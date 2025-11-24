@@ -62,7 +62,7 @@ class DashboardFragment : Fragment() {
             textView.text = it
         }
 
-        val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        val view = inflater.inflate(R.layout.doacao_template, container, false)
         itemImageView = view.findViewById(R.id.image_item)
         salvarButton = view.findViewById(R.id.salvarItemButton)
         selectImageButton = view.findViewById(R.id.button_select_image)
