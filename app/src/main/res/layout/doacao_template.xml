@@ -95,7 +95,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton8"
+                android:id="@+id/addImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="75dp"
@@ -104,12 +104,12 @@
                 android:scaleType="centerInside"
                 android:src="@android:drawable/ic_input_add"
                 app:backgroundTint="#FFFFFF"
-                app:layout_constraintEnd_toStartOf="@+id/floatingActionButton9"
+                app:layout_constraintEnd_toStartOf="@+id/editImageButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imagePreview" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton9"
+                android:id="@+id/editImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -118,7 +118,7 @@
                 android:src="@android:drawable/ic_menu_edit"
                 app:backgroundTint="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/floatingActionButton8"
+                app:layout_constraintStart_toEndOf="@+id/addImageButton"
                 app:layout_constraintTop_toBottomOf="@+id/imagePreview"
                 app:rippleColor="#00000000"
                 app:useCompatPadding="false" />
