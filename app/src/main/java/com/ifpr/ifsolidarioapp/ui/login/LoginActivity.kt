@@ -43,43 +43,43 @@ class LoginActivity : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this)
 
-        // Inicializa o Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance()
 
         emailEditText = findViewById(R.id.edit_text_email)
         passwordEditText = findViewById(R.id.edit_text_password)
         loginButton = findViewById(R.id.button_login)
         registerLink = findViewById(R.id.registerLink)
-        btnGoogleSignIn = findViewById<SignInButton>(R.id.btnGoogleSignIn)
+        btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn)
 
-        val registerLink: TextView = findViewById(R.id.registerLink)
         registerLink.setOnClickListener {
-            val intent: Intent = Intent(
-                applicationContext,
-                CadastroUsuarioActivity::class.java
-            )
-            startActivity(intent)
+            startActivity(Intent(this, CadastroUsuarioActivity::class.java))
         }
 
         loginButton.setOnClickListener {
+
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
+
+            if(email.isEmpty() || password.isEmpty()){
+                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             signIn(email, password)
         }
 
-        // Configuration do Google Sign-In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        /* val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        // Set up the sign-in button click handler
         btnGoogleSignIn.setOnClickListener {
             signInGoogle()
-        }
+        } */
     }
+
 
     private fun signIn(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -110,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun signInGoogle() {
+    /* private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -145,5 +145,5 @@ class LoginActivity : AppCompatActivity() {
                 // Tratar falha de login
             }
         }
-    }
+    }*/
 }
