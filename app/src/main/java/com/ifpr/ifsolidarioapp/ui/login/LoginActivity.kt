@@ -68,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
             signIn(email, password)
         }
 
-        /* val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
 
         btnGoogleSignIn.setOnClickListener {
             signInGoogle()
-        } */
+        }
     }
 
 
@@ -110,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    /* private fun signInGoogle() {
+     private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -145,5 +145,5 @@ class LoginActivity : AppCompatActivity() {
                 // Tratar falha de login
             }
         }
-    }*/
+    }
 }
