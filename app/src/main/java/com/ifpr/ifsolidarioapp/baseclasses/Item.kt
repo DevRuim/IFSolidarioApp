@@ -1,7 +1,7 @@
 package com.ifpr.ifsolidarioapp.baseclasses
 
 data class Item(
-    var endereco: String? = null,
-    val base64Image: String? = null,
-    val imageUrl: String? = null
+    var categoria: String? = null,
+    var quantidade: Double? = null,
+    var imageUrl: String? = null
 )

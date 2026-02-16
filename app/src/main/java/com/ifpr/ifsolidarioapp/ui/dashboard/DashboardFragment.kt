@@ -8,18 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.ifpr.ifsolidarioapp.databinding.DoacaoTemplateBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.ifpr.ifsolidarioapp.baseclasses.Item
+import com.ifpr.ifsolidarioapp.databinding.FragmentDoacaoBinding
 
 class DashboardFragment : Fragment() {
 
-    private var _binding: DoacaoTemplateBinding? = null
+    private var _binding: FragmentDoacaoBinding? = null
     private val binding get() = _binding!!
 
-    // Lista de imagens adicionadas
-    private val imageList = mutableListOf<Uri>()
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
-    // índice da imagem atual
+    private val imageList = mutableListOf<Uri>()
     private var currentImageIndex = 0
 
     companion object {
@@ -32,13 +37,41 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = DoacaoTemplateBinding.inflate(inflater, container, false)
+        _binding = FragmentDoacaoBinding.inflate(inflater, container, false)
+
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
 
         setupSpinner()
-
         setupClicks()
 
         return binding.root
+    }
+
+    // 🔥 FUNÇÃO QUE O MAIN ACTIVITY VAI CHAMAR
+    fun salvarDoacao() {
+        val categoria = binding.spinnerCategoria.selectedItem.toString()
+        val quantidadeTexto = binding.editQuantidade.text.toString()
+
+        if (quantidadeTexto.isEmpty()) {
+            Toast.makeText(requireContext(), "Informe a quantidade", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val quantidade = quantidadeTexto.toDouble()
+
+        val item = Item(
+            categoria = categoria,
+            quantidade = quantidade
+        )
+
+        val database = FirebaseDatabase
+            .getInstance()
+            .getReference("doacoes")
+
+        val id = database.push().key!!
+
+        database.child(id).setValue(item)
     }
 
     private fun setupSpinner() {
@@ -56,22 +89,15 @@ class DashboardFragment : Fragment() {
 
     private fun setupClicks() {
 
-        // BOTÃO + adiciona UMA imagem por vez
         binding.addImageButton.setOnClickListener {
-
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
-
             startActivityForResult(intent, PICK_IMAGE_CODE)
         }
 
-        // Próxima imagem
         binding.buttonNext.setOnClickListener {
-
             if (imageList.isNotEmpty()) {
-
                 currentImageIndex++
-
                 if (currentImageIndex >= imageList.size)
                     currentImageIndex = 0
 
@@ -79,13 +105,9 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        // Imagem anterior
         binding.buttonPrev.setOnClickListener {
-
             if (imageList.isNotEmpty()) {
-
                 currentImageIndex--
-
                 if (currentImageIndex < 0)
                     currentImageIndex = imageList.size - 1
 
@@ -93,14 +115,10 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        // Botão editar imagem (opcional - abre galeria para substituir imagem atual)
         binding.editImageButton.setOnClickListener {
-
             if (imageList.isNotEmpty()) {
-
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.type = "image/*"
-
                 startActivityForResult(intent, PICK_IMAGE_CODE)
             }
         }
@@ -119,14 +137,8 @@ class DashboardFragment : Fragment() {
         ) {
 
             data?.data?.let { uri ->
-
-                // adiciona imagem na lista
                 imageList.add(uri)
-
-                // define como imagem atual
                 currentImageIndex = imageList.size - 1
-
-                // mostra no preview
                 binding.imagePreview.setImageURI(uri)
             }
         }

@@ -15,7 +15,7 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.ifpr.ifsolidarioapp.ui.dashboard.DashboardFragment"
         android:label="Dashboard"
-        tools:layout="@layout/doacao_template" />
+        tools:layout="@layout/fragment_doacao" />
 
     <fragment
         android:id="@+id/navigation_notifications"
