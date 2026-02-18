@@ -2,64 +2,74 @@ package com.ifpr.ifsolidarioapp.ui.doacao
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ifpr.ifsolidarioapp.R
+import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.ui.dashboard.DashboardFragment
 
 class ActivityDoacao : AppCompatActivity() {
 
-    private val fragments = mutableListOf<DashboardFragment>()
+    private lateinit var container: LinearLayout
+    private lateinit var botaoAdicionar: FloatingActionButton
+    private lateinit var botaoFinalizar: Button
+
+    private val listaFragments = mutableListOf<DashboardFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_doacao)
 
-        val finalizar = findViewById<Button>(R.id.button_finalizar)
+        container = findViewById(R.id.container_fragments)
+        botaoAdicionar = findViewById(R.id.button_adicionar)
+        botaoFinalizar = findViewById(R.id.button_finalizar)
 
-        finalizar.setOnClickListener {
-            salvarTodosItens()
+        botaoAdicionar.setOnClickListener {
+            adicionarFragment()
         }
 
-        adicionarNovoFragment()
+        botaoFinalizar.setOnClickListener {
+            finalizarDoacao()
+        }
+
+        // começa com 1 fragment automaticamente
+        adicionarFragment()
     }
 
-    fun adicionarNovoFragment() {
+    private fun adicionarFragment() {
 
-        val fragment = DashboardFragment()
-
-        fragments.add(fragment)
+        val novoFragment = DashboardFragment()
+        listaFragments.add(novoFragment)
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.container_fragments, fragment)
+            .add(R.id.container_fragments, novoFragment)
             .commit()
     }
 
-    private fun salvarTodosItens() {
+    private fun finalizarDoacao() {
 
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val listaDados = mutableListOf<DoacaoData>()
 
-        val database = FirebaseDatabase.getInstance().reference
+        for (fragment in listaFragments) {
 
-        for (fragment in fragments) {
+            val dados = fragment.obterDados()
 
-            val item = fragment.obterItem()
-
-            if (item != null) {
-
-                val key = database.child("itens")
-                    .child(uid)
-                    .push()
-                    .key!!
-
-                database.child("itens")
-                    .child(uid)
-                    .child(key)
-                    .setValue(item)
+            if (dados != null) {
+                listaDados.add(dados)
             }
         }
 
+        salvarNoBanco(listaDados)
+    }
+
+    private fun salvarNoBanco(lista: List<DoacaoData>) {
+
+        for (item in lista) {
+            println("Categoria: ${item.categoria}")
+            println("Quantidade: ${item.quantidade}")
+        }
+
+        // Aqui você coloca Room / Firebase depois
     }
 }

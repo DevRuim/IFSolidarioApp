@@ -5,18 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.util.Base64
 import android.widget.*
-import android.graphics.BitmapFactory
-import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.ifpr.ifsolidarioapp.R
-import com.ifpr.ifsolidarioapp.baseclasses.Item
+import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -54,7 +50,7 @@ class HomeFragment : Fragment() {
 
                 for (userSnapshot in snapshot.children) {
                     for (itemSnapshot in userSnapshot.children) {
-                        val item = itemSnapshot.getValue(Item::class.java) ?: continue
+                        val doacaoData = itemSnapshot.getValue(DoacaoData::class.java) ?: continue
 
                         val itemView = LayoutInflater.from(container.context)
                             .inflate(R.layout.item_template, container, false)

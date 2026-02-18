@@ -1,7 +1,8 @@
 package com.ifpr.ifsolidarioapp.baseclasses
+import android.net.Uri
 
-data class Item(
+data class DoacaoData(
     var categoria: String? = null,
     var quantidade: Double? = null,
-    var imageUrl: String? = null
+    val imagens: List<Uri>
 )

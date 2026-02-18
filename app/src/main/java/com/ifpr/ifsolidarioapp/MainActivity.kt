@@ -36,21 +36,5 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // BOTÃO FINALIZAR (ÚNICO LISTENER)
-        binding.buttonFinalizar.setOnClickListener {
-
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main)
-
-            val currentFragment =
-                navHostFragment
-                    ?.childFragmentManager
-                    ?.fragments
-                    ?.firstOrNull()
-
-            if (currentFragment is DashboardFragment) {
-                currentFragment.salvarDoacao()
-            }
-        }
     }
 }

@@ -13,16 +13,13 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.ifpr.ifsolidarioapp.baseclasses.Item
+import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.databinding.FragmentDoacaoBinding
 
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDoacaoBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
 
     private val imageList = mutableListOf<Uri>()
     private var currentImageIndex = 0
@@ -39,39 +36,27 @@ class DashboardFragment : Fragment() {
 
         _binding = FragmentDoacaoBinding.inflate(inflater, container, false)
 
-        auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().reference
-
         setupSpinner()
         setupClicks()
 
         return binding.root
     }
 
-    // 🔥 FUNÇÃO QUE O MAIN ACTIVITY VAI CHAMAR
-    fun salvarDoacao() {
-        val categoria = binding.spinnerCategoria.selectedItem.toString()
+    fun obterDados(): DoacaoData? {
+
         val quantidadeTexto = binding.editQuantidade.text.toString()
 
-        if (quantidadeTexto.isEmpty()) {
-            Toast.makeText(requireContext(), "Informe a quantidade", Toast.LENGTH_SHORT).show()
-            return
-        }
+        if (quantidadeTexto.isEmpty())
+            return null
 
         val quantidade = quantidadeTexto.toDouble()
+        val categoria = binding.spinnerCategoria.selectedItem.toString()
 
-        val item = Item(
-            categoria = categoria,
-            quantidade = quantidade
+        return DoacaoData(
+            imagens = imageList,
+            quantidade = quantidade,
+            categoria = categoria
         )
-
-        val database = FirebaseDatabase
-            .getInstance()
-            .getReference("doacoes")
-
-        val id = database.push().key!!
-
-        database.child(id).setValue(item)
     }
 
     private fun setupSpinner() {
@@ -97,19 +82,19 @@ class DashboardFragment : Fragment() {
 
         binding.buttonNext.setOnClickListener {
             if (imageList.isNotEmpty()) {
-                currentImageIndex++
-                if (currentImageIndex >= imageList.size)
-                    currentImageIndex = 0
-
+                currentImageIndex =
+                    (currentImageIndex + 1) % imageList.size
                 binding.imagePreview.setImageURI(imageList[currentImageIndex])
             }
         }
 
         binding.buttonPrev.setOnClickListener {
             if (imageList.isNotEmpty()) {
-                currentImageIndex--
-                if (currentImageIndex < 0)
-                    currentImageIndex = imageList.size - 1
+                currentImageIndex =
+                    if (currentImageIndex - 1 < 0)
+                        imageList.size - 1
+                    else
+                        currentImageIndex - 1
 
                 binding.imagePreview.setImageURI(imageList[currentImageIndex])
             }
@@ -149,3 +134,4 @@ class DashboardFragment : Fragment() {
         _binding = null
     }
 }
+
