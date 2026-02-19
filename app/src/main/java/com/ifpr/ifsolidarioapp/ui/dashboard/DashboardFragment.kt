@@ -14,11 +14,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
-import com.ifpr.ifsolidarioapp.databinding.FragmentDoacaoBinding
+import com.ifpr.ifsolidarioapp.databinding.FragmentItemdoacaoBinding
 
 class DashboardFragment : Fragment() {
 
-    private var _binding: FragmentDoacaoBinding? = null
+    private var _binding: FragmentItemdoacaoBinding? = null
     private val binding get() = _binding!!
 
     private val imageList = mutableListOf<Uri>()
@@ -34,7 +34,7 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentDoacaoBinding.inflate(inflater, container, false)
+        _binding = FragmentItemdoacaoBinding.inflate(inflater, container, false)
 
         setupSpinner()
         setupClicks()
