@@ -8,8 +8,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ifpr.ifsolidarioapp.databinding.ActivityMainBinding
-import com.ifpr.ifsolidarioapp.ui.dashboard.DashboardFragment
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

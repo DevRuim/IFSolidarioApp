@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val container = view.findViewById<LinearLayout>(R.id.itemContainer)
-        carregarItensMarketplace(container)
+        //carregarItensMarketplace(container)
 
         return view
     }
@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    fun carregarItensMarketplace(container: LinearLayout) {
+    /*fun carregarItensMarketplace(container: LinearLayout) {
         val databaseRef = FirebaseDatabase.getInstance().getReference("itens")
 
         databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -66,5 +66,5 @@ class HomeFragment : Fragment() {
                 Toast.makeText(container.context, "Erro ao carregar dados", Toast.LENGTH_SHORT).show()
             }
         })
-    }
+    }*/
 }

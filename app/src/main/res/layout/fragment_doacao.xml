@@ -25,7 +25,8 @@
             app:layout_constraintBottom_toTopOf="@id/button_finalizar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:importantForAccessibility="no">
 
             <LinearLayout
                 android:id="@+id/container_fragments"
@@ -55,7 +56,8 @@
             android:src="@android:drawable/ic_input_add"
             app:backgroundTint="#4CAF50"
             app:layout_constraintBottom_toTopOf="@id/button_finalizar"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="Adicionar doação" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

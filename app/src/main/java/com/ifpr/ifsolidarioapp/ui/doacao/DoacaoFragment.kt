@@ -10,9 +10,14 @@ import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.databinding.FragmentDoacaoBinding
 import com.ifpr.ifsolidarioapp.ui.dashboard.DashboardFragment
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseAuth
+
 
 class DoacaoFragment : Fragment() {
-
+    private lateinit var database: DatabaseReference
+    private lateinit var auth: FirebaseAuth
     private var _binding: FragmentDoacaoBinding? = null
     private val binding get() = _binding!!
 
@@ -28,7 +33,12 @@ class DoacaoFragment : Fragment() {
 
         setupClicks()
 
-        adicionarFragment()
+        if (savedInstanceState == null) {
+            adicionarFragment()
+        }
+
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
 
         return binding.root
     }
@@ -50,7 +60,8 @@ class DoacaoFragment : Fragment() {
         listaFragments.add(novoFragment)
 
         childFragmentManager.beginTransaction()
-            .add(R.id.container_fragments, novoFragment, "fragment_${listaFragments.size}")
+            .add(R.id.container_fragments, novoFragment)
+            .commit()
 
     }
 
@@ -69,12 +80,29 @@ class DoacaoFragment : Fragment() {
 
     private fun salvarNoBanco(lista: List<DoacaoData>) {
 
-        for (item in lista) {
-            println("Categoria: ${item.categoria}")
-            println("Quantidade: ${item.quantidade}")
+        val userId = auth.currentUser?.uid
+
+        if (userId == null) {
+            println("Usuário não logado")
+            return
         }
 
-        // Aqui depois você integra Firebase
+        val doacoesRef = database
+            .child("doacoes")
+            .child(userId)
+
+        for (item in lista) {
+
+            val novaDoacaoRef = doacoesRef.push()
+
+            val dadosMap = hashMapOf(
+                "categoria" to item.categoria,
+                "quantidade" to item.quantidade,
+                "imagens" to item.imagens.map { it.toString() }
+            )
+
+            novaDoacaoRef.setValue(dadosMap)
+        }
     }
 
     override fun onDestroyView() {
