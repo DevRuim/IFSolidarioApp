@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@id/textCadastroCampanhaTitle"/>
 
     <EditText
-        android:id="@+id/registerEndereçolEditText"
+        android:id="@+id/registerEnderecoEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Endereço"
@@ -42,22 +42,22 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
-        android:id="@+id/registerDesricaoEditText"
+        android:id="@+id/registerDescricaoEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Descrição"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/registerEndereçolEditText"
+        app:layout_constraintTop_toBottomOf="@id/registerEnderecoEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
-        android:id="@+id/registerConfirmPasswordEditText"
+        android:id="@+id/registerMetaEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Confirmar Senha"
+        android:hint="Meta de Doações"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/registerDesricaoEditText"
+        app:layout_constraintTop_toBottomOf="@id/registerDescricaoEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -66,7 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Cadastrar"
-        app:layout_constraintTop_toBottomOf="@id/registerConfirmPasswordEditText"
+        app:layout_constraintTop_toBottomOf="@id/registerMetaEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
