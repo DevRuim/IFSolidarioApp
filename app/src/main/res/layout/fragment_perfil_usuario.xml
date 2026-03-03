@@ -52,21 +52,12 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
-        android:id="@+id/registerEnderecoEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Endereço"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerEmailEditText" />
-
-    <EditText
         android:id="@+id/registerPasswordEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Senha"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/registerEnderecoEditText"
+        app:layout_constraintTop_toBottomOf="@id/registerEmailEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
