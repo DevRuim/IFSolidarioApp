@@ -14,6 +14,9 @@ import com.google.firebase.database.ValueEventListener
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.databinding.FragmentHomeBinding
+import android.content.Intent
+import android.widget.Button
+import com.ifpr.ifsolidarioapp.ui.campanha.CadastroCampanhaActivity
 
 class HomeFragment : Fragment() {
 
@@ -31,8 +34,15 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val container = view.findViewById<LinearLayout>(R.id.itemContainer)
-        //carregarItensMarketplace(container)
 
+        val botao = view.findViewById<Button>(R.id.abrir_campanha)
+
+        botao.setOnClickListener {
+
+            val intent = Intent(requireContext(), CadastroCampanhaActivity::class.java)
+            startActivity(intent)
+
+        }
         return view
     }
 
