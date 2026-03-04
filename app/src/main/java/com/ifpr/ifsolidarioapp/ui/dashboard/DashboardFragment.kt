@@ -8,11 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.databinding.FragmentItemdoacaoBinding
 
@@ -44,18 +40,21 @@ class DashboardFragment : Fragment() {
 
     fun obterDados(): DoacaoData? {
 
-        val quantidadeTexto = binding.editQuantidade.text.toString()
+        val b = _binding ?: return null
 
-        if (quantidadeTexto.isEmpty())
-            return null
+        val quantidadeTexto = b.editQuantidade.text.toString()
+
+        if (quantidadeTexto.isEmpty()) return null
 
         val quantidade = quantidadeTexto.toDouble()
-        val categoria = binding.spinnerCategoria.selectedItem.toString()
+        val categoria = b.spinnerCategoria.selectedItem.toString()
+
+        val imagensString = imageList.map { it.toString() }
 
         return DoacaoData(
-            imagens = imageList,
+            categoria = categoria,
             quantidade = quantidade,
-            categoria = categoria
+            imagens = imagensString
         )
     }
 
@@ -75,21 +74,26 @@ class DashboardFragment : Fragment() {
     private fun setupClicks() {
 
         binding.addImageButton.setOnClickListener {
+
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
             startActivityForResult(intent, PICK_IMAGE_CODE)
         }
 
         binding.buttonNext.setOnClickListener {
+
             if (imageList.isNotEmpty()) {
-                currentImageIndex =
-                    (currentImageIndex + 1) % imageList.size
+
+                currentImageIndex = (currentImageIndex + 1) % imageList.size
+
                 binding.imagePreview.setImageURI(imageList[currentImageIndex])
             }
         }
 
         binding.buttonPrev.setOnClickListener {
+
             if (imageList.isNotEmpty()) {
+
                 currentImageIndex =
                     if (currentImageIndex - 1 < 0)
                         imageList.size - 1
@@ -101,11 +105,10 @@ class DashboardFragment : Fragment() {
         }
 
         binding.editImageButton.setOnClickListener {
-            if (imageList.isNotEmpty()) {
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "image/*"
-                startActivityForResult(intent, PICK_IMAGE_CODE)
-            }
+
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "image/*"
+            startActivityForResult(intent, PICK_IMAGE_CODE)
         }
     }
 
@@ -117,13 +120,14 @@ class DashboardFragment : Fragment() {
 
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE_CODE &&
-            resultCode == Activity.RESULT_OK
-        ) {
+        if (requestCode == PICK_IMAGE_CODE && resultCode == Activity.RESULT_OK) {
 
             data?.data?.let { uri ->
+
                 imageList.add(uri)
+
                 currentImageIndex = imageList.size - 1
+
                 binding.imagePreview.setImageURI(uri)
             }
         }
@@ -134,4 +138,3 @@ class DashboardFragment : Fragment() {
         _binding = null
     }
 }
-

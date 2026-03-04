@@ -36,7 +36,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Endereço"
-        android:inputType="textEmailAddress"
         app:layout_constraintTop_toBottomOf="@id/registerNameCampanhaEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -46,7 +45,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Descrição"
-        android:inputType="textPassword"
         app:layout_constraintTop_toBottomOf="@id/registerEnderecoEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -56,13 +54,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Meta de Doações"
-        android:inputType="textPassword"
+        android:inputType="number"
         app:layout_constraintTop_toBottomOf="@id/registerDescricaoEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
-        android:id="@+id/salvarButton"
+        android:id="@+id/registerCampanhaButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Cadastrar"
@@ -75,7 +73,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Sair"
-        app:layout_constraintTop_toBottomOf="@id/salvarButton"
+        app:layout_constraintTop_toBottomOf="@id/registerCampanhaButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

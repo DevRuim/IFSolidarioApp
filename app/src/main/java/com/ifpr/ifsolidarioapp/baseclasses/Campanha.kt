@@ -2,7 +2,7 @@ package com.ifpr.ifsolidarioapp.baseclasses
 
 data class Campanha(
 
-    var key: String? = null,
+    var key: String = "",
     var nomeCampanha: String = "",
     var endereco: String = "",
     var descricao: String = "",

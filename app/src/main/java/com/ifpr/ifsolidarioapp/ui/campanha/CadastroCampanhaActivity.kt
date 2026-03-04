@@ -1,15 +1,12 @@
 package com.ifpr.ifsolidarioapp.ui.campanha
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
 import com.ifpr.ifsolidarioapp.R
@@ -22,7 +19,7 @@ class CadastroCampanhaActivity  : AppCompatActivity() {
     private lateinit var registerEnderecoEditText: EditText
     private lateinit var registerDescricaoEditText: EditText
     private lateinit var registerMetaEditText: EditText
-    private lateinit var registerButton: Button
+    private lateinit var registerCampanhaButton: Button
     private lateinit var sairButton: Button
 
     private lateinit var database: DatabaseReference
@@ -41,11 +38,11 @@ class CadastroCampanhaActivity  : AppCompatActivity() {
         registerEnderecoEditText = findViewById(R.id.registerEnderecoEditText)
         registerDescricaoEditText = findViewById(R.id.registerDescricaoEditText)
         registerMetaEditText = findViewById(R.id.registerMetaEditText)
-        registerButton = findViewById(R.id.salvarButton)
+        registerCampanhaButton = findViewById(R.id.registerCampanhaButton)
         sairButton = findViewById(R.id.sairButton)
 
-        registerButton.setOnClickListener {
-            createAccount()
+        registerCampanhaButton.setOnClickListener {
+            createCampanha()
         }
 
         sairButton.setOnClickListener {
@@ -53,7 +50,7 @@ class CadastroCampanhaActivity  : AppCompatActivity() {
         }
     }
 
-    private fun createAccount() {
+    private fun createCampanha() {
 
         val nomeCampanha = registerNameCampanhaEditText.text.toString().trim()
         val endereco = registerEnderecoEditText.text.toString().trim()
@@ -93,6 +90,7 @@ class CadastroCampanhaActivity  : AppCompatActivity() {
         )
 
         database.child("campanhas")
+            .child(userId)
             .child(campanhaKey)
             .setValue(campanha)
             .addOnSuccessListener {

@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.usuario.CadastroUsuarioActivity" />
+        <activity android:name=".ui.campanha.CadastroCampanhaActivity"/>
     </application>
 
 </manifest>
