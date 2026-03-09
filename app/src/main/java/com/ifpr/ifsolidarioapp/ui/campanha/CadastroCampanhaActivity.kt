@@ -2,20 +2,18 @@ package com.ifpr.ifsolidarioapp.ui.campanha
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.util.Base64
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.storage.FirebaseStorage
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Campanha
+import java.io.ByteArrayOutputStream
 
 class CadastroCampanhaActivity : AppCompatActivity() {
 
@@ -105,8 +103,9 @@ class CadastroCampanhaActivity : AppCompatActivity() {
 
         val meta = metaTexto.toDouble()
         val userId = auth.currentUser?.uid ?: return
-
         val campanhaKey = database.child("campanhas").push().key ?: return
+
+        val base64String = uriToBase64(imageUri!!)
 
         val campanha = Campanha(
             key = campanhaKey,
@@ -115,7 +114,7 @@ class CadastroCampanhaActivity : AppCompatActivity() {
             descricao = descricao,
             meta = meta,
             criadorId = userId,
-            imagemUri = imageUri.toString()
+            imagemBase64 = base64String
         )
 
         database.child("campanhas")
@@ -133,5 +132,13 @@ class CadastroCampanhaActivity : AppCompatActivity() {
                 Toast.makeText(this, "Erro ao salvar campanha", Toast.LENGTH_SHORT).show()
 
             }
+    }
+
+    private fun uriToBase64(uri: Uri): String {
+
+        val inputStream = contentResolver.openInputStream(uri)
+        val bytes = inputStream?.readBytes()
+
+        return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 }
