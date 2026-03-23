@@ -25,10 +25,42 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/item_nome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nome: "
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/item_criador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ONG: "
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/item_meta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Meta: "
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/item_endereco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Endereço:"
+                android:text="Endereço: "
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/item_descricao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descrição: "
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

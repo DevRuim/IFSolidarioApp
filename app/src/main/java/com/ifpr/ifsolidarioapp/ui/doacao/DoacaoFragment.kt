@@ -19,6 +19,7 @@ class DoacaoFragment : Fragment() {
 
     private var _binding: FragmentDoacaoBinding? = null
     private val binding get() = _binding!!
+    private val listaFragments = mutableListOf<DashboardFragment>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +56,8 @@ class DoacaoFragment : Fragment() {
 
         val novoFragment = DashboardFragment()
 
+        listaFragments.add(novoFragment) // 🔥 ESSENCIAL
+
         childFragmentManager.beginTransaction()
             .add(binding.containerFragments.id, novoFragment)
             .commit()
@@ -64,9 +67,9 @@ class DoacaoFragment : Fragment() {
 
         val listaDoacoes = mutableListOf<DoacaoData>()
 
-        childFragmentManager.fragments.forEach { fragment ->
+        for (fragment in listaFragments) {
 
-            if (fragment is DashboardFragment) {
+            if (fragment.isAdded && fragment.view != null) {
 
                 val dados = fragment.obterDados()
 
