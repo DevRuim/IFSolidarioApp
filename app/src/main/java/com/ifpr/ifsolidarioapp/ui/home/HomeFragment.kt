@@ -1,5 +1,6 @@
 package com.ifpr.ifsolidarioapp.ui.home
 
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
@@ -13,9 +14,13 @@ import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Campanha
 import android.content.Intent
 import com.ifpr.ifsolidarioapp.ui.campanha.CadastroCampanhaActivity
+import androidx.navigation.fragment.findNavController
 
-class HomeFragment : Fragment() {
+class
+HomeFragment : Fragment() {
 
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,9 +69,15 @@ class HomeFragment : Fragment() {
                             val meta = itemView.findViewById<TextView>(R.id.item_meta)
                             val criador = itemView.findViewById<TextView>(R.id.item_criador)
 
-                            nome.text = campanha.nomeCampanha
-                            desc.text = campanha.descricao
-                            endereco.text = campanha.endereco
+                            val doarBotao = itemView.findViewById<Button>(R.id.doarButton)
+
+                            doarBotao.setOnClickListener {
+                                findNavController().navigate(R.id.navigation_dashboard)
+                            }
+
+                            nome.text = "Nome: ${campanha.nomeCampanha}"
+                            desc.text = "Descrição: ${campanha.descricao}"
+                            endereco.text = "Endereço: ${campanha.endereco}"
                             meta.text = "Meta: R$ ${campanha.meta}"
 
                             try {
@@ -77,14 +88,14 @@ class HomeFragment : Fragment() {
                                 img.setImageResource(android.R.drawable.ic_menu_report_image)
                             }
 
-                            // 🔥 BUSCAR NOME DO CRIADOR
                             db.child("users")
                                 .child(campanha.criadorId)
                                 .child("nome")
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         val nomeUsuario = snapshot.getValue(String::class.java)
-                                        criador.text = "Criado por: ${nomeUsuario ?: "Desconhecido"}"
+                                        criador.text =
+                                            "Criado por: ${nomeUsuario ?: "Desconhecido"}"
                                     }
 
                                     override fun onCancelled(error: DatabaseError) {
