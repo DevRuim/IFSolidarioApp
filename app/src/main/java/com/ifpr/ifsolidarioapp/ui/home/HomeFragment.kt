@@ -49,6 +49,7 @@ HomeFragment : Fragment() {
         db.child("campanhas")
             .addListenerForSingleValueEvent(object : ValueEventListener {
 
+                @SuppressLint("SetTextI18n")
                 override fun onDataChange(snapshot: DataSnapshot) {
 
                     container.removeAllViews()
@@ -88,20 +89,9 @@ HomeFragment : Fragment() {
                                 img.setImageResource(android.R.drawable.ic_menu_report_image)
                             }
 
-                            db.child("users")
-                                .child(campanha.criadorId)
-                                .child("nome")
-                                .addListenerForSingleValueEvent(object : ValueEventListener {
-                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                        val nomeUsuario = snapshot.getValue(String::class.java)
-                                        criador.text =
-                                            "Criado por: ${nomeUsuario ?: "Desconhecido"}"
-                                    }
-
-                                    override fun onCancelled(error: DatabaseError) {
-                                        criador.text = "Criador desconhecido"
-                                    }
-                                })
+                            criador.text = "Criado por: ${
+                                campanha.criadorNome.takeIf { it.isNotBlank() } ?: "Desconhecido"
+                            }"
 
                             container.addView(itemView)
                         }

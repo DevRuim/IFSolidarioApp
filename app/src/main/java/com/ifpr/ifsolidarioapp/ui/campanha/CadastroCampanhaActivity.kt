@@ -102,7 +102,9 @@ class CadastroCampanhaActivity : AppCompatActivity() {
         }
 
         val meta = metaTexto.toDouble()
-        val userId = auth.currentUser?.uid ?: return
+        val user = auth.currentUser ?: return
+        val userId = user.uid
+        val userName = user.displayName ?: "Usuário"
         val campanhaKey = database.child("campanhas").push().key ?: return
 
         val base64String = uriToBase64(imageUri!!)
@@ -114,6 +116,7 @@ class CadastroCampanhaActivity : AppCompatActivity() {
             descricao = descricao,
             meta = meta,
             criadorId = userId,
+            criadorNome = userName,
             imagemBase64 = base64String
         )
 
