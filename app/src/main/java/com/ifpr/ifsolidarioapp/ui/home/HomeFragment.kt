@@ -15,10 +15,13 @@ import com.ifpr.ifsolidarioapp.baseclasses.Campanha
 import android.content.Intent
 import com.ifpr.ifsolidarioapp.ui.campanha.CadastroCampanhaActivity
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
+import com.ifpr.ifsolidarioapp.ui.usuario.CadastroUsuarioActivity
 
 class
 HomeFragment : Fragment() {
-
+    private lateinit var auth: FirebaseAuth
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -31,6 +34,8 @@ HomeFragment : Fragment() {
 
         val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
         val botao = view.findViewById<Button>(R.id.abrir_campanha)
+
+        auth = FirebaseAuth.getInstance()
 
         botao.setOnClickListener {
             val intent = Intent(requireContext(), CadastroCampanhaActivity::class.java)
@@ -73,7 +78,14 @@ HomeFragment : Fragment() {
                             val doarBotao = itemView.findViewById<Button>(R.id.doarButton)
 
                             doarBotao.setOnClickListener {
+                                val uid = auth.currentUser?.uid
+                                if(uid !=null)
                                 findNavController().navigate(R.id.navigation_dashboard)
+                                else{
+                                    startActivity(Intent(context, LoginActivity::class.java))
+                                }
+
+
                             }
 
                             nome.text = "Nome: ${campanha.nomeCampanha}"
