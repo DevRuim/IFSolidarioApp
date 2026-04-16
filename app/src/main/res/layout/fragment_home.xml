@@ -9,13 +9,30 @@
         android:id="@+id/text_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/title_itens"
-        android:textSize="20sp"
         android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/item_endereco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nome da Campanha"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Campos futuros aqui -->
+    </LinearLayout>
+
 
     <ScrollView
         android:id="@+id/scrollView"

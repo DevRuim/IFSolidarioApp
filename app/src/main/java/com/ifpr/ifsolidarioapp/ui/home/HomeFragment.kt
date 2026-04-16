@@ -15,8 +15,12 @@ import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.databinding.FragmentHomeBinding
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.widget.Button
+import com.ifpr.ifsolidarioapp.baseclasses.Campanha
 import com.ifpr.ifsolidarioapp.ui.campanha.CadastroCampanhaActivity
+import android.util.Base64
+
 
 class HomeFragment : Fragment() {
 
@@ -34,6 +38,7 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val container = view.findViewById<LinearLayout>(R.id.itemContainer)
+        carregarItensMarketplace(container)
 
         val botao = view.findViewById<Button>(R.id.abrir_campanha)
 
@@ -51,30 +56,41 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    /*fun carregarItensMarketplace(container: LinearLayout) {
-        val databaseRef = FirebaseDatabase.getInstance().getReference("itens")
+    fun carregarItensMarketplace(container: LinearLayout) {
+    val databaseRef = FirebaseDatabase.getInstance().getReference("campanhas")
 
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                container.removeAllViews()
+    databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            container.removeAllViews()
 
-                for (userSnapshot in snapshot.children) {
-                    for (itemSnapshot in userSnapshot.children) {
-                        val doacaoData = itemSnapshot.getValue(DoacaoData::class.java) ?: continue
+            for (userSnapshot in snapshot.children) {
+                for (itemSnapshot in userSnapshot.children) {
+                    val item = itemSnapshot.getValue(Campanha::class.java) ?: continue
 
-                        val itemView = LayoutInflater.from(container.context)
-                            .inflate(R.layout.item_template, container, false)
+                    val itemView = LayoutInflater.from(container.context)
+                        .inflate(R.layout.item_template, container, false)
 
-                        val imageView = itemView.findViewById<ImageView>(R.id.item_image)
+                    val imageView = itemView.findViewById<ImageView>(R.id.item_image)
+                    val nomeCampanhaView = itemView.findViewById<TextView>(R.id.item_endereco)
 
-                        container.addView(itemView)
+                    nomeCampanhaView.text = "${item.nomeCampanha ?: "Não informado"}"
+
+                    if (!item.imagemBase64.isNullOrEmpty()) {
+                        try {
+                            val bytes = Base64.decode(item.imagemBase64, Base64.DEFAULT)
+                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                            imageView.setImageBitmap(bitmap)
+                        } catch (_: Exception) {}
                     }
+
+                    container.addView(itemView)
                 }
             }
+        }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(container.context, "Erro ao carregar dados", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }*/
+        override fun onCancelled(error: DatabaseError) {
+            Toast.makeText(container.context, "Erro ao carregar dados", Toast.LENGTH_SHORT).show()
+        }
+    })
+}
 }
