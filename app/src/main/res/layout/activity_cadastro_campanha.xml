@@ -21,6 +21,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imagemCampanha"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintTop_toBottomOf="@id/textCadastroCampanhaTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/buttonEscolherImagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Escolher imagem"
+        app:layout_constraintTop_toBottomOf="@id/imagemCampanha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <EditText
         android:id="@+id/registerNameCampanhaEditText"
         android:layout_width="0dp"
@@ -29,7 +47,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textCadastroCampanhaTitle"/>
+        app:layout_constraintTop_toBottomOf="@id/buttonEscolherImagem"/>
 
     <EditText
         android:id="@+id/registerEnderecoEditText"

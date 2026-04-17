@@ -1,80 +1,106 @@
 package com.ifpr.ifsolidarioapp.ui.home
 
+import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
 import android.widget.*
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import androidx.fragment.app.Fragment
+import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.R
-import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
-import com.ifpr.ifsolidarioapp.databinding.FragmentHomeBinding
+import com.ifpr.ifsolidarioapp.baseclasses.Campanha
 import android.content.Intent
-import android.widget.Button
 import com.ifpr.ifsolidarioapp.ui.campanha.CadastroCampanhaActivity
+import androidx.navigation.fragment.findNavController
 
-class HomeFragment : Fragment() {
+class
+HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val container = view.findViewById<LinearLayout>(R.id.itemContainer)
-
+        val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
         val botao = view.findViewById<Button>(R.id.abrir_campanha)
 
         botao.setOnClickListener {
-
             val intent = Intent(requireContext(), CadastroCampanhaActivity::class.java)
             startActivity(intent)
-
         }
+
+        carregarCampanhas(containerLayout)
+
         return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    private fun carregarCampanhas(container: LinearLayout) {
 
-    /*fun carregarItensMarketplace(container: LinearLayout) {
-        val databaseRef = FirebaseDatabase.getInstance().getReference("itens")
+        val db = FirebaseDatabase.getInstance().reference
 
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                container.removeAllViews()
+        db.child("campanhas")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
 
-                for (userSnapshot in snapshot.children) {
-                    for (itemSnapshot in userSnapshot.children) {
-                        val doacaoData = itemSnapshot.getValue(DoacaoData::class.java) ?: continue
+                @SuppressLint("SetTextI18n")
+                override fun onDataChange(snapshot: DataSnapshot) {
 
-                        val itemView = LayoutInflater.from(container.context)
-                            .inflate(R.layout.item_template, container, false)
+                    container.removeAllViews()
 
-                        val imageView = itemView.findViewById<ImageView>(R.id.item_image)
+                    for (userSnapshot in snapshot.children) {
+                        for (campanhaSnapshot in userSnapshot.children) {
 
-                        container.addView(itemView)
+                            val campanha = campanhaSnapshot.getValue(Campanha::class.java)
+                                ?: continue
+
+                            val itemView = LayoutInflater.from(container.context)
+                                .inflate(R.layout.item_template, container, false)
+
+                            val img = itemView.findViewById<ImageView>(R.id.item_image)
+                            val nome = itemView.findViewById<TextView>(R.id.item_nome)
+                            val desc = itemView.findViewById<TextView>(R.id.item_descricao)
+                            val endereco = itemView.findViewById<TextView>(R.id.item_endereco)
+                            val meta = itemView.findViewById<TextView>(R.id.item_meta)
+                            val criador = itemView.findViewById<TextView>(R.id.item_criador)
+
+                            val doarBotao = itemView.findViewById<Button>(R.id.doarButton)
+
+                            doarBotao.setOnClickListener {
+                                findNavController().navigate(R.id.navigation_dashboard)
+                            }
+
+                            nome.text = "Nome: ${campanha.nomeCampanha}"
+                            desc.text = "Descrição: ${campanha.descricao}"
+                            endereco.text = "Endereço: ${campanha.endereco}"
+                            meta.text = "Meta: R$ ${campanha.meta}"
+
+                            try {
+                                val bytes = Base64.decode(campanha.imagemBase64, Base64.DEFAULT)
+                                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                                img.setImageBitmap(bitmap)
+                            } catch (e: Exception) {
+                                img.setImageResource(android.R.drawable.ic_menu_report_image)
+                            }
+
+                            criador.text = "Criado por: ${
+                                campanha.criadorNome.takeIf { it.isNotBlank() } ?: "Desconhecido"
+                            }"
+
+                            container.addView(itemView)
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(container.context, "Erro ao carregar dados", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }*/
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(container.context, "Erro ao carregar", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
 }
