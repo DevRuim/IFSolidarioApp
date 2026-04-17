@@ -41,8 +41,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        FirebaseApp.initializeApp(this)
-
         firebaseAuth = FirebaseAuth.getInstance()
 
         emailEditText = findViewById(R.id.edit_text_email)
