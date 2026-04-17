@@ -17,8 +17,12 @@ class DoacaoFragment : Fragment() {
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
+    private var campanha_id: String = ""
+    private var campanha_nome: String = ""
+
     private var _binding: FragmentDoacaoBinding? = null
     private val binding get() = _binding!!
+
     private val listaFragments = mutableListOf<DashboardFragment>()
 
     override fun onCreateView(
@@ -31,6 +35,15 @@ class DoacaoFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
+
+        // 🔥 RECEBE DADOS
+        campanha_id = arguments?.getString("campanha_id") ?: ""
+        campanha_nome = arguments?.getString("campanha_nome") ?: ""
+
+        // 🔥 ESCONDE BOTÃO SE VEIO DA HOME
+        if (campanha_id.isNotEmpty()) {
+            binding.buttonAdicionar.visibility = View.GONE
+        }
 
         setupClicks()
 
@@ -56,7 +69,16 @@ class DoacaoFragment : Fragment() {
 
         val novoFragment = DashboardFragment()
 
-        listaFragments.add(novoFragment) // 🔥 ESSENCIAL
+        // 🔥 PASSA DADOS PARA CADA CARD
+        val bundle = Bundle().apply {
+            putString("campanha_id", campanha_id)
+            putString("campanha_nome", campanha_nome)
+            putString("categoria_campanha", arguments?.getString("categoria_campanha"))
+        }
+
+        novoFragment.arguments = bundle
+
+        listaFragments.add(novoFragment)
 
         childFragmentManager.beginTransaction()
             .add(binding.containerFragments.id, novoFragment)

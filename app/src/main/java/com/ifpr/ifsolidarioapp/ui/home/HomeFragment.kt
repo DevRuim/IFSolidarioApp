@@ -30,12 +30,6 @@ HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
-        val botao = view.findViewById<Button>(R.id.abrir_campanha)
-
-        botao.setOnClickListener {
-            val intent = Intent(requireContext(), CadastroCampanhaActivity::class.java)
-            startActivity(intent)
-        }
 
         carregarCampanhas(containerLayout)
 
@@ -60,6 +54,13 @@ HomeFragment : Fragment() {
                             val campanha = campanhaSnapshot.getValue(Campanha::class.java)
                                 ?: continue
 
+                            val campanha_id = campanhaSnapshot.key
+
+                            if (campanha_id.isNullOrEmpty()) {
+                                Toast.makeText(container.context, "Erro: ID nulo", Toast.LENGTH_SHORT).show()
+                                continue
+                            }
+
                             val itemView = LayoutInflater.from(container.context)
                                 .inflate(R.layout.item_template, container, false)
 
@@ -73,10 +74,23 @@ HomeFragment : Fragment() {
                             val doarBotao = itemView.findViewById<Button>(R.id.doarButton)
 
                             doarBotao.setOnClickListener {
-                                findNavController().navigate(R.id.navigation_dashboard)
+
+                                Toast.makeText(
+                                    container.context,
+                                    "ID: $campanha_id | NOME: ${campanha.nome_campanha}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+
+                                val bundle = Bundle().apply {
+                                    putString("campanha_id", campanha_id)
+                                    putString("campanha_nome", campanha.nome_campanha)
+                                    putString("categoria_campanha", campanha.categoria_campanha)
+                                }
+
+                                findNavController().navigate(R.id.navigation_dashboard, bundle)
                             }
 
-                            nome.text = "Nome: ${campanha.nomeCampanha}"
+                            nome.text = "Nome: ${campanha.nome_campanha}"
                             desc.text = "Descrição: ${campanha.descricao}"
                             endereco.text = "Endereço: ${campanha.endereco}"
                             meta.text = "Meta: R$ ${campanha.meta}"
@@ -90,7 +104,7 @@ HomeFragment : Fragment() {
                             }
 
                             criador.text = "Criado por: ${
-                                campanha.criadorNome.takeIf { it.isNotBlank() } ?: "Desconhecido"
+                                campanha.criador_nome.takeIf { it.isNotBlank() } ?: "Desconhecido"
                             }"
 
                             container.addView(itemView)
