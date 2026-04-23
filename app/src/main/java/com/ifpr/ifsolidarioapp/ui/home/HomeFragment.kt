@@ -88,7 +88,6 @@ HomeFragment : Fragment() {
                             val doarBotao = itemView.findViewById<Button>(R.id.doarButton)
 
                             doarBotao.setOnClickListener {
-
                                 val uid = auth.currentUser?.uid
                                 if(uid !=null) {
                                     Toast.makeText(
@@ -104,11 +103,9 @@ HomeFragment : Fragment() {
                                     }
 
                                     findNavController().navigate(R.id.navigation_dashboard, bundle)
-                                }else{
+                                } else{
                                     startActivity(Intent(context, LoginActivity::class.java))
                                 }
-
-
                             }
 
                             nome.text = "Nome: ${campanha.nome_campanha}"
@@ -130,35 +127,7 @@ HomeFragment : Fragment() {
 
                             container.addView(itemView)
                         }
-
-    fun carregarItensMarketplace(container: LinearLayout) {
-    val databaseRef = FirebaseDatabase.getInstance().getReference("campanhas")
-
-    databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            container.removeAllViews()
-
-            for (userSnapshot in snapshot.children) {
-                for (itemSnapshot in userSnapshot.children) {
-                    val item = itemSnapshot.getValue(Campanha::class.java) ?: continue
-
-                    val itemView = LayoutInflater.from(container.context)
-                        .inflate(R.layout.item_template, container, false)
-
-                    val imageView = itemView.findViewById<ImageView>(R.id.item_image)
-                    val nomeCampanhaView = itemView.findViewById<TextView>(R.id.item_endereco)
-
-                    nomeCampanhaView.text = "${item.nomeCampanha ?: "Não informado"}"
-
-                    if (!item.imagemBase64.isNullOrEmpty()) {
-                        try {
-                            val bytes = Base64.decode(item.imagemBase64, Base64.DEFAULT)
-                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                            imageView.setImageBitmap(bitmap)
-                        } catch (_: Exception) {}
                     }
-
-                    container.addView(itemView)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -166,4 +135,5 @@ HomeFragment : Fragment() {
                 }
             })
     }
+
 }
