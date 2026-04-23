@@ -15,12 +15,15 @@ import androidx.fragment.app.Fragment
 import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.databinding.FragmentItemdoacaoBinding
 import java.io.ByteArrayOutputStream
+import android.widget.Toast
+
 
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentItemdoacaoBinding? = null
     private val binding get() = _binding!!
-
+    private var campanha_id: String = ""
+    private var campanha_nome: String = ""
     private val imageList = mutableListOf<Uri>()
     private var currentImageIndex = 0
 
@@ -36,8 +39,35 @@ class DashboardFragment : Fragment() {
 
         _binding = FragmentItemdoacaoBinding.inflate(inflater, container, false)
 
+        campanha_id = arguments?.getString("campanha_id") ?: ""
+        campanha_nome = arguments?.getString("campanha_nome") ?: ""
+        val categoriaRecebida = arguments?.getString("categoria_campanha")
+
         setupSpinner()
+
+        categoriaRecebida?.let { categoria ->
+            val index = (binding.spinnerCategoria.adapter as ArrayAdapter<String>)
+                .getPosition(categoria.replaceFirstChar { it.uppercase() })
+
+            if (index >= 0) {
+                binding.spinnerCategoria.setSelection(index)
+            }
+        }
+
         setupClicks()
+
+        categoriaRecebida?.let { categoria ->
+
+            val adapter = binding.spinnerCategoria.adapter as ArrayAdapter<String>
+            val index = adapter.getPosition(categoria)
+
+            if (index >= 0) {
+                binding.spinnerCategoria.setSelection(index)
+            }
+
+            binding.spinnerCategoria.isEnabled = false
+            binding.spinnerCategoria.isClickable = false
+        }
 
         return binding.root
     }
@@ -54,13 +84,16 @@ class DashboardFragment : Fragment() {
 
         val quantidade = quantidadeTexto.toDouble()
         val categoria = b.spinnerCategoria.selectedItem.toString()
-
         val imagensBase64 = imageList.map { uriToBase64(it) }
+
+        Toast.makeText(requireContext(), "SALVANDO ID: $campanha_id", Toast.LENGTH_SHORT).show()
 
         return DoacaoData(
             imagens = imagensBase64,
             quantidade = quantidade,
-            categoria = categoria
+            categoria = categoria,
+            campanha_id = campanha_id,
+            campanha_nome = campanha_nome
         )
     }
 
@@ -138,7 +171,6 @@ class DashboardFragment : Fragment() {
 
         val outputStream = ByteArrayOutputStream()
 
-        // 🔽 reduz qualidade pra não pesar
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
 
         val bytes = outputStream.toByteArray()
