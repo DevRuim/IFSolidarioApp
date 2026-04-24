@@ -35,15 +35,7 @@ HomeFragment : Fragment() {
 
         val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
 
-        val botao = view.findViewById<Button>(R.id.abrir_campanha)
-
         auth = FirebaseAuth.getInstance()
-
-        botao.setOnClickListener {
-            val intent = Intent(requireContext(), CadastroCampanhaActivity::class.java)
-            startActivity(intent)
-        }
-
 
         carregarCampanhas(containerLayout)
 
