@@ -4,6 +4,7 @@ data class Usuario(
 
     var key: String = "",
     var nome: String = "",
-    var email: String = ""
+    var email: String = "",
+    var imagemBase64: String = ""
 
 )

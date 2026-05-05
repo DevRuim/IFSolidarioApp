@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.ong.CadastroOngActivity">
+
+    <TextView
+        android:id="@+id/textCadastroONGTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Cadastro de ONG"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/registerOngNameEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nome Fantasia da ONG"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textCadastroONGTitle"/>
+
+    <EditText
+        android:id="@+id/registerOngEmailEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintTop_toBottomOf="@id/registerOngNameEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/registerOngTelefoneEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Telefone"
+        android:inputType="textEmailAddress"
+        app:layout_constraintTop_toBottomOf="@id/registerOngEmailEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/registerCNPJEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="CNPJ"
+        android:inputType="textEmailAddress"
+        app:layout_constraintTop_toBottomOf="@id/registerOngTelefoneEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/registerOngPasswordEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Senha"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@id/registerCNPJEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/registerConfirmPasswordEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Confirmar Senha"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@id/registerOngPasswordEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/salvarButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Cadastrar"
+        app:layout_constraintTop_toBottomOf="@id/registerConfirmPasswordEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/sairButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sair"
+        app:layout_constraintTop_toBottomOf="@id/salvarButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
