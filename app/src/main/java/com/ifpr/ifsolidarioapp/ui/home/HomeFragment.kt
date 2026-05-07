@@ -73,6 +73,7 @@ HomeFragment : Fragment() {
                             val img = itemView.findViewById<ImageView>(R.id.item_image)
                             val nome = itemView.findViewById<TextView>(R.id.item_nome)
                             val desc = itemView.findViewById<TextView>(R.id.item_descricao)
+                            val categoria = itemView.findViewById<TextView>(R.id.item_categoria)
                             val endereco = itemView.findViewById<TextView>(R.id.item_endereco)
                             val meta = itemView.findViewById<TextView>(R.id.item_meta)
                             val criador = itemView.findViewById<TextView>(R.id.item_criador)
@@ -102,6 +103,7 @@ HomeFragment : Fragment() {
 
                             nome.text = "Nome: ${campanha.nome_campanha}"
                             desc.text = "Descrição: ${campanha.descricao}"
+                            categoria.text = "Categoria: ${campanha.categoria_campanha}"
                             endereco.text = "Endereço: ${campanha.endereco}"
                             meta.text = "Meta: R$ ${campanha.meta}"
 
