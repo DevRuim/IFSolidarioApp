@@ -34,9 +34,10 @@
 
                     <ImageView
                         android:id="@+id/imagemOng"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#00E0E0E0"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        android:background="@drawable/bg_circle"
+                        android:clipToOutline="true"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_profile_black_24dp" />
 
