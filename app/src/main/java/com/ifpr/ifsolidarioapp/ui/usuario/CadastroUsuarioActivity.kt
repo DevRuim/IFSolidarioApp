@@ -1,14 +1,19 @@
 package com.ifpr.ifsolidarioapp.ui.usuario
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,11 +21,11 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.ifsolidarioapp.R
-import com.ifpr.ifsolidarioapp.baseclasses.Usuario
 import com.ifpr.ifsolidarioapp.baseclasses.Ong
-
+import com.ifpr.ifsolidarioapp.baseclasses.Usuario
 
 class CadastroUsuarioActivity : AppCompatActivity() {
+
     private lateinit var selectUsuario: MaterialAutoCompleteTextView
     private lateinit var textViewUsuario: TextView
     private lateinit var textViewOng: TextView
@@ -32,8 +37,15 @@ class CadastroUsuarioActivity : AppCompatActivity() {
     private lateinit var registerPasswordEditText: EditText
     private lateinit var registerConfirmPasswordEditText: EditText
     private lateinit var registerButton: Button
+    private lateinit var imagemOng: ImageView
+    private lateinit var escolherImagemButton: FloatingActionButton
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private var imageUri: Uri? = null
+
+    companion object {
+        const val PICK_IMAGE = 100
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -49,18 +61,48 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         textViewUsuario = findViewById(R.id.textViewUsuario)
         textViewOng = findViewById(R.id.textViewOng)
         textViewCNPJ = findViewById(R.id.textViewCNPJ)
+
         registerNameEditText = findViewById(R.id.registerNameEditText)
         registerEmailEditText = findViewById(R.id.registerEmailEditText)
         registerTelefoneEditText = findViewById(R.id.registerTelefoneEditText)
         registerCNPJEditText = findViewById(R.id.registerCNPJEditText)
         registerPasswordEditText = findViewById(R.id.registerPasswordEditText)
         registerConfirmPasswordEditText = findViewById(R.id.registerConfirmPasswordEditText)
+
         registerButton = findViewById(R.id.registerButton)
+
+        imagemOng = findViewById(R.id.imagemOng)
+        escolherImagemButton = findViewById(R.id.escolherImagemButton)
+
+        escolherImagemButton.setOnClickListener {
+
+            val intent = Intent(Intent.ACTION_PICK)
+
+            intent.type = "image/*"
+
+            startActivityForResult(intent, PICK_IMAGE)
+        }
 
         setupSelect()
 
         registerButton.setOnClickListener {
             createAccount()
+        }
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+
+            imageUri = data?.data
+
+            imagemOng.setImageURI(imageUri)
         }
     }
 
@@ -78,8 +120,10 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         )
 
         selectUsuario.setAdapter(adapter)
+
         selectUsuario.inputType = 0
         selectUsuario.keyListener = null
+
         selectUsuario.setText(tipos[0], false)
 
         atualizarCampos()
@@ -94,27 +138,43 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         val tipo = selectUsuario.text.toString()
 
         if (tipo == "ONG") {
+
             textViewUsuario.visibility = View.GONE
+
             textViewOng.visibility = View.VISIBLE
+
             textViewCNPJ.visibility = View.VISIBLE
+
             registerCNPJEditText.visibility = View.VISIBLE
+
         } else {
+
             textViewUsuario.visibility = View.VISIBLE
+
             textViewOng.visibility = View.GONE
+
             textViewCNPJ.visibility = View.GONE
+
             registerCNPJEditText.visibility = View.GONE
         }
     }
 
     private fun createAccount() {
 
-        val tipoUsuario =  selectUsuario.text.toString()
+        val tipoUsuario = selectUsuario.text.toString()
+
         val name = registerNameEditText.text.toString().trim()
+
         val email = registerEmailEditText.text.toString().trim()
+
         val telefone = registerTelefoneEditText.text.toString().trim()
+
         val cnpj = registerCNPJEditText.text.toString().trim()
+
         val password = registerPasswordEditText.text.toString().trim()
-        val confirmPassword = registerConfirmPasswordEditText.text.toString().trim()
+
+        val confirmPassword =
+            registerConfirmPasswordEditText.text.toString().trim()
 
         if (
             name.isEmpty() ||
@@ -166,6 +226,12 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             return
         }
 
+        val imagemBase64 = if (imageUri != null) {
+            uriToBase64(imageUri!!)
+        } else {
+            ""
+        }
+
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
 
@@ -184,7 +250,8 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                             email_ong = email,
                             telefone_ong = telefone,
                             tipo_usuario = tipoUsuario,
-                            cnpj = cnpj
+                            cnpj = cnpj,
+                            imagemBase64 = imagemBase64
                         )
 
                     } else {
@@ -194,7 +261,8 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                             nome_usuario = name,
                             email_usuario = email,
                             telefone_usuario = telefone,
-                            tipo_usuario = tipoUsuario
+                            tipo_usuario = tipoUsuario,
+                            imagemBase64 = imagemBase64
                         )
                     }
 
@@ -279,24 +347,14 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                 .build()
 
         user?.updateProfile(profileUpdates)
-            ?.addOnCompleteListener { task ->
+    }
 
-                if (task.isSuccessful) {
+    private fun uriToBase64(uri: Uri): String {
 
-                    Toast.makeText(
-                        baseContext,
-                        "Nome alterado com sucesso",
-                        Toast.LENGTH_SHORT
-                    ).show()
+        val inputStream = contentResolver.openInputStream(uri)
 
-                } else {
+        val bytes = inputStream?.readBytes()
 
-                    Toast.makeText(
-                        baseContext,
-                        "Erro ao alterar nome",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+        return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 }
