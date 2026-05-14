@@ -2,138 +2,300 @@ package com.ifpr.ifsolidarioapp.ui.usuario
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.ifsolidarioapp.R
+import com.ifpr.ifsolidarioapp.baseclasses.Usuario
+import com.ifpr.ifsolidarioapp.baseclasses.Ong
 
 
-class CadastroUsuarioActivity  : AppCompatActivity() {
-    private lateinit var textCadastroUsuarioTitle: TextView
+class CadastroUsuarioActivity : AppCompatActivity() {
+    private lateinit var selectUsuario: MaterialAutoCompleteTextView
+    private lateinit var textViewUsuario: TextView
+    private lateinit var textViewOng: TextView
+    private lateinit var textViewCNPJ: TextView
     private lateinit var registerNameEditText: EditText
     private lateinit var registerEmailEditText: EditText
+    private lateinit var registerTelefoneEditText: EditText
+    private lateinit var registerCNPJEditText: EditText
     private lateinit var registerPasswordEditText: EditText
     private lateinit var registerConfirmPasswordEditText: EditText
     private lateinit var registerButton: Button
-    private lateinit var sairButton: Button
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_usuario)
 
-        // Inicializa o Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        textCadastroUsuarioTitle = findViewById(R.id.textCadastroUsuarioTitle)
+        database = FirebaseDatabase.getInstance().reference
+
+        selectUsuario = findViewById(R.id.selectUsuario)
+
+        textViewUsuario = findViewById(R.id.textViewUsuario)
+        textViewOng = findViewById(R.id.textViewOng)
+        textViewCNPJ = findViewById(R.id.textViewCNPJ)
         registerNameEditText = findViewById(R.id.registerNameEditText)
         registerEmailEditText = findViewById(R.id.registerEmailEditText)
+        registerTelefoneEditText = findViewById(R.id.registerTelefoneEditText)
+        registerCNPJEditText = findViewById(R.id.registerCNPJEditText)
         registerPasswordEditText = findViewById(R.id.registerPasswordEditText)
         registerConfirmPasswordEditText = findViewById(R.id.registerConfirmPasswordEditText)
-        registerButton = findViewById(R.id.salvarButton)
-        sairButton = findViewById(R.id.sairButton)
+        registerButton = findViewById(R.id.registerButton)
+
+        setupSelect()
 
         registerButton.setOnClickListener {
             createAccount()
         }
+    }
 
-        sairButton.setOnClickListener {
-            finish()
+    private fun setupSelect() {
+
+        val tipos = arrayOf(
+            "Doador",
+            "ONG"
+        )
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            tipos
+        )
+
+        selectUsuario.setAdapter(adapter)
+        selectUsuario.inputType = 0
+        selectUsuario.keyListener = null
+        selectUsuario.setText(tipos[0], false)
+
+        atualizarCampos()
+
+        selectUsuario.setOnItemClickListener { _, _, _, _ ->
+            atualizarCampos()
         }
     }
 
+    private fun atualizarCampos() {
 
+        val tipo = selectUsuario.text.toString()
+
+        if (tipo == "ONG") {
+            textViewUsuario.visibility = View.GONE
+            textViewOng.visibility = View.VISIBLE
+            textViewCNPJ.visibility = View.VISIBLE
+            registerCNPJEditText.visibility = View.VISIBLE
+        } else {
+            textViewUsuario.visibility = View.VISIBLE
+            textViewOng.visibility = View.GONE
+            textViewCNPJ.visibility = View.GONE
+            registerCNPJEditText.visibility = View.GONE
+        }
+    }
 
     private fun createAccount() {
+
+        val tipoUsuario =  selectUsuario.text.toString()
         val name = registerNameEditText.text.toString().trim()
         val email = registerEmailEditText.text.toString().trim()
+        val telefone = registerTelefoneEditText.text.toString().trim()
+        val cnpj = registerCNPJEditText.text.toString().trim()
         val password = registerPasswordEditText.text.toString().trim()
         val confirmPassword = registerConfirmPasswordEditText.text.toString().trim()
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT)
-                .show()
+        if (
+            name.isEmpty() ||
+            email.isEmpty() ||
+            telefone.isEmpty() ||
+            password.isEmpty() ||
+            confirmPassword.isEmpty()
+        ) {
+
+            Toast.makeText(
+                this,
+                "Preencha todos os campos",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            return
+        }
+
+        if (tipoUsuario == "ONG" && cnpj.isEmpty()) {
+
+            Toast.makeText(
+                this,
+                "Preencha o CNPJ",
+                Toast.LENGTH_SHORT
+            ).show()
+
             return
         }
 
         if (password.length < 6) {
-            Toast.makeText(this, "A senha deve ter no mínimo 6 caracteres", Toast.LENGTH_SHORT).show()
+
+            Toast.makeText(
+                this,
+                "Senha mínima de 6 caracteres",
+                Toast.LENGTH_SHORT
+            ).show()
+
             return
         }
 
         if (password != confirmPassword) {
-            Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show()
+
+            Toast.makeText(
+                this,
+                "As senhas não coincidem",
+                Toast.LENGTH_SHORT
+            ).show()
+
             return
         }
 
-        try {
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            this,
-                            "Novo usuário cadastrado com sucesso!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        val user = auth.currentUser
-                        updateProfile(user, name)
-                        sendEmailVerification(user)
-                    } else {
-                        val errorMessage = task.exception?.message ?: "Erro desconhecido"
-                        Log.e("FirebaseAuth", "Erro ao cadastrar usuário: $errorMessage")
-                        Toast.makeText(
-                            this,
-                            "Falha ao cadastrar novo usuário: $errorMessage",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-        } catch (ex: Exception) {
-            Log.e("FirebaseAuth", "Erro ao conectar com o Firebase", ex)
-            Toast.makeText(
-                this,
-                "Falha ao conectar com o Firebase: ${ex.message}",
-                Toast.LENGTH_LONG
-            ).show()
-        }
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
 
-
-    }
-
-    private fun sendEmailVerification(user: FirebaseUser?) {
-        user?.sendEmailVerification()
-            ?.addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(baseContext, "Verification email sent to ${user.email}.",
-                        Toast.LENGTH_SHORT).show()
-                    finish()
+
+                    val user =
+                        auth.currentUser ?: return@addOnCompleteListener
+
+                    val uid = user.uid
+
+                    val usuario = if (tipoUsuario == "ONG") {
+
+                        Ong(
+                            key = uid,
+                            nome_ong = name,
+                            email_ong = email,
+                            telefone_ong = telefone,
+                            tipo_usuario = tipoUsuario,
+                            cnpj = cnpj
+                        )
+
+                    } else {
+
+                        Usuario(
+                            key = uid,
+                            nome_usuario = name,
+                            email_usuario = email,
+                            telefone_usuario = telefone,
+                            tipo_usuario = tipoUsuario
+                        )
+                    }
+
+                    database
+                        .child("usuarios")
+                        .child(uid)
+                        .setValue(usuario)
+                        .addOnSuccessListener {
+
+                            updateProfile(user, name)
+
+                            sendEmailVerification(user)
+
+                            Toast.makeText(
+                                this,
+                                "Usuário cadastrado com sucesso!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        .addOnFailureListener {
+
+                            Toast.makeText(
+                                this,
+                                "Erro ao salvar usuário",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
                 } else {
-                    Toast.makeText(baseContext, "Failed to send verification email.",
-                        Toast.LENGTH_SHORT).show()
+
+                    val errorMessage =
+                        task.exception?.message ?: "Erro desconhecido"
+
+                    Log.e(
+                        "FirebaseAuth",
+                        errorMessage
+                    )
+
+                    Toast.makeText(
+                        this,
+                        errorMessage,
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
     }
 
-    private fun updateProfile(user: FirebaseUser?, displayName: String) {
-        val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName(displayName)
-            .build()
+    private fun sendEmailVerification(user: FirebaseUser?) {
+
+        user?.sendEmailVerification()
+            ?.addOnCompleteListener(this) { task ->
+
+                if (task.isSuccessful) {
+
+                    Toast.makeText(
+                        baseContext,
+                        "Email de verificação enviado",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    finish()
+
+                } else {
+
+                    Toast.makeText(
+                        baseContext,
+                        "Falha ao enviar email",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
+
+    private fun updateProfile(
+        user: FirebaseUser?,
+        displayName: String
+    ) {
+
+        val profileUpdates =
+            UserProfileChangeRequest.Builder()
+                .setDisplayName(displayName)
+                .build()
 
         user?.updateProfile(profileUpdates)
             ?.addOnCompleteListener { task ->
+
                 if (task.isSuccessful) {
-                    Toast.makeText(baseContext, "Nome do usuario alterado com sucesso.",
-                        Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(
+                        baseContext,
+                        "Nome alterado com sucesso",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                 } else {
-                    Toast.makeText(baseContext, "Não foi possivel alterar o nome do usuario.",
-                        Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(
+                        baseContext,
+                        "Erro ao alterar nome",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }

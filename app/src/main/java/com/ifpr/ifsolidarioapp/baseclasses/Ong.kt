@@ -7,7 +7,6 @@ data class Ong(
     var email_ong: String = "",
     var telefone_ong: String = "",
     var cnpj: String = "",
-    var imagemBase64: String = ""
-
-
+    var imagemBase64: String = "",
+    var tipo_usuario: String = "ONG"
 )

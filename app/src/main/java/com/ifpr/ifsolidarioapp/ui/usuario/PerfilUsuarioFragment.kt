@@ -98,8 +98,8 @@ class PerfilUsuarioFragment : Fragment() {
 
                         usuario?.let {
 
-                            binding.registerNameEditText.setText(it.nome ?: "")
-                            binding.registerEmailEditText.setText(it.email ?: "")
+                            binding.registerNameEditText.setText(it.nome_usuario ?: "")
+                            binding.registerEmailEditText.setText(it.email_usuario ?: "")
                         }
                     }
                 }
@@ -158,8 +158,8 @@ class PerfilUsuarioFragment : Fragment() {
 
         val usuario = Usuario(
             key = user.uid,
-            nome = displayName,
-            email = user.email ?: ""
+            nome_usuario = displayName,
+            email_usuario = user.email ?: ""
         )
 
         user.updateProfile(profileUpdates)
