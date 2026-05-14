@@ -74,9 +74,10 @@ HomeFragment : Fragment() {
                             val nome = itemView.findViewById<TextView>(R.id.item_nome)
                             val desc = itemView.findViewById<TextView>(R.id.item_descricao)
                             val categoria = itemView.findViewById<TextView>(R.id.item_categoria)
-                            val endereco = itemView.findViewById<TextView>(R.id.item_endereco)
-                            val meta = itemView.findViewById<TextView>(R.id.item_meta)
-                            val criador = itemView.findViewById<TextView>(R.id.item_criador)
+                            //val endereco = itemView.findViewById<TextView>(R.id.item_endereco)
+                            //val criador = itemView.findViewById<TextView>(R.id.item_criador)
+                            val data = itemView.findViewById<TextView>(R.id.item_data)
+                            val progresso = itemView.findViewById<TextView>(R.id.item_progresso)
 
                             val doarBotao = itemView.findViewById<Button>(R.id.doarButton)
 
@@ -101,11 +102,18 @@ HomeFragment : Fragment() {
                                 }
                             }
 
-                            nome.text = "Nome: ${campanha.nome_campanha}"
-                            desc.text = "Descrição: ${campanha.descricao}"
+                            nome.text = campanha.nome_campanha
+
+                            desc.text = campanha.descricao
+
                             categoria.text = "Categoria: ${campanha.categoria_campanha}"
-                            endereco.text = "Endereço: ${campanha.endereco}"
-                            meta.text = "Meta: R$ ${campanha.meta}"
+
+                            val unidade = obterUnidade(campanha.categoria_campanha)
+
+                            progresso.text =
+                                "${campanha.quantidade_atual.toInt()} de ${campanha.meta.toInt()} $unidade"
+
+                            data.text = "Termina em: ${campanha.data_termino}"
 
                             try {
                                 val bytes = Base64.decode(campanha.imagemBase64, Base64.DEFAULT)
@@ -115,15 +123,28 @@ HomeFragment : Fragment() {
                                 img.setImageResource(android.R.drawable.ic_menu_report_image)
                             }
 
-                            criador.text = "Criado por: ${
+                            /*criador.text = "Criado por: ${
                                 campanha.criador_nome.takeIf { it.isNotBlank() } ?: "Desconhecido"
-                            }"
+                            }"*/
 
                             container.addView(itemView)
                         }
                     }
                 }
 
+                private fun obterUnidade(categoria: String): String {
+
+                    return when (categoria.lowercase()) {
+
+                        "alimento", "alimentos" -> "Kg"
+
+                        "brinquedo", "brinquedos" -> "un."
+
+                        "roupa", "roupas" -> "Pç"
+
+                        else -> "un."
+                    }
+                }
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(container.context, "Erro ao carregar", Toast.LENGTH_SHORT).show()
                 }

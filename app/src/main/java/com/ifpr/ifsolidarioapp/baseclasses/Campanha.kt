@@ -11,7 +11,8 @@ data class Campanha(
     var categoria_campanha: String = "",
     var criadorId: String = "",
     var criador_nome: String = "",
-    var imagemBase64: String = ""
+    var imagemBase64: String = "",
+    var data_termino: String = ""
 
 
 )
