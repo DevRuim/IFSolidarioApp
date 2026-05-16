@@ -16,10 +16,11 @@ class DoacaoFragment : Fragment() {
 
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
-
     private var campanha_id: String = ""
-    private var campanha_nome: String = ""
 
+    private var criadorId: String = ""
+    private var campanha_nome: String = ""
+    private var quantidade_atual: String = ""
     private var _binding: FragmentDoacaoBinding? = null
     private val binding get() = _binding!!
 
@@ -36,11 +37,12 @@ class DoacaoFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        // 🔥 RECEBE DADOS
+        criadorId = arguments?.getString("criadorId") ?: ""
+
         campanha_id = arguments?.getString("campanha_id") ?: ""
         campanha_nome = arguments?.getString("campanha_nome") ?: ""
+        quantidade_atual = arguments?.getString("quantidade_atual") ?: ""
 
-        // 🔥 ESCONDE BOTÃO SE VEIO DA HOME
         if (campanha_id.isNotEmpty()) {
             binding.buttonAdicionar.visibility = View.GONE
         }
@@ -69,10 +71,11 @@ class DoacaoFragment : Fragment() {
 
         val novoFragment = DashboardFragment()
 
-        // 🔥 PASSA DADOS PARA CADA CARD
         val bundle = Bundle().apply {
             putString("campanha_id", campanha_id)
             putString("campanha_nome", campanha_nome)
+            putString("quantidade_atual", quantidade_atual)
+            putString("criadorId", arguments?.getString("criadorId"))
             putString("categoria_campanha", arguments?.getString("categoria_campanha"))
         }
 
@@ -108,7 +111,11 @@ class DoacaoFragment : Fragment() {
 
         val uid = auth.currentUser?.uid ?: return
 
+        var quantidadeDoada = 0.0
+
         for (item in lista) {
+
+            quantidadeDoada += item.quantidade
 
             database
                 .child("doacoes")
@@ -116,6 +123,37 @@ class DoacaoFragment : Fragment() {
                 .push()
                 .setValue(item)
         }
+
+        atualizarQuantidadeCampanha(quantidadeDoada)
+    }
+
+    private fun atualizarQuantidadeCampanha(
+        quantidadeDoada: Double
+    ) {
+
+        if (
+            campanha_id.isEmpty() ||
+            criadorId.isEmpty()
+        ) return
+
+        val campanhaRef = database
+            .child("campanhas")
+            .child(criadorId)
+            .child(campanha_id)
+
+        campanhaRef
+            .child("quantidade_atual")
+            .get()
+            .addOnSuccessListener { snapshot ->
+
+                val atual = snapshot.getValue(Double::class.java) ?: 0.0
+
+                val novaQuantidade = atual + quantidadeDoada
+
+                campanhaRef
+                    .child("quantidade_atual")
+                    .setValue(novaQuantidade)
+            }
     }
 
     override fun onDestroyView() {

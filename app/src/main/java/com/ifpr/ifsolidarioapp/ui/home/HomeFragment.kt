@@ -13,7 +13,6 @@ import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Campanha
 import android.content.Intent
-import com.ifpr.ifsolidarioapp.ui.campanha.CadastroCampanhaActivity
 import androidx.navigation.fragment.findNavController
 
 class
@@ -51,8 +50,12 @@ HomeFragment : Fragment() {
                     for (userSnapshot in snapshot.children) {
                         for (campanhaSnapshot in userSnapshot.children) {
 
-                            val campanha = campanhaSnapshot.getValue(Campanha::class.java)
-                                ?: continue
+                            val campanha = try {
+                                campanhaSnapshot.getValue(Campanha::class.java)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                null
+                            } ?: continue
 
                             val campanha_id = campanhaSnapshot.key
 
