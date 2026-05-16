@@ -138,23 +138,15 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         val tipo = selectUsuario.text.toString()
 
         if (tipo == "ONG") {
-
             textViewUsuario.visibility = View.GONE
-
             textViewOng.visibility = View.VISIBLE
-
             textViewCNPJ.visibility = View.VISIBLE
-
             registerCNPJEditText.visibility = View.VISIBLE
 
         } else {
-
             textViewUsuario.visibility = View.VISIBLE
-
             textViewOng.visibility = View.GONE
-
             textViewCNPJ.visibility = View.GONE
-
             registerCNPJEditText.visibility = View.GONE
         }
     }
@@ -162,17 +154,11 @@ class CadastroUsuarioActivity : AppCompatActivity() {
     private fun createAccount() {
 
         val tipoUsuario = selectUsuario.text.toString()
-
         val name = registerNameEditText.text.toString().trim()
-
         val email = registerEmailEditText.text.toString().trim()
-
         val telefone = registerTelefoneEditText.text.toString().trim()
-
         val cnpj = registerCNPJEditText.text.toString().trim()
-
         val password = registerPasswordEditText.text.toString().trim()
-
         val confirmPassword =
             registerConfirmPasswordEditText.text.toString().trim()
 
@@ -316,7 +302,6 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             ?.addOnCompleteListener(this) { task ->
 
                 if (task.isSuccessful) {
-
                     Toast.makeText(
                         baseContext,
                         "Email de verificação enviado",
@@ -324,9 +309,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                     ).show()
 
                     finish()
-
                 } else {
-
                     Toast.makeText(
                         baseContext,
                         "Falha ao enviar email",
