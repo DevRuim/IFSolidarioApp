@@ -11,6 +11,8 @@ import com.ifpr.ifsolidarioapp.ui.dashboard.DashboardFragment
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.auth.FirebaseAuth
+import androidx.navigation.fragment.findNavController
+import com.ifpr.ifsolidarioapp.R
 
 class DoacaoFragment : Fragment() {
 
@@ -147,13 +149,21 @@ class DoacaoFragment : Fragment() {
             .get()
             .addOnSuccessListener { snapshot ->
 
-                val atual = snapshot.getValue(Double::class.java) ?: 0.0
+                val atual =
+                    snapshot.getValue(Double::class.java) ?: 0.0
 
-                val novaQuantidade = atual + quantidadeDoada
+                val novaQuantidade =
+                    atual + quantidadeDoada
 
                 campanhaRef
                     .child("quantidade_atual")
                     .setValue(novaQuantidade)
+                    .addOnSuccessListener {
+
+                        findNavController().navigate(
+                            R.id.navigation_home
+                        )
+                    }
             }
     }
 
