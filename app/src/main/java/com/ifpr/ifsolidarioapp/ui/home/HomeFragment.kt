@@ -88,6 +88,8 @@ HomeFragment : Fragment() {
                                     putString("campanha_id", campanha_id)
                                     putString("campanha_nome", campanha.nome_campanha)
                                     putString("categoria_campanha", campanha.categoria_campanha)
+                                    putString("criadorId", campanha.criadorId)
+                                    putString("quantidade_atual", campanha.quantidade_atual.toString())
                                 }
 
                                 findNavController().navigate(R.id.navigation_dashboard, bundle)

@@ -72,11 +72,12 @@ class DoacaoFragment : Fragment() {
         val novoFragment = DashboardFragment()
 
         val bundle = Bundle().apply {
+
             putString("campanha_id", campanha_id)
             putString("campanha_nome", campanha_nome)
-            putString("quantidade_atual", quantidade_atual)
-            putString("criadorId", arguments?.getString("criadorId"))
             putString("categoria_campanha", arguments?.getString("categoria_campanha"))
+            putString("criadorId", criadorId)
+            putString("quantidade_atual", quantidade_atual)
         }
 
         novoFragment.arguments = bundle
