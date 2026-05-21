@@ -62,6 +62,8 @@ class PerfilUsuarioFragment : Fragment() {
             binding.registerNameEditText.setText(user.displayName ?: "")
             binding.registerEmailEditText.setText(user.email ?: "")
 
+            contarDoacoesUsuario(user.uid)
+
             // Carrega foto com segurança
             if (user.photoUrl != null) {
                 Glide.with(this)
@@ -95,6 +97,30 @@ class PerfilUsuarioFragment : Fragment() {
         ).show()
 
         requireActivity().finish()
+    }
+    private fun contarDoacoesUsuario(uid: String) {
+
+        val ref = FirebaseDatabase.getInstance().getReference("doacoes")
+
+        ref.child(uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    val total = snapshot.childrenCount
+
+                    binding.valorDoacoes.text = total.toString()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                    Toast.makeText(
+                        context,
+                        "Erro ao carregar doações",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
 
 
