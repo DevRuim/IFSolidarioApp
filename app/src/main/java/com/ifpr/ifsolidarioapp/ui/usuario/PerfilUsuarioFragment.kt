@@ -1,5 +1,6 @@
 package com.ifpr.ifsolidarioapp.ui.usuario
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.baseclasses.Usuario
 import com.ifpr.ifsolidarioapp.databinding.FragmentPerfilUsuarioBinding
+import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
 
 class PerfilUsuarioFragment : Fragment() {
 
@@ -33,8 +35,19 @@ class PerfilUsuarioFragment : Fragment() {
 
         // Inicializa Firebase
         auth = FirebaseAuth.getInstance()
+
+        val uid = auth.currentUser?.uid
+        if(uid ==null) {
+            startActivity(Intent(context, LoginActivity::class.java))
+        }
         usersReference = FirebaseDatabase.getInstance().getReference("users")
 
+        carregaDadosDoUsuarioLogado()
+
+        return binding.root
+    }
+
+    private fun carregaDadosDoUsuarioLogado() {
         val user = auth.currentUser
 
         if (user != null) {
@@ -58,18 +71,18 @@ class PerfilUsuarioFragment : Fragment() {
 
             // Carrega dados do Realtime Database
             recuperarDadosUsuario(user.uid)
-        }
 
-        binding.salvarButton.setOnClickListener {
-            updateUser()
-        }
 
-        binding.sairButton.setOnClickListener {
-            signOut()
-        }
+            binding.salvarButton.setOnClickListener {
+                updateUser()
+            }
 
-        return binding.root
+            binding.sairButton.setOnClickListener {
+                signOut()
+            }
+        }
     }
+
 
     private fun signOut() {
 
@@ -218,6 +231,10 @@ class PerfilUsuarioFragment : Fragment() {
             }
     }
 
+    override fun onResume() {
+        super.onResume()
+        carregaDadosDoUsuarioLogado()
+    }
 
     override fun onDestroyView() {
 
