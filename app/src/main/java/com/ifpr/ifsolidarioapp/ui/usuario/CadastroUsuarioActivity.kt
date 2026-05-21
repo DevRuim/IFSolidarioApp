@@ -228,8 +228,9 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
                     val uid = user.uid
 
+                    var raiz = "usuarios"
                     val usuario = if (tipoUsuario == "ONG") {
-
+                        raiz = "ongs"
                         Ong(
                             key = uid,
                             nome_ong = name,
@@ -239,6 +240,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                             cnpj = cnpj,
                             imagemBase64 = imagemBase64
                         )
+
 
                     } else {
 
@@ -253,7 +255,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                     }
 
                     database
-                        .child("usuarios")
+                        .child(raiz)
                         .child(uid)
                         .setValue(usuario)
                         .addOnSuccessListener {
