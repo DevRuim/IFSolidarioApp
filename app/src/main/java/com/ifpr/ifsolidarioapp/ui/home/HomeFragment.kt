@@ -198,7 +198,7 @@ HomeFragment : Fragment() {
                 }
 
                 totalText.text =
-                    "${totalQuantidade.toInt()} ITENS ARRECADADOS"
+                    totalQuantidade.toInt().toString()
             }
 
             override fun onCancelled(error: DatabaseError) {
