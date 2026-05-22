@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Campanha
+import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +36,8 @@ HomeFragment : Fragment() {
         val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
 
         auth = FirebaseAuth.getInstance()
+
+        contarTotalDoacoes(view)
 
         carregarCampanhas(containerLayout)
 
@@ -153,6 +156,60 @@ HomeFragment : Fragment() {
                     Toast.makeText(container.context, "Erro ao carregar", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+    private fun contarTotalDoacoes(view: View) {
+
+        val totalText =
+            view.findViewById<TextView>(R.id.textTotalDoacoes)
+
+        val ref = FirebaseDatabase.getInstance()
+            .getReference("doacoes")
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                var totalQuantidade = 0.0
+
+                // percorre todos os usuários
+                for (usuarioSnapshot in snapshot.children) {
+
+                    // percorre todas as doações do usuário
+                    for (doacaoSnapshot in usuarioSnapshot.children) {
+
+                        val valor =
+                            doacaoSnapshot.child("quantidade").value
+
+                        when (valor) {
+
+                            is Long -> {
+                                totalQuantidade += valor.toDouble()
+                            }
+
+                            is Double -> {
+                                totalQuantidade += valor
+                            }
+
+                            is Int -> {
+                                totalQuantidade += valor.toDouble()
+                            }
+                        }
+                    }
+                }
+
+                totalText.text =
+                    "${totalQuantidade.toInt()} ITENS ARRECADADOS"
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+                Toast.makeText(
+                    context,
+                    error.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
 }

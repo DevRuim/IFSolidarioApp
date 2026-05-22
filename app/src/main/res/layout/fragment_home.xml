@@ -6,16 +6,16 @@
     tools:context=".ui.home.HomeFragment">
 
     <TextView
-        android:id="@+id/textHomeTitle"
+        android:id="@+id/textTotalDoacoes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="DOAÇÕES FEITAS"
+        android:text="0 ITENS DOADOS"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textHomeTitle">
+        app:layout_constraintTop_toBottomOf="@+id/textTotalDoacoes">
 
         <LinearLayout
             android:id="@+id/itemContainer"
