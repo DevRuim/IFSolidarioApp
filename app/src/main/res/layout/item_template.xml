@@ -43,7 +43,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:layout_marginBottom="6dp" />
+            android:layout_marginBottom="6dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:lineSpacingExtra="2dp"
+            android:textAlignment="viewStart"/>
 
         <!-- CATEGORIA -->
 

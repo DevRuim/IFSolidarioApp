@@ -44,6 +44,24 @@ HomeFragment : Fragment() {
 
         val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
 
+        val scrollView =
+            view.findViewById<ScrollView>(R.id.scrollView)
+
+        val totalContainer =
+            view.findViewById<LinearLayout>(R.id.totalDoacoesContainer)
+
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+
+            val scrollY = scrollView.scrollY
+
+            // fade progressivo
+            val alpha = 1f - (scrollY / 300f)
+
+            totalContainer.alpha =
+                alpha.coerceIn(0f, 1f)
+        }
+
+
         auth = FirebaseAuth.getInstance()
 
         contarTotalDoacoes(view)
@@ -172,8 +190,12 @@ HomeFragment : Fragment() {
                         ) {
 
                             data.setTextColor(
-                                resources.getColor(android.R.color.holo_red_dark)
+                                resources.getColor(android.R.color.white)
                             )
+
+                            data.setBackgroundResource(R.drawable.bg_alerta_vermelho)
+
+                            data.setPadding(24, 10, 24, 10)
                         }
 
                         try {
