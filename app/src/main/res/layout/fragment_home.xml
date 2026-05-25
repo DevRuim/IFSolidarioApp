@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,59 +13,106 @@
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="120dp"
         android:clipToPadding="false"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- TOTAL DE DOAÇÕES -->
-            <LinearLayout
+            <!-- TOPO -->
+
+            <FrameLayout
                 android:id="@+id/totalDoacoesContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="20dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:layout_marginTop="14dp"
+                android:paddingHorizontal="24dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ITENS ARRECADADOS"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginBottom="6dp"/>
 
-                <TextView
-                    android:id="@+id/textTotalDoacoes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:paddingHorizontal="80dp"
-                    android:paddingVertical="12dp"
-                    android:elevation="6dp"
-                    android:background="@drawable/bg_total_doacoes"/>
-            </LinearLayout>
+                <!-- CONTEÚDO -->
 
-            <!-- CONTAINER DOS CARDS -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="Juntos já arrecadamos"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"/>
+
+                    <FrameLayout
+                        android:layout_width="260dp"
+                        android:layout_height="90dp"
+                        android:background="@drawable/bg_total_doacoes"
+                        android:clipChildren="true"
+                        android:clipToPadding="true"
+                        android:layout_marginTop="8dp">
+
+                        <!-- PARTÍCULAS -->
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:alpha="0.18"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            app:lottie_rawRes="@raw/particles"/>
+
+                        <!-- NÚMERO -->
+
+                        <TextView
+                            android:id="@+id/textTotalDoacoes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="0"
+                            android:textColor="#FFFFFF"
+                            android:textSize="34sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/poppins_bold"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="0"
+                            android:shadowDy="2"
+                            android:shadowRadius="6"/>
+
+                    </FrameLayout>
+
+                    <!--<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="itens doados"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"/>-->
+
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <!-- LISTA -->
+
             <LinearLayout
                 android:id="@+id/itemContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation="vertical"
+                android:paddingBottom="32dp"/>
 
         </LinearLayout>
 

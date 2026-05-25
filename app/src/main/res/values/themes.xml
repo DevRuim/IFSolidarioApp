@@ -22,6 +22,14 @@
 
     </style>
 
+    <style name="RoundedImage">
+
+        <item name="cornerFamily">rounded</item>
+
+        <item name="cornerSize">24dp</item>
+
+    </style>
+
     <style name="circleImage">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">999dp</item>

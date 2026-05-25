@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
 import java.util.concurrent.TimeUnit
+import android.widget.FrameLayout
 
 data class CampanhaItem(
     val campanha: Campanha,
@@ -48,7 +49,7 @@ HomeFragment : Fragment() {
             view.findViewById<ScrollView>(R.id.scrollView)
 
         val totalContainer =
-            view.findViewById<LinearLayout>(R.id.totalDoacoesContainer)
+            view.findViewById<FrameLayout>(R.id.totalDoacoesContainer)
 
         scrollView.viewTreeObserver.addOnScrollChangedListener {
 
@@ -160,12 +161,20 @@ HomeFragment : Fragment() {
                         val progresso =
                             itemView.findViewById<TextView>(R.id.item_progresso)
 
+                        val progressBar =
+                            itemView.findViewById<ProgressBar>(R.id.progressBarCampanha)
+
+                        val porcentagem =
+                            ((campanha.quantidade_atual / campanha.meta) * 100).toInt()
+
+                        progressBar.progress = porcentagem
+
                         val doarBotao =
                             itemView.findViewById<Button>(R.id.doarButton)
 
                         nome.text = campanha.nome_campanha
 
-                        desc.text = campanha.descricao
+                        desc.text = "     ${campanha.descricao}"
 
                         categoria.text =
                             "Categoria: ${campanha.categoria_campanha}"
@@ -189,13 +198,29 @@ HomeFragment : Fragment() {
                             textoData.contains("3 dias")
                         ) {
 
+                            // ALERTA VERMELHO
+
                             data.setTextColor(
                                 resources.getColor(android.R.color.white)
                             )
 
-                            data.setBackgroundResource(R.drawable.bg_alerta_vermelho)
+                            data.setBackgroundResource(
+                                R.drawable.bg_alerta_vermelho
+                            )
 
                             data.setPadding(24, 10, 24, 10)
+
+                        } else {
+
+                            // VOLTA AO NORMAL
+
+                            data.setTextColor(
+                                resources.getColor(R.color.black)
+                            )
+
+                            data.background = null
+
+                            data.setPadding(0, 0, 0, 0)
                         }
 
                         try {
@@ -264,6 +289,18 @@ HomeFragment : Fragment() {
                             }
                         }
 
+                        // ANIMAÇÃO DOS CARDS
+
+                        itemView.alpha = 0f
+                        itemView.translationY = 50f
+
+                        itemView.animate()
+                            .alpha(1f)
+                            .translationY(0f)
+                            .setDuration(500)
+                            .setStartDelay((container.childCount * 90).toLong())
+                            .start()
+
                         container.addView(itemView)
                     }
                 }
@@ -276,7 +313,7 @@ HomeFragment : Fragment() {
 
                         "brinquedo", "brinquedos" -> "un."
 
-                        "roupa", "roupas" -> "Pç"
+                        "roupa", "roupas" -> "peças"
 
                         else -> "un."
                     }

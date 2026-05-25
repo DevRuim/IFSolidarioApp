@@ -2,52 +2,59 @@
 
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    card_view:cardCornerRadius="32dp"
-    card_view:cardElevation="6dp"
+    android:layout_marginHorizontal="14dp"
+    android:layout_marginBottom="18dp"
+    card_view:cardCornerRadius="36dp"
+    card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="18dp">
 
-        <!-- NOME DA CAMPANHA -->
+        <!-- TÍTULO -->
 
         <TextView
             android:id="@+id/item_nome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/poppins_bold"
             android:gravity="center"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:textColor="#111111"
+            android:textSize="24sp" />
 
         <!-- IMAGEM -->
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/item_image"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="210dp"
+            android:layout_marginBottom="16dp"
+            android:background="#DDDDDD"
             android:scaleType="centerCrop"
-            android:layout_marginBottom="12dp" />
+            app:shapeAppearanceOverlay="@style/RoundedImage"/>
 
         <!-- DESCRIÇÃO -->
 
         <TextView
             android:id="@+id/item_descricao"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="6dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:lineSpacingExtra="2dp"
-            android:textAlignment="viewStart"/>
+            android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_regular"
+            android:lineSpacingExtra="3dp"
+            android:maxLines="5"
+            android:paddingHorizontal="6dp"
+            android:textColor="#444444"
+            android:textSize="15sp" />
 
         <!-- CATEGORIA -->
 
@@ -55,49 +62,84 @@
             android:id="@+id/item_categoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/bg_categoria_soft"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="7dp"
+            android:textColor="#7717AB"
+            android:textSize="13sp" />
 
-        <!-- PARTE INFERIOR -->
+        <!-- PROGRESSO -->
+
+        <TextView
+            android:id="@+id/item_progresso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="#1F1F1F"
+            android:textSize="17sp" />
+
+        <!-- BARRA -->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/bg_progress_fundo">
+
+            <ProgressBar
+                android:id="@+id/progressBarCampanha"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="40"
+                android:progressDrawable="@drawable/progress_bar_custom"
+                android:splitTrack="false"/>
+
+        </FrameLayout>
+
+        <!-- ÁREA INFERIOR -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <!-- LADO ESQUERDO -->
+            <!-- DATA -->
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/item_data"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:fontFamily="@font/poppins_bold"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/item_progresso"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="4dp"/>
+            <!-- ESPAÇO -->
 
-                <TextView
-                    android:id="@+id/item_data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"/>
-
-            </LinearLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
 
             <!-- BOTÃO -->
 
             <Button
                 android:id="@+id/doarButton"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:text="Doar"
-                android:background="@drawable/botao_arredondado"/>
+                android:layout_width="130dp"
+                android:layout_height="48dp"
+                android:background="@drawable/botao_arredondado"
+                android:fontFamily="@font/poppins_bold"
+                android:text="DOAR"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp" />
 
         </LinearLayout>
 
