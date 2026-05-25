@@ -12,12 +12,23 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Campanha
+import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
 import com.ifpr.ifsolidarioapp.ui.usuario.CadastroUsuarioActivity
 import android.widget.Button
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.Date
+import java.util.concurrent.TimeUnit
+import android.widget.FrameLayout
+
+data class CampanhaItem(
+    val campanha: Campanha,
+    val campanhaId: String
+)
 
 class
 HomeFragment : Fragment() {
@@ -34,7 +45,27 @@ HomeFragment : Fragment() {
 
         val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
 
+        val scrollView =
+            view.findViewById<ScrollView>(R.id.scrollView)
+
+        val totalContainer =
+            view.findViewById<FrameLayout>(R.id.totalDoacoesContainer)
+
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+
+            val scrollY = scrollView.scrollY
+
+            // fade progressivo
+            val alpha = 1f - (scrollY / 300f)
+
+            totalContainer.alpha =
+                alpha.coerceIn(0f, 1f)
+        }
+
+
         auth = FirebaseAuth.getInstance()
+
+        contarTotalDoacoes(view)
 
         carregarCampanhas(containerLayout)
 
@@ -53,6 +84,8 @@ HomeFragment : Fragment() {
 
                     container.removeAllViews()
 
+                    val listaCampanhas = mutableListOf<Pair<Campanha, String>>()
+
                     for (userSnapshot in snapshot.children) {
                         for (campanhaSnapshot in userSnapshot.children) {
 
@@ -70,61 +103,264 @@ HomeFragment : Fragment() {
                                 continue
                             }
 
-                            val itemView = LayoutInflater.from(container.context)
-                                .inflate(R.layout.item_template, container, false)
+                            listaCampanhas.add(Pair(campanha, campanha_id))
 
-                            val img = itemView.findViewById<ImageView>(R.id.item_image)
-                            val nome = itemView.findViewById<TextView>(R.id.item_nome)
-                            val desc = itemView.findViewById<TextView>(R.id.item_descricao)
-                            val categoria = itemView.findViewById<TextView>(R.id.item_categoria)
-                            val endereco = itemView.findViewById<TextView>(R.id.item_endereco)
-                            val meta = itemView.findViewById<TextView>(R.id.item_meta)
-                            val criador = itemView.findViewById<TextView>(R.id.item_criador)
+                        }
+                    }
 
-                            val doarBotao = itemView.findViewById<Button>(R.id.doarButton)
+                    val formato =
+                        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-                            doarBotao.setOnClickListener {
-                                val uid = auth.currentUser?.uid
-                                if(uid !=null) {
-                                    Toast.makeText(
-                                        container.context,
-                                        "ID: $campanha_id | NOME: ${campanha.nome_campanha}",
-                                        Toast.LENGTH_LONG
-                                    ).show()
+                    val hoje = Date()
 
-                                    val bundle = Bundle().apply {
-                                        putString("campanha_id", campanha_id)
-                                        putString("campanha_nome", campanha.nome_campanha)
-                                        putString("categoria_campanha", campanha.categoria_campanha)
-                                        putString("criadorId", campanha.criadorId)
-                                        putString("quantidade_atual", campanha.quantidade_atual.toString())
-                                    }
-                                    findNavController().navigate(R.id.navigation_dashboard, bundle)
-                                } else{
-                                    startActivity(Intent(context, LoginActivity::class.java))
+                    val campanhasOrdenadas =
+                        listaCampanhas
+                            .filter {
+
+                                try {
+
+                                    val dataFinal =
+                                        formato.parse(it.first.data_termino)
+
+                                    dataFinal.time >= hoje.time - 86400000
+
+                                } catch (e: Exception) {
+
+                                    false
+                                }
+                            }
+                            .sortedBy {
+
+                                try {
+
+                                    formato.parse(it.first.data_termino)
+
+                                } catch (e: Exception) {
+
+                                    null
                                 }
                             }
 
-                            nome.text = "Nome: ${campanha.nome_campanha}"
-                            desc.text = "Descrição: ${campanha.descricao}"
-                            categoria.text = "Categoria: ${campanha.categoria_campanha}"
-                            endereco.text = "Endereço: ${campanha.endereco}"
-                            meta.text = "Meta: R$ ${campanha.meta}"
+                    for ((campanha, campanha_id) in campanhasOrdenadas) {
 
-                            try {
-                                val bytes = Base64.decode(campanha.imagemBase64, Base64.DEFAULT)
-                                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                                img.setImageBitmap(bitmap)
-                            } catch (e: Exception) {
-                                img.setImageResource(android.R.drawable.ic_menu_report_image)
-                            }
+                        val itemView = LayoutInflater.from(container.context)
+                            .inflate(R.layout.item_template, container, false)
 
-                            criador.text = "Criado por: ${
-                                campanha.criador_nome.takeIf { it.isNotBlank() } ?: "Desconhecido"
-                            }"
+                        val img = itemView.findViewById<ImageView>(R.id.item_image)
 
-                            container.addView(itemView)
+                        val nome = itemView.findViewById<TextView>(R.id.item_nome)
+
+                        val desc = itemView.findViewById<TextView>(R.id.item_descricao)
+
+                        val categoria =
+                            itemView.findViewById<TextView>(R.id.item_categoria)
+
+                        val data =
+                            itemView.findViewById<TextView>(R.id.item_data)
+
+                        val progresso =
+                            itemView.findViewById<TextView>(R.id.item_progresso)
+
+                        val progressBar =
+                            itemView.findViewById<ProgressBar>(R.id.progressBarCampanha)
+
+                        val porcentagem =
+                            ((campanha.quantidade_atual / campanha.meta) * 100).toInt()
+
+                        progressBar.progress = porcentagem
+
+                        val doarBotao =
+                            itemView.findViewById<Button>(R.id.doarButton)
+
+                        nome.text = campanha.nome_campanha
+
+                        desc.text = "     ${campanha.descricao}"
+
+                        categoria.text =
+                            "Categoria: ${campanha.categoria_campanha}"
+
+                        val unidade =
+                            obterUnidade(campanha.categoria_campanha)
+
+                        progresso.text =
+                            "${campanha.quantidade_atual.toInt()} de ${campanha.meta.toInt()} $unidade"
+
+                        data.text =
+                            obterTextoData(campanha.data_termino)
+
+                        val textoData =
+                            obterTextoData(campanha.data_termino)
+
+                        if (
+                            textoData.contains("hoje") ||
+                            textoData.contains("amanhã") ||
+                            textoData.contains("2 dias") ||
+                            textoData.contains("3 dias")
+                        ) {
+
+                            // ALERTA VERMELHO
+
+                            data.setTextColor(
+                                resources.getColor(android.R.color.white)
+                            )
+
+                            data.setBackgroundResource(
+                                R.drawable.bg_alerta_vermelho
+                            )
+
+                            data.setPadding(24, 10, 24, 10)
+
+                        } else {
+
+                            // VOLTA AO NORMAL
+
+                            data.setTextColor(
+                                resources.getColor(R.color.black)
+                            )
+
+                            data.background = null
+
+                            data.setPadding(0, 0, 0, 0)
                         }
+
+                        try {
+
+                            val bytes = Base64.decode(
+                                campanha.imagemBase64,
+                                Base64.DEFAULT
+                            )
+
+                            val bitmap = BitmapFactory.decodeByteArray(
+                                bytes,
+                                0,
+                                bytes.size
+                            )
+
+                            img.setImageBitmap(bitmap)
+
+                        } catch (e: Exception) {
+
+                            img.setImageResource(
+                                android.R.drawable.ic_menu_report_image
+                            )
+                        }
+
+                        doarBotao.setOnClickListener {
+
+                            val uid = auth.currentUser?.uid
+
+                            if (uid != null) {
+
+                                val bundle = Bundle().apply {
+
+                                    putString("campanha_id", campanha_id)
+
+                                    putString(
+                                        "campanha_nome",
+                                        campanha.nome_campanha
+                                    )
+
+                                    putString(
+                                        "categoria_campanha",
+                                        campanha.categoria_campanha
+                                    )
+
+                                    putString(
+                                        "criadorId",
+                                        campanha.criadorId
+                                    )
+
+                                    putString(
+                                        "quantidade_atual",
+                                        campanha.quantidade_atual.toString()
+                                    )
+                                }
+
+                                findNavController().navigate(
+                                    R.id.navigation_dashboard,
+                                    bundle
+                                )
+
+                            } else {
+
+                                startActivity(
+                                    Intent(context, LoginActivity::class.java)
+                                )
+                            }
+                        }
+
+                        // ANIMAÇÃO DOS CARDS
+
+                        itemView.alpha = 0f
+                        itemView.translationY = 50f
+
+                        itemView.animate()
+                            .alpha(1f)
+                            .translationY(0f)
+                            .setDuration(500)
+                            .setStartDelay((container.childCount * 90).toLong())
+                            .start()
+
+                        container.addView(itemView)
+                    }
+                }
+
+                private fun obterUnidade(categoria: String): String {
+
+                    return when (categoria.lowercase()) {
+
+                        "alimento", "alimentos" -> "Kg"
+
+                        "brinquedo", "brinquedos" -> "un."
+
+                        "roupa", "roupas" -> "peças"
+
+                        else -> "un."
+                    }
+                }
+                @SuppressLint("SetTextI18n")
+                private fun obterTextoData(dataTermino: String): String {
+
+                    return try {
+
+                        val formato =
+                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+                        val dataFinal =
+                            formato.parse(dataTermino)
+
+                        val hoje = formato.parse(formato.format(Date()))
+
+                        val diferencaMillis =
+                            dataFinal.time - hoje.time
+
+                        val dias =
+                            TimeUnit.MILLISECONDS.toDays(diferencaMillis).toInt()
+
+                        when {
+
+                            dias > 3 ->
+                                "Termina em: $dataTermino"
+
+                            dias == 3 ->
+                                "Termina em 3 dias"
+
+                            dias == 2 ->
+                                "Termina em 2 dias"
+
+                            dias == 1 ->
+                                "Termina amanhã"
+
+                            dias == 0 ->
+                                "Termina hoje"
+
+                            else ->
+                                "Campanha encerrada"
+                        }
+
+                    } catch (e: Exception) {
+
+                        "Data inválida"
                     }
                 }
 
@@ -132,6 +368,60 @@ HomeFragment : Fragment() {
                     Toast.makeText(container.context, "Erro ao carregar", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+    private fun contarTotalDoacoes(view: View) {
+
+        val totalText =
+            view.findViewById<TextView>(R.id.textTotalDoacoes)
+
+        val ref = FirebaseDatabase.getInstance()
+            .getReference("doacoes")
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                var totalQuantidade = 0.0
+
+                // percorre todos os usuários
+                for (usuarioSnapshot in snapshot.children) {
+
+                    // percorre todas as doações do usuário
+                    for (doacaoSnapshot in usuarioSnapshot.children) {
+
+                        val valor =
+                            doacaoSnapshot.child("quantidade").value
+
+                        when (valor) {
+
+                            is Long -> {
+                                totalQuantidade += valor.toDouble()
+                            }
+
+                            is Double -> {
+                                totalQuantidade += valor
+                            }
+
+                            is Int -> {
+                                totalQuantidade += valor.toDouble()
+                            }
+                        }
+                    }
+                }
+
+                totalText.text =
+                    totalQuantidade.toInt().toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+                Toast.makeText(
+                    context,
+                    error.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
 }
