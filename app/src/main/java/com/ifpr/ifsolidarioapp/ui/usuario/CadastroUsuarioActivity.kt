@@ -230,7 +230,6 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
                     var raiz = "usuarios"
                     val usuario = if (tipoUsuario == "ONG") {
-
                         raiz = "ongs"
                         Ong(
                             key = uid,

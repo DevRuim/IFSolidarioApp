@@ -125,9 +125,60 @@ class DoacaoFragment : Fragment() {
                 .child(uid)
                 .push()
                 .setValue(item)
+
+            atualizarEstatisticasUsuario(
+                uid,
+                item.categoria,
+                item.quantidade
+            )
         }
 
         atualizarQuantidadeCampanha(quantidadeDoada)
+    }
+
+    private fun atualizarEstatisticasUsuario(
+        uid: String,
+        categoria: String,
+        quantidade: Double
+    ) {
+
+        val usuarioRef = database
+            .child("usuarios")
+            .child(uid)
+
+        usuarioRef.child("total_doacoes")
+            .get()
+            .addOnSuccessListener { totalSnapshot ->
+
+                val totalAtual =
+                    totalSnapshot.getValue(Double::class.java) ?: 0.0
+
+                usuarioRef
+                    .child("total_doacoes")
+                    .setValue(totalAtual + quantidade)
+            }
+
+        val campoCategoria = when (categoria) {
+
+            "Alimento" -> "alimentos"
+            "Brinquedo" -> "brinquedos"
+            "Roupa" -> "roupas"
+
+            else -> return
+        }
+
+        usuarioRef
+            .child(campoCategoria)
+            .get()
+            .addOnSuccessListener { snapshot ->
+
+                val valorAtual =
+                    snapshot.getValue(Double::class.java) ?: 0.0
+
+                usuarioRef
+                    .child(campoCategoria)
+                    .setValue(valorAtual + quantidade)
+            }
     }
 
     private fun atualizarQuantidadeCampanha(
