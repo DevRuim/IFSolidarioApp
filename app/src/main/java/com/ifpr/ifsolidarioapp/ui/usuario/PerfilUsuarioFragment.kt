@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -16,6 +17,11 @@ import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.baseclasses.Usuario
 import com.ifpr.ifsolidarioapp.databinding.FragmentPerfilUsuarioBinding
 import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import android.graphics.BitmapFactory
+import android.util.Base64
 
 class PerfilUsuarioFragment : Fragment() {
 
@@ -25,64 +31,127 @@ class PerfilUsuarioFragment : Fragment() {
     private lateinit var usersReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentPerfilUsuarioBinding.inflate(inflater, container, false)
+        _binding = FragmentPerfilUsuarioBinding.inflate(
+            inflater,
+            container,
+            false
+        )
 
-        // Inicializa Firebase
+        val view = binding.root
+
         auth = FirebaseAuth.getInstance()
 
         val uid = auth.currentUser?.uid
-        if(uid ==null) {
+
+        if (uid == null) {
+
             startActivity(Intent(context, LoginActivity::class.java))
+            requireActivity().finish()
+
+            return view
         }
-        usersReference = FirebaseDatabase.getInstance().getReference("users")
 
-        carregaDadosDoUsuarioLogado()
+        usersReference =
+            FirebaseDatabase.getInstance()
+                .getReference("usuarios")
 
-        return binding.root
+        binding.buttonEditarPerfil.setOnClickListener {
+
+            // ação aqui
+        }
+
+        binding.buttonSair.setOnClickListener {
+
+            signOut()
+        }
+
+        carregarDadosUsuario()
+
+        return view
     }
 
-    private fun carregaDadosDoUsuarioLogado() {
-        val user = auth.currentUser
+    private fun carregarDadosUsuario() {
 
-        if (user != null) {
+        val uid = auth.currentUser?.uid ?: return
 
-            // Configura UI
-            binding.sairButton.visibility = View.VISIBLE
-            binding.registerPasswordEditText.visibility = View.GONE
-            binding.registerConfirmPasswordEditText.visibility = View.GONE
-            binding.registerEmailEditText.isEnabled = false
+        val user = FirebaseAuth.getInstance().currentUser
 
-            // Preenche dados do Firebase Auth
-            binding.registerNameEditText.setText(user.displayName ?: "")
-            binding.registerEmailEditText.setText(user.email ?: "")
+        val ultimoLogin = user?.metadata?.lastSignInTimestamp
 
-            contarDoacoesUsuario(user.uid)
+        val data = Date(ultimoLogin ?: 0)
 
-            // Carrega foto com segurança
-            if (user.photoUrl != null) {
-                Glide.with(this)
-                    .load(user.photoUrl)
-                    .into(binding.userProfileImageView)
+        val formato = SimpleDateFormat(
+            "dd/MM/yyyy",
+            Locale.getDefault()
+        )
+
+        val dataFormatada = formato.format(data)
+
+        binding.textViewUltimaSessao.text = dataFormatada
+
+        FirebaseDatabase.getInstance()
+            .getReference("usuarios")
+            .child(uid)
+            .get()
+            .addOnSuccessListener { snapshot ->
+
+                if (snapshot.exists()) {
+
+                    val imagemBase64 =
+                        snapshot.child("imagemBase64")
+                            .getValue(String::class.java)
+
+                    if (!imagemBase64.isNullOrEmpty()) {
+
+                        try {
+
+                            val bytes = Base64.decode(
+                                imagemBase64,
+                                Base64.DEFAULT
+                            )
+
+                            val bitmap = BitmapFactory.decodeByteArray(
+                                bytes,
+                                0,
+                                bytes.size
+                            )
+
+                            binding.imageViewFoto.setImageBitmap(bitmap)
+
+                        } catch (e: Exception) {
+
+                            e.printStackTrace()
+                        }
+                    }
+
+                    val nome = snapshot.child("nome_usuario").getValue(String::class.java)
+                    val email = snapshot.child("email_usuario").getValue(String::class.java)
+                    val telefone = snapshot.child("telefone_usuario").getValue(String::class.java)
+                    val alimentos = snapshot.child("alimentos").getValue(Int::class.java) ?: 0
+                    val brinquedos = snapshot.child("brinquedos").getValue(Int::class.java) ?: 0
+                    val roupas = snapshot.child("roupas").getValue(Int::class.java) ?: 0
+                    val total = snapshot.child("total_doacoes").getValue(Int::class.java) ?: 0
+                    val conquistas = snapshot.child("conquistas").getValue(Int::class.java) ?: 0
+                    val tipo = snapshot.child("tipo_usuario").getValue(String::class.java)
+
+                    binding.textViewNameUsuario.text = nome
+                    binding.textViewEmail.text = email
+                    binding.textViewTelefone.text = telefone
+                    binding.textViewTotal.text = total.toString()
+                    binding.textViewAlimentos.text = alimentos.toString()
+                    binding.textViewBrinquedos.text = brinquedos.toString()
+                    binding.textViewRoupas.text = roupas.toString()
+                    binding.textViewConquistas.text = conquistas.toString()
+
+                }
             }
-
-            // Carrega dados do Realtime Database
-            recuperarDadosUsuario(user.uid)
-
-
-            binding.salvarButton.setOnClickListener {
-                updateUser()
-            }
-
-            binding.sairButton.setOnClickListener {
-                signOut()
-            }
-        }
     }
 
 
@@ -90,76 +159,17 @@ class PerfilUsuarioFragment : Fragment() {
 
         auth.signOut()
 
-        Toast.makeText(
-            context,
-            "Logout realizado com sucesso!",
-            Toast.LENGTH_SHORT
-        ).show()
+        startActivity(
+            Intent(context, LoginActivity::class.java)
+        )
 
         requireActivity().finish()
     }
-    private fun contarDoacoesUsuario(uid: String) {
-
-        val ref = FirebaseDatabase.getInstance().getReference("doacoes")
-
-        ref.child(uid)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-
-                    val total = snapshot.childrenCount
-
-                    binding.valorDoacoes.text = total.toString()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                    Toast.makeText(
-                        context,
-                        "Erro ao carregar doações",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-    }
-
-
-    private fun recuperarDadosUsuario(usuarioKey: String) {
-
-        usersReference.child(usuarioKey)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-
-                    if (snapshot.exists()) {
-
-                        val usuario = snapshot.getValue(Usuario::class.java)
-
-                        usuario?.let {
-
-                            binding.registerNameEditText.setText(it.nome_usuario ?: "")
-                            binding.registerEmailEditText.setText(it.email_usuario ?: "")
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                    Log.e("FirebaseError", error.message)
-
-                    Toast.makeText(
-                        context,
-                        "Erro ao carregar dados",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-    }
-
 
     private fun updateUser() {
 
-        val name = binding.registerNameEditText.text.toString().trim()
+        val name = "" //binding.editTextNome.text.toString().trim()
+        val telefone = ""//binding.editTextTelefone.text.toString().trim()
 
         if (name.isEmpty()) {
 
@@ -176,7 +186,11 @@ class PerfilUsuarioFragment : Fragment() {
 
         if (user != null) {
 
-            updateProfile(user, name)
+            updateProfile(
+                user,
+                name,
+                telefone
+            )
 
         } else {
 
@@ -189,24 +203,25 @@ class PerfilUsuarioFragment : Fragment() {
     }
 
 
-    private fun updateProfile(user: FirebaseUser, displayName: String) {
+    private fun updateProfile(
+        user: FirebaseUser,
+        displayName: String,
+        telefone: String
+    ) {
 
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName(displayName)
             .build()
-
-        val usuario = Usuario(
-            key = user.uid,
-            nome_usuario = displayName,
-            email_usuario = user.email ?: ""
-        )
 
         user.updateProfile(profileUpdates)
             .addOnCompleteListener { task ->
 
                 if (task.isSuccessful) {
 
-                    saveUserToDatabase(usuario)
+                    saveUserToDatabase(
+                        displayName,
+                        telefone
+                    )
 
                 } else {
 
@@ -220,23 +235,20 @@ class PerfilUsuarioFragment : Fragment() {
     }
 
 
-    private fun saveUserToDatabase(usuario: Usuario) {
+    private fun saveUserToDatabase(
+        nome: String,
+        telefone: String
+    ) {
 
-        val uid = usuario.key
+        val uid = auth.currentUser?.uid ?: return
 
-        if (uid.isEmpty()) {
-
-            Toast.makeText(
-                context,
-                "Erro: UID inválido",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            return
-        }
+        val updates = mapOf(
+            "nome_usuario" to nome,
+            "telefone_usuario" to telefone
+        )
 
         usersReference.child(uid)
-            .setValue(usuario)
+            .updateChildren(updates)
             .addOnSuccessListener {
 
                 Toast.makeText(
@@ -252,14 +264,12 @@ class PerfilUsuarioFragment : Fragment() {
                     "Erro ao salvar: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
-
-                Log.e("FirebaseError", e.message ?: "Erro desconhecido")
             }
     }
 
     override fun onResume() {
         super.onResume()
-        carregaDadosDoUsuarioLogado()
+        carregarDadosUsuario()
     }
 
     override fun onDestroyView() {

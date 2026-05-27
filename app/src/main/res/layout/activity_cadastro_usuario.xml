@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EFEFEF"
+    android:background="@drawable/bg_perfil"
     android:fitsSystemWindows="true"
     tools:context=".ui.usuario.CadastroUsuarioActivity">
 
@@ -23,7 +23,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="260dp"
-                android:background="#7A2ECE"
                 android:gravity="center"
                 android:orientation="vertical">
 

@@ -7,6 +7,7 @@ data class Usuario(
     var email_usuario: String = "",
     var telefone_usuario: String = "",
     var imagemBase64: String = "",
+    var conquistas: Int = 0,
     var alimentos: Int = 0,
     var roupas: Int = 0,
     var brinquedos: Int = 0,
