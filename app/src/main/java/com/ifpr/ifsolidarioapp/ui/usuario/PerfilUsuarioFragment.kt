@@ -83,19 +83,6 @@ class PerfilUsuarioFragment : Fragment() {
 
         val user = FirebaseAuth.getInstance().currentUser
 
-        val ultimoLogin = user?.metadata?.lastSignInTimestamp
-
-        val data = Date(ultimoLogin ?: 0)
-
-        val formato = SimpleDateFormat(
-            "dd/MM/yyyy",
-            Locale.getDefault()
-        )
-
-        val dataFormatada = formato.format(data)
-
-        binding.textViewUltimaSessao.text = dataFormatada
-
         FirebaseDatabase.getInstance()
             .getReference("usuarios")
             .child(uid)
