@@ -548,7 +548,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="202dp"
+                    android:layout_height="266dp"
+                    android:layout_marginBottom="50dp"
                     android:background="@drawable/bg_rounded_white"
                     android:orientation="vertical">
 
@@ -623,6 +624,41 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/buttonProgressoConquista"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_conquista" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Progresso"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_black" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/buttonSair"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -658,16 +694,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:gravity="center_vertical"
-                    android:text="Conquistas Realizadas"
-                    android:textColor="#2A2A2A"
-                    android:textSize="28sp" />
 
             </LinearLayout>
 
