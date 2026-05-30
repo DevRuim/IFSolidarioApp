@@ -2,6 +2,8 @@ package com.ifpr.ifsolidarioapp
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -40,25 +42,55 @@ class MainActivity : AppCompatActivity() {
 
     private fun carregarTipoUsuario(navView: BottomNavigationView) {
 
-        val user =
-            FirebaseAuth.getInstance().currentUser
-                ?: return
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user == null) {
+
+            configurarMenu(navView.menu, "VISITANTE")
+            return
+        }
 
         val uid = user.uid
 
-        FirebaseDatabase
-            .getInstance()
-            .reference
-            .child("usuarios")
-            .child(uid)
-            .child("tipo_usuario")
-            .get()
-            .addOnSuccessListener { snapshot ->
+        val usuariosRef =
+            FirebaseDatabase.getInstance()
+                .getReference("usuarios")
+                .child(uid)
 
-                val tipo =
-                    snapshot.getValue(String::class.java)
+        val ongsRef =
+            FirebaseDatabase.getInstance()
+                .getReference("ongs")
+                .child(uid)
 
-                configurarMenu(navView.menu, tipo)
+        usuariosRef.get()
+            .addOnSuccessListener { usuarioSnapshot ->
+
+                if (usuarioSnapshot.exists()) {
+
+                    configurarMenu(navView.menu, "Doador")
+
+                } else {
+
+                    ongsRef.get()
+                        .addOnSuccessListener { ongSnapshot ->
+
+                            if (ongSnapshot.exists()) {
+                                configurarMenu(navView.menu, "ONG")
+                            } else {
+                                configurarMenu(navView.menu, "VISITANTE")
+                            }
+                        }
+                }
+            }
+            .addOnFailureListener {
+
+                configurarMenu(navView.menu, "VISITANTE")
+
+                Toast.makeText(
+                    this,
+                    "Erro ao carregar usuário",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -67,21 +99,37 @@ class MainActivity : AppCompatActivity() {
         tipo: String?
     ) {
 
-        if (tipo == "ONG") {
+        when (tipo) {
 
-            menu.findItem(R.id.navigation_dashboard)
-                .isVisible = false
+            "ONG" -> {
 
-            menu.findItem(R.id.navigation_notifications)
-                .isVisible = true
+                menu.findItem(R.id.navigation_dashboard)
+                    .isVisible = false
 
-        } else {
+                menu.findItem(R.id.navigation_notifications)
+                    .isVisible = true
+            }
 
-            menu.findItem(R.id.navigation_dashboard)
-                .isVisible = true
+            "Doador" -> {
 
-            menu.findItem(R.id.navigation_notifications)
-                .isVisible = false
+                menu.findItem(R.id.navigation_dashboard)
+                    .isVisible = true
+
+                menu.findItem(R.id.navigation_notifications)
+                    .isVisible = false
+            }
+
+            "VISITANTE" -> {
+
+                menu.findItem(R.id.navigation_dashboard)
+                    .isVisible = false
+
+                menu.findItem(R.id.navigation_notifications)
+                    .isVisible = false
+
+                // opcionalmente esconder perfil também
+                // menu.findItem(R.id.navigation_profile).isVisible = false
+            }
         }
     }
 }
