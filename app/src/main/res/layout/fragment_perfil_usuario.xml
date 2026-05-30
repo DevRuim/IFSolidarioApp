@@ -48,7 +48,7 @@
                 </FrameLayout>
 
                 <TextView
-                    android:id="@+id/textViewNameUsuario"
+                    android:id="@+id/textViewName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -69,6 +69,7 @@
 
 
                <LinearLayout
+                    android:id="@+id/cardInfoUsuario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -330,6 +331,114 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cardInfoOng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/bg_rounded_white"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center_horizontal"
+                        android:text="Informações da ONG"
+                        android:textColor="#2A2A2A"
+                        android:textSize="22sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Email:"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textViewEmailOng"
+                            android:layout_width="match_parent"
+                            android:layout_height="41dp"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="#2A2A2A"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Telefone:"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textViewTelefoneOng"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="CNPJ: "
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textViewCNPJ"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardConquistas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -358,7 +467,7 @@
                                 android:gravity="center">
 
                                 <ImageView
-                                    android:id="@+id/ImageViewIconPrimeiraConquista"
+                                    android:id="@+id/imageViewIconPrimeiraConquista"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -391,25 +500,25 @@
                             android:gravity="center">
 
                             <ImageView
-                                android:id="@+id/ImageViewIconAlimento5"
+                                android:id="@+id/imageViewIconAlimento5"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_alimento_5_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconAlimento10"
+                                android:id="@+id/imageViewIconAlimento10"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_alimento_10_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconAlimento20"
+                                android:id="@+id/imageViewIconAlimento20"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_alimento_20_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconAlimento40"
+                                android:id="@+id/imageViewIconAlimento40"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_alimento_40_disabled" />
@@ -441,25 +550,25 @@
                             android:gravity="center">
 
                             <ImageView
-                                android:id="@+id/ImageViewIconBrinquedo5"
+                                android:id="@+id/imageViewIconBrinquedo5"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_brinquedo_5_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconBrinquedo10"
+                                android:id="@+id/imageViewIconBrinquedo10"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_brinquedo_10_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconBrinquedo20"
+                                android:id="@+id/imageViewIconBrinquedo20"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_brinquedo_20_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconBrinquedo40"
+                                android:id="@+id/imageViewIconBrinquedo40"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_brinquedo_40_disabled" />
@@ -491,25 +600,25 @@
                             android:gravity="center">
 
                             <ImageView
-                                android:id="@+id/ImageViewIconRoupa5"
+                                android:id="@+id/imageViewIconRoupa5"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_roupa_5_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconRoupa10"
+                                android:id="@+id/imageViewIconRoupa10"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_roupa_10_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconRoupa20"
+                                android:id="@+id/imageViewIconRoupa20"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_roupa_20_disabled" />
 
                             <ImageView
-                                android:id="@+id/ImageViewIconRoupa40"
+                                android:id="@+id/imageViewIconRoupa40"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:src="@drawable/ic_roupa_40_disabled" />
@@ -547,14 +656,15 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cardOpcoesUsuario"
                     android:layout_width="match_parent"
-                    android:layout_height="266dp"
+                    android:layout_height="256dp"
                     android:layout_marginBottom="50dp"
                     android:background="@drawable/bg_rounded_white"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/buttonEditarPerfil"
+                        android:id="@+id/buttonEditarPerfilUsuario"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
@@ -659,7 +769,87 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/buttonSair"
+                        android:id="@+id/buttonSairUsuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_exit" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Sair"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_black" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardOpcoesOng"
+                    android:layout_width="match_parent"
+                    android:layout_height="128dp"
+                    android:layout_marginBottom="50dp"
+                    android:background="@drawable/bg_rounded_white"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/buttonEditarPerfilOng"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_edit_profile" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Editar perfil"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_black" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/buttonSairOng"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"

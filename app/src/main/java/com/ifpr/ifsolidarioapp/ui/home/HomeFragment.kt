@@ -383,17 +383,12 @@ HomeFragment : Fragment() {
 
                 var totalQuantidade = 0.0
 
-                // percorre todos os usuários
                 for (usuarioSnapshot in snapshot.children) {
-
-                    // percorre todas as doações do usuário
                     for (doacaoSnapshot in usuarioSnapshot.children) {
-
                         val valor =
                             doacaoSnapshot.child("quantidade").value
 
                         when (valor) {
-
                             is Long -> {
                                 totalQuantidade += valor.toDouble()
                             }
@@ -423,5 +418,4 @@ HomeFragment : Fragment() {
             }
         })
     }
-
 }
