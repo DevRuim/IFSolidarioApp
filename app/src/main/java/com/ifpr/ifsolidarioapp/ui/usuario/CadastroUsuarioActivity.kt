@@ -241,6 +241,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                             imagemBase64 = imagemBase64
                         )
 
+
                     } else {
 
                         Usuario(
