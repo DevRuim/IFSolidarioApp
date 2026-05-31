@@ -27,6 +27,19 @@
         android:id="@+id/navigation_profile"
         android:name="com.ifpr.ifsolidarioapp.ui.usuario.PerfilUsuarioFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_perfil_usuario" />
+        tools:layout="@layout/fragment_perfil_usuario">
+
+        <action
+            android:id="@+id/action_profile_to_editarPerfil"
+            app:destination="@id/navigation_editar_perfil" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_editar_perfil"
+        android:name="com.ifpr.ifsolidarioapp.ui.usuario.EditarPerfilFragment"
+        android:label="Editar Perfil"
+        tools:layout="@layout/fragment_editar_perfil">
+    </fragment>
 
 </navigation>

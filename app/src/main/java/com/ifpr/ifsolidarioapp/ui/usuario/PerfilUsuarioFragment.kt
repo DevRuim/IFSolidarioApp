@@ -11,22 +11,19 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.databinding.FragmentPerfilUsuarioBinding
 import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
+import androidx.navigation.fragment.findNavController
 
 class PerfilUsuarioFragment : Fragment() {
 
     private var _binding: FragmentPerfilUsuarioBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var usersReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,20 +68,26 @@ class PerfilUsuarioFragment : Fragment() {
     private fun setupClicks() {
 
         binding.buttonEditarPerfilUsuario.setOnClickListener {
-            // abrir tela editar perfil
+            abrirTelaEditarPerfil()
         }
         binding.buttonEditarPerfilOng.setOnClickListener {
-            // abrir tela editar perfil
+            abrirTelaEditarPerfil()
         }
 
         binding.buttonSairUsuario.setOnClickListener {
             signOut()
         }
+
         binding.buttonSairOng.setOnClickListener {
             signOut()
         }
     }
 
+    private fun abrirTelaEditarPerfil() {
+        findNavController().navigate(
+            R.id.action_profile_to_editarPerfil
+        )
+    }
     private fun carregarDadosUsuario() {
 
         val uid = auth.currentUser?.uid ?: return
@@ -165,7 +168,7 @@ class PerfilUsuarioFragment : Fragment() {
             brinquedos,
             roupas,
             total,
-            conquistas
+            conquistas,
         )
 
         carregarConquistas(
@@ -191,7 +194,7 @@ class PerfilUsuarioFragment : Fragment() {
             nome,
             email,
             telefone,
-            cnpj
+            cnpj,
         )
     }
 
@@ -424,108 +427,6 @@ class PerfilUsuarioFragment : Fragment() {
                     Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         startActivity(intent)
-    }
-
-    private fun updateUser() {
-
-        val name = ""
-        val telefone = ""
-
-        if (name.isEmpty()) {
-
-            Toast.makeText(
-                context,
-                "Digite um nome válido",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            return
-        }
-
-        val user = auth.currentUser
-
-        if (user != null) {
-
-            updateProfile(
-                user,
-                name,
-                telefone
-            )
-
-        } else {
-
-            Toast.makeText(
-                context,
-                "Usuário não está logado",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    private fun updateProfile(
-        user: FirebaseUser,
-        displayName: String,
-        telefone: String
-    ) {
-
-        val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName(displayName)
-            .build()
-
-        user.updateProfile(profileUpdates)
-            .addOnCompleteListener { task ->
-
-                if (task.isSuccessful) {
-
-                    saveUserToDatabase(
-                        displayName,
-                        telefone
-                    )
-
-                } else {
-
-                    Toast.makeText(
-                        context,
-                        "Erro ao atualizar perfil",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-    }
-
-    private fun saveUserToDatabase(
-        nome: String,
-        telefone: String
-    ) {
-
-        val uid = auth.currentUser?.uid ?: return
-
-        val updates = mapOf(
-            "nome_usuario" to nome,
-            "telefone_usuario" to telefone
-        )
-
-        usersReference
-            .child(uid)
-            .updateChildren(updates)
-
-            .addOnSuccessListener {
-
-                Toast.makeText(
-                    context,
-                    "Usuário atualizado com sucesso",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            .addOnFailureListener { e ->
-
-                Toast.makeText(
-                    context,
-                    "Erro ao salvar: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
     }
 
     override fun onDestroyView() {
