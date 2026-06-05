@@ -1,29 +1,29 @@
 package com.ifpr.ifsolidarioapp.ui.usuario
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.database.*
-import com.ifpr.ifsolidarioapp.baseclasses.Usuario
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
+import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.databinding.FragmentPerfilUsuarioBinding
 import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
+import androidx.navigation.fragment.findNavController
 
 class PerfilUsuarioFragment : Fragment() {
 
     private var _binding: FragmentPerfilUsuarioBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var usersReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,240 +31,408 @@ class PerfilUsuarioFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentPerfilUsuarioBinding.inflate(inflater, container, false)
+        _binding = FragmentPerfilUsuarioBinding.inflate(
+            inflater,
+            container,
+            false
+        )
 
-        // Inicializa Firebase
         auth = FirebaseAuth.getInstance()
 
         val uid = auth.currentUser?.uid
-        if(uid ==null) {
-            startActivity(Intent(context, LoginActivity::class.java))
-        }
-        usersReference = FirebaseDatabase.getInstance().getReference("users")
 
-        carregaDadosDoUsuarioLogado()
+        if (uid == null) {
+
+            val intent = Intent(
+                context,
+                LoginActivity::class.java
+            )
+
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
+
+            requireActivity().finish()
+
+            return binding.root
+        }
+
+        carregarDadosUsuario()
+        setupClicks()
 
         return binding.root
     }
 
-    private fun carregaDadosDoUsuarioLogado() {
-        val user = auth.currentUser
+    private fun setupClicks() {
 
-        if (user != null) {
+        binding.buttonEditarPerfilUsuario.setOnClickListener {
+            abrirTelaEditarPerfil()
+        }
+        binding.buttonEditarPerfilOng.setOnClickListener {
+            abrirTelaEditarPerfil()
+        }
 
-            // Configura UI
-            binding.sairButton.visibility = View.VISIBLE
-            binding.registerPasswordEditText.visibility = View.GONE
-            binding.registerConfirmPasswordEditText.visibility = View.GONE
-            binding.registerEmailEditText.isEnabled = false
+        binding.buttonSairUsuario.setOnClickListener {
+            signOut()
+        }
 
-            // Preenche dados do Firebase Auth
-            binding.registerNameEditText.setText(user.displayName ?: "")
-            binding.registerEmailEditText.setText(user.email ?: "")
-
-            contarDoacoesUsuario(user.uid)
-
-            // Carrega foto com segurança
-            if (user.photoUrl != null) {
-                Glide.with(this)
-                    .load(user.photoUrl)
-                    .into(binding.userProfileImageView)
-            }
-
-            // Carrega dados do Realtime Database
-            recuperarDadosUsuario(user.uid)
-
-
-            binding.salvarButton.setOnClickListener {
-                updateUser()
-            }
-
-            binding.sairButton.setOnClickListener {
-                signOut()
-            }
+        binding.buttonSairOng.setOnClickListener {
+            signOut()
         }
     }
 
+    private fun abrirTelaEditarPerfil() {
+        findNavController().navigate(
+            R.id.action_profile_to_editarPerfil
+        )
+    }
+    private fun carregarDadosUsuario() {
+
+        val uid = auth.currentUser?.uid ?: return
+
+        val usuariosRef =
+            FirebaseDatabase.getInstance()
+                .getReference("usuarios")
+                .child(uid)
+
+        val ongsRef =
+            FirebaseDatabase.getInstance()
+                .getReference("ongs")
+                .child(uid)
+
+        usuariosRef.get().addOnSuccessListener { usuarioSnapshot ->
+
+            if (usuarioSnapshot.exists()) {
+
+                binding.cardInfoUsuario.visibility = View.VISIBLE
+                binding.cardConquistas.visibility = View.VISIBLE
+                binding.cardOpcoesUsuario.visibility = View.VISIBLE
+
+                binding.cardInfoOng.visibility = View.GONE
+                binding.cardOpcoesOng.visibility = View.GONE
+
+                carregarDadosDoador(usuarioSnapshot)
+
+            } else {
+
+                ongsRef.get()
+                    .addOnSuccessListener { ongSnapshot ->
+
+                        if (ongSnapshot.exists()) {
+
+                            binding.cardInfoUsuario.visibility = View.GONE
+                            binding.cardConquistas.visibility = View.GONE
+                            binding.cardOpcoesUsuario.visibility = View.GONE
+
+                            binding.cardInfoOng.visibility = View.VISIBLE
+                            binding.cardOpcoesOng.visibility = View.VISIBLE
+
+                            carregarDadosOng(ongSnapshot)
+                        }
+                    }
+            }
+        }
+
+        .addOnFailureListener {
+
+            Toast.makeText(
+                context,
+                "Erro ao carregar usuário",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun carregarDadosDoador(
+        snapshot: DataSnapshot
+    ) {
+
+        carregarFoto(snapshot)
+
+        val nome = snapshot.child("nome_usuario").getValue(String::class.java) ?: ""
+        val email = snapshot.child("email_usuario").getValue(String::class.java) ?: ""
+        val telefone = snapshot.child("telefone_usuario").getValue(String::class.java) ?: ""
+        val conquistas = snapshot.child("conquistas").getValue(Int::class.java) ?: 0
+        val alimentos = snapshot.child("alimentos").getValue(Int::class.java) ?: 0
+        val brinquedos = snapshot.child("brinquedos").getValue(Int::class.java) ?: 0
+        val roupas = snapshot.child("roupas").getValue(Int::class.java) ?: 0
+        val total = snapshot.child("total_doacoes").getValue(Int::class.java) ?: 0
+
+        carregarInformacoes(
+            nome,
+            email,
+            telefone,
+            alimentos,
+            brinquedos,
+            roupas,
+            total,
+            conquistas,
+        )
+
+        carregarConquistas(
+            alimentos,
+            roupas,
+            brinquedos,
+            total
+        )
+    }
+
+    private fun carregarDadosOng(
+        snapshot: DataSnapshot
+    ) {
+
+        carregarFoto(snapshot)
+
+        val nome = snapshot.child("nome_ong").getValue(String::class.java) ?: ""
+        val email = snapshot.child("email_ong").getValue(String::class.java) ?: ""
+        val telefone = snapshot.child("telefone_ong").getValue(String::class.java) ?: ""
+        val cnpj = snapshot.child("cnpj").getValue(String::class.java) ?: ""
+
+        carregarInformacoesOng(
+            nome,
+            email,
+            telefone,
+            cnpj,
+        )
+    }
+
+    private fun carregarFoto(snapshot: DataSnapshot) {
+
+        val imagemBase64 = snapshot
+            .child("imagemBase64")
+            .getValue(String::class.java)
+
+        if (imagemBase64.isNullOrEmpty()) {
+
+            binding.imageViewFoto.setImageResource(
+                R.drawable.ic_profile_black_24dp
+            )
+
+            return
+        }
+
+        try {
+
+            val bytes = Base64.decode(
+                imagemBase64,
+                Base64.DEFAULT
+            )
+
+            val bitmap = BitmapFactory.decodeByteArray(
+                bytes,
+                0,
+                bytes.size
+            )
+
+            binding.imageViewFoto.setImageBitmap(bitmap)
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+            binding.imageViewFoto.setImageResource(
+                R.drawable.ic_profile_black_24dp
+            )
+        }
+    }
+
+    private fun carregarInformacoes(
+        nome: String,
+        email: String,
+        telefone: String,
+        alimentos: Int,
+        brinquedos: Int,
+        roupas: Int,
+        total: Int,
+        conquistas: Int
+    ) {
+
+        binding.textViewName.text = nome
+        binding.textViewEmail.text = email
+        binding.textViewTelefone.text = telefone
+
+        binding.textViewTotal.text = total.toString()
+
+        binding.textViewAlimentos.text = alimentos.toString()
+        binding.textViewBrinquedos.text = brinquedos.toString()
+        binding.textViewRoupas.text = roupas.toString()
+
+        binding.textViewConquistas.text = conquistas.toString()
+    }
+
+    private fun carregarInformacoesOng(
+        nome: String,
+        email: String,
+        telefone: String,
+        cnpj: String
+    ) {
+
+        binding.textViewName.text = nome
+        binding.textViewEmailOng.text = email
+        binding.textViewTelefoneOng.text = telefone
+        binding.textViewCNPJ.text = cnpj
+
+    }
+
+    private fun carregarConquistas(
+        alimentos: Int,
+        roupas: Int,
+        brinquedos: Int,
+        total: Int
+    ) {
+
+        habilitarPrimeiraConquista(total)
+
+        atualizarConquista(
+            alimentos,
+            5,
+            binding.imageViewIconAlimento5,
+            R.drawable.ic_alimento_5_enabled,
+            R.drawable.ic_alimento_5_disabled
+        )
+        atualizarConquista(
+            alimentos,
+            10,
+            binding.imageViewIconAlimento10,
+            R.drawable.ic_alimento_10_enabled,
+            R.drawable.ic_alimento_10_disabled
+        )
+        atualizarConquista(
+            alimentos,
+            20,
+            binding.imageViewIconAlimento20,
+            R.drawable.ic_alimento_20_enabled,
+            R.drawable.ic_alimento_20_disabled
+        )
+        atualizarConquista(
+            alimentos,
+            40,
+            binding.imageViewIconAlimento40,
+            R.drawable.ic_alimento_40_enabled,
+            R.drawable.ic_alimento_40_disabled
+        )
+
+
+        atualizarConquista(
+            brinquedos,
+            5,
+            binding.imageViewIconBrinquedo5,
+            R.drawable.ic_brinquedo_5_enabled,
+            R.drawable.ic_brinquedo_5_disabled
+        )
+        atualizarConquista(
+            brinquedos,
+            10,
+            binding.imageViewIconBrinquedo10,
+            R.drawable.ic_brinquedo_10_enabled,
+            R.drawable.ic_brinquedo_10_disabled
+        )
+        atualizarConquista(
+            brinquedos,
+            20,
+            binding.imageViewIconBrinquedo20,
+            R.drawable.ic_brinquedo_20_enabled,
+            R.drawable.ic_brinquedo_20_disabled
+        )
+        atualizarConquista(
+            brinquedos,
+            40,
+            binding.imageViewIconBrinquedo40,
+            R.drawable.ic_brinquedo_40_enabled,
+            R.drawable.ic_brinquedo_40_disabled
+        )
+
+        // ROUPAS
+
+        atualizarConquista(
+            roupas,
+            5,
+            binding.imageViewIconRoupa5,
+            R.drawable.ic_roupa_5_enabled,
+            R.drawable.ic_roupa_5_disabled
+        )
+
+        atualizarConquista(
+            roupas,
+            10,
+            binding.imageViewIconRoupa10,
+            R.drawable.ic_roupa_10_enabled,
+            R.drawable.ic_roupa_10_disabled
+        )
+
+        atualizarConquista(
+            roupas,
+            20,
+            binding.imageViewIconRoupa20,
+            R.drawable.ic_roupa_20_enabled,
+            R.drawable.ic_roupa_20_disabled
+        )
+
+        atualizarConquista(
+            roupas,
+            40,
+            binding.imageViewIconRoupa40,
+            R.drawable.ic_roupa_40_enabled,
+            R.drawable.ic_roupa_40_disabled
+        )
+    }
+
+    private fun habilitarPrimeiraConquista(
+        total: Int
+    ) {
+
+        if (total >= 1) {
+            binding.imageViewIconPrimeiraConquista
+                .setImageResource(
+                    R.drawable.ic_primeira_doacao_enabled
+                )
+        } else {
+            binding.imageViewIconPrimeiraConquista
+                .setImageResource(
+                    R.drawable.ic_primeira_doacao_disabled
+                )
+        }
+    }
+
+    private fun atualizarConquista(
+        quantidade: Int,
+        meta: Int,
+        imageView: ImageView,
+        enabled: Int,
+        disabled: Int
+    ) {
+
+        imageView.setImageResource(
+            if (quantidade >= meta) {
+                enabled
+            } else {
+                disabled
+            }
+        )
+    }
 
     private fun signOut() {
 
         auth.signOut()
 
-        Toast.makeText(
+        val intent = Intent(
             context,
-            "Logout realizado com sucesso!",
-            Toast.LENGTH_SHORT
-        ).show()
-
-        requireActivity().finish()
-    }
-    private fun contarDoacoesUsuario(uid: String) {
-
-        val ref = FirebaseDatabase.getInstance().getReference("doacoes")
-
-        ref.child(uid)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-
-                    val total = snapshot.childrenCount
-
-                    binding.valorDoacoes.text = total.toString()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                    Toast.makeText(
-                        context,
-                        "Erro ao carregar doações",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-    }
-
-
-    private fun recuperarDadosUsuario(usuarioKey: String) {
-
-        usersReference.child(usuarioKey)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-
-                    if (snapshot.exists()) {
-
-                        val usuario = snapshot.getValue(Usuario::class.java)
-
-                        usuario?.let {
-
-                            binding.registerNameEditText.setText(it.nome_usuario ?: "")
-                            binding.registerEmailEditText.setText(it.email_usuario ?: "")
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                    Log.e("FirebaseError", error.message)
-
-                    Toast.makeText(
-                        context,
-                        "Erro ao carregar dados",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-    }
-
-
-    private fun updateUser() {
-
-        val name = binding.registerNameEditText.text.toString().trim()
-
-        if (name.isEmpty()) {
-
-            Toast.makeText(
-                context,
-                "Digite um nome válido",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            return
-        }
-
-        val user = auth.currentUser
-
-        if (user != null) {
-
-            updateProfile(user, name)
-
-        } else {
-
-            Toast.makeText(
-                context,
-                "Usuário não está logado",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-
-    private fun updateProfile(user: FirebaseUser, displayName: String) {
-
-        val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName(displayName)
-            .build()
-
-        val usuario = Usuario(
-            key = user.uid,
-            nome_usuario = displayName,
-            email_usuario = user.email ?: ""
+            LoginActivity::class.java
         )
 
-        user.updateProfile(profileUpdates)
-            .addOnCompleteListener { task ->
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-                if (task.isSuccessful) {
-
-                    saveUserToDatabase(usuario)
-
-                } else {
-
-                    Toast.makeText(
-                        context,
-                        "Erro ao atualizar perfil",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-    }
-
-
-    private fun saveUserToDatabase(usuario: Usuario) {
-
-        val uid = usuario.key
-
-        if (uid.isEmpty()) {
-
-            Toast.makeText(
-                context,
-                "Erro: UID inválido",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            return
-        }
-
-        usersReference.child(uid)
-            .setValue(usuario)
-            .addOnSuccessListener {
-
-                Toast.makeText(
-                    context,
-                    "Usuário atualizado com sucesso",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            .addOnFailureListener { e ->
-
-                Toast.makeText(
-                    context,
-                    "Erro ao salvar: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                Log.e("FirebaseError", e.message ?: "Erro desconhecido")
-            }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        carregaDadosDoUsuarioLogado()
+        startActivity(intent)
     }
 
     override fun onDestroyView() {
 
         super.onDestroyView()
+
         _binding = null
     }
 }

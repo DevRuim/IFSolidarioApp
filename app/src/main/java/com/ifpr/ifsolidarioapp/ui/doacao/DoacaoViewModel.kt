@@ -1,13 +1,13 @@
-package com.ifpr.ifsolidarioapp.ui.dashboard
+package com.ifpr.ifsolidarioapp.ui.doacao
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class DoacaoViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+        value = "This is doacao Fragment"
     }
     val text: LiveData<String> = _text
 }

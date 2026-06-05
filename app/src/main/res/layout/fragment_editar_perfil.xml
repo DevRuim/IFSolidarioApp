@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_perfil"
     android:fitsSystemWindows="true"
-    tools:context=".ui.usuario.CadastroUsuarioActivity">
+    tools:context=".ui.usuario.PerfilUsuarioFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
 
 
                     <ImageView
-                        android:id="@+id/imagemOng"
+                        android:id="@+id/imageViewUsuario"
                         android:layout_width="160dp"
                         android:layout_height="160dp"
                         android:background="@drawable/bg_circle"
@@ -42,12 +42,12 @@
 
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/escolherImagemButton"
+                        android:id="@+id/editarFoto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|end"
                         android:layout_margin="4dp"
-                        android:src="@drawable/ic_add_custom"
+                        android:src="@drawable/ic_camera"
                         app:backgroundTint="#F4D03F"
                         app:elevation="4dp"
                         app:fabSize="mini"
@@ -66,30 +66,6 @@
                 android:background="@drawable/bg_rounded_white"
                 android:orientation="vertical"
                 android:padding="24dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Tipo de Usuário"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/selectUsuario"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:hint="Selecionar"
-                        android:inputType="none"
-                        android:textColor="#000000" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <TextView
@@ -112,7 +88,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/registerNameEditText"
+                    android:id="@+id/editTextName"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginBottom="24dp"
@@ -132,7 +108,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/registerTelefoneEditText"
+                    android:id="@+id/editTextTelefone"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginBottom="24dp"
@@ -154,7 +130,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/registerCNPJEditText"
+                    android:id="@+id/editTextCNPJ"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginBottom="24dp"
@@ -165,76 +141,14 @@
                     android:textColor="#000000"
                     android:textColorHint="#8A8A8A" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Email"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/registerEmailEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="24dp"
-                    android:background="@drawable/edittext_background"
-                    android:hint="Preencher"
-                    android:inputType="textEmailAddress"
-                    android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Senha"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/registerPasswordEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="24dp"
-                    android:background="@drawable/edittext_background"
-                    android:hint="Preencher"
-                    android:inputType="textPassword"
-                    android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Confirmar Senha"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/registerConfirmPasswordEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="32dp"
-                    android:background="@drawable/edittext_background"
-                    android:hint="Preencher"
-                    android:inputType="textPassword"
-                    android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
-
 
                 <Button
-                    android:id="@+id/registerButton"
+                    android:id="@+id/buttonSalvar"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginBottom="24dp"
                     android:backgroundTint="#7A2ECE"
-                    android:text="Cadastrar"
+                    android:text="Salvar"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 
