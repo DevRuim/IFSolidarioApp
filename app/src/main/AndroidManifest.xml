@@ -26,6 +26,7 @@
         <activity android:name=".ui.login.LoginActivity" />
         <activity android:name=".ui.usuario.CadastroUsuarioActivity" />
         <activity android:name=".ui.campanha.CadastroCampanhaActivity"/>
+        <activity android:name=".ui.conquista.ConquistaActivity"/>
 
     </application>
 

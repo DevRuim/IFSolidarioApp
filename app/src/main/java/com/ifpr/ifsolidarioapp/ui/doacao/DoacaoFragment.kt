@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.activity.result.contract.ActivityResultContracts
+import com.ifpr.ifsolidarioapp.ui.conquista.ConquistaActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -42,6 +44,15 @@ class DoacaoFragment : Fragment() {
     companion object {
         private const val PICK_IMAGE_CODE = 1000
     }
+
+    private val conquistaLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            findNavController().navigate(
+                R.id.navigation_home
+            )
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -223,7 +234,6 @@ class DoacaoFragment : Fragment() {
     private fun salvarNoBanco(
         item: DoacaoData
     ) {
-
         val uid =
             auth.currentUser?.uid ?: return
 
@@ -238,20 +248,33 @@ class DoacaoFragment : Fragment() {
                     uid,
                     item.categoria,
                     item.quantidade
-                )
+                ) { novaConquista, novoTotalCategoria ->
 
-                atualizarQuantidadeCampanha(
-                    item.quantidade
-                )
+                    atualizarQuantidadeCampanha(
+                        item.quantidade
+                    ) {
+                        if (novaConquista != null) {
+                            abrirTelaConquista(
+                                item.categoria,
+                                novaConquista,
+                                novoTotalCategoria
+                            )
+                        } else {
+                            findNavController().navigate(
+                                R.id.navigation_home
+                            )
+                        }
+                    }
+                }
             }
     }
 
     private fun atualizarEstatisticasUsuario(
         uid: String,
         categoria: String,
-        quantidade: Double
+        quantidade: Double,
+        onFinish: (Int?, Int) -> Unit
     ) {
-
         val usuarioRef =
             database
                 .child("usuarios")
@@ -273,37 +296,46 @@ class DoacaoFragment : Fragment() {
                     .child("total_doacoes")
                     .setValue(novoTotal)
 
-                usuarioRef
-                    .child("conquistas")
-                    .get()
-                    .addOnSuccessListener { conquistaSnapshot ->
+                atualizarTotalCategoria(
+                    usuarioRef,
+                    categoria,
+                    quantidade
+                ) { novaConquista, novoTotalCategoria ->
 
-                        val conquistasAtual =
-                            conquistaSnapshot.getValue(Int::class.java)
-                                ?: 0
-
-                        val novasConquistas =
-                            conquistasAtual + 1
-
-                        when (novasConquistas) {
-                            1, 5, 10, 20, 40 -> {
-                                usuarioRef
-                                    .child("conquistas")
-                                    .setValue(novasConquistas)
-                            }
-                        }
-                    }
+                    onFinish(
+                        novaConquista,
+                        novoTotalCategoria
+                    )
+                }
             }
+    }
 
+    private fun verificarNovaConquistaCategoria(
+        categoria: String,
+        totalAnterior: Int,
+        novoTotal: Int
+    ): Int? {
+        val metas = listOf(5, 10, 20, 40)
+
+        return metas.firstOrNull { meta ->
+            totalAnterior < meta && novoTotal >= meta
+        }
+    }
+
+    private fun atualizarTotalCategoria(
+        usuarioRef: DatabaseReference,
+        categoria: String,
+        quantidade: Double,
+        onFinish: (Int?, Int) -> Unit
+    ) {
         val campoCategoria = when (categoria) {
-
             "Alimento" -> "alimentos"
-
             "Brinquedo" -> "brinquedos"
-
             "Roupa" -> "roupas"
-
-            else -> return
+            else -> {
+                onFinish(null, 0)
+                return
+            }
         }
 
         usuarioRef
@@ -312,24 +344,99 @@ class DoacaoFragment : Fragment() {
             .addOnSuccessListener { snapshot ->
 
                 val valorAtual =
-                    snapshot
-                        .getValue(Double::class.java)
-                        ?: 0.0
+                    snapshot.getValue(Int::class.java) ?: 0
+
+                val novoValor =
+                    valorAtual + quantidade.toInt()
 
                 usuarioRef
                     .child(campoCategoria)
-                    .setValue(valorAtual + quantidade)
+                    .setValue(novoValor)
+                    .addOnSuccessListener {
+
+                        val novaConquista =
+                            verificarNovaConquistaCategoria(
+                                categoria,
+                                valorAtual,
+                                novoValor
+                            )
+
+                        onFinish(
+                            novaConquista,
+                            novoValor
+                        )
+                    }
             }
     }
 
-    private fun atualizarQuantidadeCampanha(
-        quantidadeDoada: Double
-    ) {
+    private fun getInsigniaEnabled(
+        categoria: String,
+        meta: Int
+    ): Int {
+        return when (categoria) {
+            "Alimento" -> when (meta) {
+                5 -> R.drawable.ic_alimento_5_enabled
+                10 -> R.drawable.ic_alimento_10_enabled
+                20 -> R.drawable.ic_alimento_20_enabled
+                40 -> R.drawable.ic_alimento_40_enabled
+                else -> R.drawable.ic_alimento_5_enabled
+            }
 
+            "Brinquedo" -> when (meta) {
+                5 -> R.drawable.ic_brinquedo_5_enabled
+                10 -> R.drawable.ic_brinquedo_10_enabled
+                20 -> R.drawable.ic_brinquedo_20_enabled
+                40 -> R.drawable.ic_brinquedo_40_enabled
+                else -> R.drawable.ic_brinquedo_5_enabled
+            }
+
+            "Roupa" -> when (meta) {
+                5 -> R.drawable.ic_roupa_5_enabled
+                10 -> R.drawable.ic_roupa_10_enabled
+                20 -> R.drawable.ic_roupa_20_enabled
+                40 -> R.drawable.ic_roupa_40_enabled
+                else -> R.drawable.ic_roupa_5_enabled
+            }
+
+            else -> R.drawable.ic_alimento_5_enabled
+        }
+    }
+
+    private fun abrirTelaConquista(
+        categoria: String,
+        meta: Int,
+        novoTotalCategoria: Int
+    ) {
+        val insigniaDrawable =
+            getInsigniaEnabled(categoria, meta)
+
+        val mensagem =
+            "Parabéns, você alcançou $novoTotalCategoria doações de $categoria!"
+
+        val intent = Intent(
+            requireContext(),
+            ConquistaActivity::class.java
+        )
+
+        intent.putExtra("mensagem", mensagem)
+        intent.putExtra("lottieResName", "success_congrats")
+        intent.putExtra("insigniaDrawable", insigniaDrawable)
+        intent.putExtra("tempoDuracao", 5000L)
+
+        conquistaLauncher.launch(intent)
+    }
+
+    private fun atualizarQuantidadeCampanha(
+        quantidadeDoada: Double,
+        onFinish: () -> Unit
+    ) {
         if (
             campanha_id.isEmpty() ||
             criadorId.isEmpty()
-        ) return
+        ) {
+            onFinish()
+            return
+        }
 
         val campanhaRef =
             database
@@ -343,8 +450,7 @@ class DoacaoFragment : Fragment() {
             .addOnSuccessListener { snapshot ->
 
                 val atual =
-                    snapshot
-                        .getValue(Double::class.java)
+                    snapshot.getValue(Double::class.java)
                         ?: 0.0
 
                 val novaQuantidade =
@@ -354,10 +460,7 @@ class DoacaoFragment : Fragment() {
                     .child("quantidade_atual")
                     .setValue(novaQuantidade)
                     .addOnSuccessListener {
-
-                        findNavController().navigate(
-                            R.id.navigation_home
-                        )
+                        onFinish()
                     }
             }
     }
