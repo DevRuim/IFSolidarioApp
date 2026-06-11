@@ -3,7 +3,6 @@ package com.ifpr.ifsolidarioapp.ui.conquista
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.ifpr.ifsolidarioapp.databinding.ActivityConquistaBinding
 
@@ -13,11 +12,6 @@ class ConquistaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d(
-            "CONQUISTA",
-            "ACTIVITY ABERTA"
-        )
 
         binding = ActivityConquistaBinding.inflate(layoutInflater)
         setContentView(binding.root)

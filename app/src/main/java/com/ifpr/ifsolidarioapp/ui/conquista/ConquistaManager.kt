@@ -2,7 +2,6 @@ package com.ifpr.ifsolidarioapp.ui.conquista
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Conquista
@@ -10,11 +9,9 @@ import com.ifpr.ifsolidarioapp.baseclasses.Conquista
 object ConquistasManager {
 
     private val filaConquistas = mutableListOf<Conquista>()
-
     private var verificandoConquistas = false
     private val conquistasPendentes =
         mutableSetOf<String>()
-
     private var exibindoConquista = false
 
 
@@ -26,10 +23,6 @@ object ConquistasManager {
         brinquedos: Int,
         total: Int
     ) {
-        Log.d(
-            "CONQUISTA",
-            "VERIFICAR CONQUISTAS CHAMADO"
-        )
 
         if (verificandoConquistas) return
 
@@ -52,43 +45,31 @@ object ConquistasManager {
 
             if (progresso >= conquista.meta) {
 
-                Log.d(
-                    "CONQUISTA",
-                    "ATINGIU META: ${conquista.key}"
-                )
-
                 conquistaJaDesbloqueada(
                     uid,
                     conquista.key
                 ) { desbloqueada ->
-
-                    Log.d(
-                        "CONQUISTA",
-                        "${conquista.key} desbloqueada? $desbloqueada"
-                    )
 
                     if (!desbloqueada) {
 
                         desbloquearConquista(
                             uid,
                             conquista
-                        ) {
+                        ) { sucesso ->
 
-                            if (!conquistasPendentes.contains(conquista.key)) {
+                            if (!sucesso) {
+                                verificacoesRestantes--
 
-                                conquistasPendentes.add(conquista.key)
+                                if (verificacoesRestantes == 0) {
+                                    verificandoConquistas = false
+                                    exibirProximaConquista(context)
+                                }
 
-                                Log.d(
-                                    "CONQUISTA",
-                                    "ADICIONANDO NA FILA: ${conquista.key}"
-                                )
+                                return@desbloquearConquista
+                            }
 
+                            if (conquistasPendentes.add(conquista.key)) {
                                 filaConquistas.add(conquista)
-
-                                Log.d(
-                                    "CONQUISTA",
-                                    "FILA AGORA: ${filaConquistas.size}"
-                                )
                             }
 
                             verificacoesRestantes--
@@ -132,11 +113,6 @@ object ConquistasManager {
         context: Context
     ) {
 
-        Log.d(
-            "CONQUISTA",
-            "Fila: ${filaConquistas.size}"
-        )
-
         if (exibindoConquista) {
             return
         }
@@ -149,11 +125,6 @@ object ConquistasManager {
 
         val conquista =
             filaConquistas.removeAt(0)
-
-        Log.d(
-            "CONQUISTA",
-            "EXIBINDO ${conquista.key}"
-        )
 
         conquistasPendentes.remove(
             conquista.key
@@ -213,11 +184,6 @@ object ConquistasManager {
         conquista: Conquista
     ) {
 
-        Log.d(
-            "CONQUISTA",
-            "MOSTRANDO ${conquista.key}"
-        )
-
         val intent = Intent(
             context,
             ConquistaActivity::class.java
@@ -225,7 +191,7 @@ object ConquistasManager {
 
         intent.putExtra(
             "mensagem",
-            conquista.titulo
+            "Parabéns, você conquistou ${conquista.titulo}!"
         )
 
         intent.putExtra(
@@ -238,6 +204,11 @@ object ConquistasManager {
             conquista.insigniaHabilitada
         )
 
+        intent.putExtra(
+            "tempoDuracao",
+            5000L
+        )
+
         intent.addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK
         )
@@ -248,11 +219,6 @@ object ConquistasManager {
     fun conquistaFinalizada(
         context: Context
     ) {
-
-        Log.d(
-            "CONQUISTA",
-            "FINALIZOU UMA CONQUISTA"
-        )
 
         exibindoConquista = false
 
@@ -273,7 +239,7 @@ object ConquistasManager {
             categoria = "TOTAL",
             insigniaHabilitada = R.drawable.ic_primeira_doacao_enabled,
             insigniaDesabilitada = R.drawable.ic_primeira_doacao_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         // ALIMENTOS
@@ -286,7 +252,7 @@ object ConquistasManager {
             categoria = "ALIMENTO",
             insigniaHabilitada = R.drawable.ic_alimento_5_enabled,
             insigniaDesabilitada = R.drawable.ic_alimento_5_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -297,7 +263,7 @@ object ConquistasManager {
             categoria = "ALIMENTO",
             insigniaHabilitada = R.drawable.ic_alimento_10_enabled,
             insigniaDesabilitada = R.drawable.ic_alimento_10_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -308,7 +274,7 @@ object ConquistasManager {
             categoria = "ALIMENTO",
             insigniaHabilitada = R.drawable.ic_alimento_20_enabled,
             insigniaDesabilitada = R.drawable.ic_alimento_20_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -319,7 +285,7 @@ object ConquistasManager {
             categoria = "ALIMENTO",
             insigniaHabilitada = R.drawable.ic_alimento_40_enabled,
             insigniaDesabilitada = R.drawable.ic_alimento_40_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         // BRINQUEDOS
@@ -332,7 +298,7 @@ object ConquistasManager {
             categoria = "BRINQUEDO",
             insigniaHabilitada = R.drawable.ic_brinquedo_5_enabled,
             insigniaDesabilitada = R.drawable.ic_brinquedo_5_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -343,7 +309,7 @@ object ConquistasManager {
             categoria = "BRINQUEDO",
             insigniaHabilitada = R.drawable.ic_brinquedo_10_enabled,
             insigniaDesabilitada = R.drawable.ic_brinquedo_10_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -354,7 +320,7 @@ object ConquistasManager {
             categoria = "BRINQUEDO",
             insigniaHabilitada = R.drawable.ic_brinquedo_20_enabled,
             insigniaDesabilitada = R.drawable.ic_brinquedo_20_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -365,7 +331,7 @@ object ConquistasManager {
             categoria = "BRINQUEDO",
             insigniaHabilitada = R.drawable.ic_brinquedo_40_enabled,
             insigniaDesabilitada = R.drawable.ic_brinquedo_40_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         // ROUPAS
@@ -378,7 +344,7 @@ object ConquistasManager {
             categoria = "ROUPA",
             insigniaHabilitada = R.drawable.ic_roupa_5_enabled,
             insigniaDesabilitada = R.drawable.ic_roupa_5_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -389,7 +355,7 @@ object ConquistasManager {
             categoria = "ROUPA",
             insigniaHabilitada = R.drawable.ic_roupa_10_enabled,
             insigniaDesabilitada = R.drawable.ic_roupa_10_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -400,7 +366,7 @@ object ConquistasManager {
             categoria = "ROUPA",
             insigniaHabilitada = R.drawable.ic_roupa_20_enabled,
             insigniaDesabilitada = R.drawable.ic_roupa_20_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         ),
 
         Conquista(
@@ -411,7 +377,7 @@ object ConquistasManager {
             categoria = "ROUPA",
             insigniaHabilitada = R.drawable.ic_roupa_40_enabled,
             insigniaDesabilitada = R.drawable.ic_roupa_40_disabled,
-            lottieAnimation = "conquista"
+            lottieAnimation = "success_congrats"
         )
     )
 }
