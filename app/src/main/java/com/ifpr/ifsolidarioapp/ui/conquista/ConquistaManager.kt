@@ -2,6 +2,7 @@ package com.ifpr.ifsolidarioapp.ui.conquista
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Conquista
@@ -10,6 +11,7 @@ object ConquistasManager {
 
     private val filaConquistas = mutableListOf<Conquista>()
 
+    private var verificandoConquistas = false
     private val conquistasPendentes =
         mutableSetOf<String>()
 
@@ -24,28 +26,46 @@ object ConquistasManager {
         brinquedos: Int,
         total: Int
     ) {
+        Log.d(
+            "CONQUISTA",
+            "VERIFICAR CONQUISTAS CHAMADO"
+        )
+
+        if (verificandoConquistas) return
+
+        verificandoConquistas = true
+
+        filaConquistas.clear()
+        conquistasPendentes.clear()
+
+        var verificacoesRestantes = listaConquistas.size
 
         listaConquistas.forEach { conquista ->
 
             val progresso = when (conquista.categoria) {
-
                 "ALIMENTO" -> alimentos
-
                 "ROUPA" -> roupas
-
                 "BRINQUEDO" -> brinquedos
-
                 "TOTAL" -> total
-
                 else -> 0
             }
 
             if (progresso >= conquista.meta) {
 
+                Log.d(
+                    "CONQUISTA",
+                    "ATINGIU META: ${conquista.key}"
+                )
+
                 conquistaJaDesbloqueada(
                     uid,
                     conquista.key
                 ) { desbloqueada ->
+
+                    Log.d(
+                        "CONQUISTA",
+                        "${conquista.key} desbloqueada? $desbloqueada"
+                    )
 
                     if (!desbloqueada) {
 
@@ -54,24 +74,55 @@ object ConquistasManager {
                             conquista
                         ) {
 
-                            if (
-                                !conquistasPendentes.contains(
-                                    conquista.key
-                                )
-                            ) {
+                            if (!conquistasPendentes.contains(conquista.key)) {
 
-                                conquistasPendentes.add(
-                                    conquista.key
+                                conquistasPendentes.add(conquista.key)
+
+                                Log.d(
+                                    "CONQUISTA",
+                                    "ADICIONANDO NA FILA: ${conquista.key}"
                                 )
 
-                                filaConquistas.add(
-                                    conquista
+                                filaConquistas.add(conquista)
+
+                                Log.d(
+                                    "CONQUISTA",
+                                    "FILA AGORA: ${filaConquistas.size}"
                                 )
                             }
+
+                            verificacoesRestantes--
+
+                            if (verificacoesRestantes == 0) {
+
+                                verificandoConquistas = false
+
+                                exibirProximaConquista(context)
+                            }
+                        }
+
+                    } else {
+
+                        verificacoesRestantes--
+
+                        if (verificacoesRestantes == 0) {
+
+                            verificandoConquistas = false
 
                             exibirProximaConquista(context)
                         }
                     }
+                }
+
+            } else {
+
+                verificacoesRestantes--
+
+                if (verificacoesRestantes == 0) {
+
+                    verificandoConquistas = false
+
+                    exibirProximaConquista(context)
                 }
             }
         }
@@ -80,6 +131,11 @@ object ConquistasManager {
     private fun exibirProximaConquista(
         context: Context
     ) {
+
+        Log.d(
+            "CONQUISTA",
+            "Fila: ${filaConquistas.size}"
+        )
 
         if (exibindoConquista) {
             return
@@ -93,6 +149,11 @@ object ConquistasManager {
 
         val conquista =
             filaConquistas.removeAt(0)
+
+        Log.d(
+            "CONQUISTA",
+            "EXIBINDO ${conquista.key}"
+        )
 
         conquistasPendentes.remove(
             conquista.key
@@ -127,8 +188,9 @@ object ConquistasManager {
     private fun desbloquearConquista(
         uid: String,
         conquista: Conquista,
-        callback: () -> Unit
+        callback: (Boolean) -> Unit
     ) {
+
 
         FirebaseDatabase.getInstance()
             .getReference("usuarios")
@@ -136,13 +198,13 @@ object ConquistasManager {
             .child("conquistas_desbloqueadas")
             .child(conquista.key)
             .setValue(true)
+
             .addOnSuccessListener {
-
-                callback()
+                callback(true)
             }
-            .addOnFailureListener {
 
-                it.printStackTrace()
+            .addOnFailureListener {
+                callback(false)
             }
     }
 
@@ -150,6 +212,11 @@ object ConquistasManager {
         context: Context,
         conquista: Conquista
     ) {
+
+        Log.d(
+            "CONQUISTA",
+            "MOSTRANDO ${conquista.key}"
+        )
 
         val intent = Intent(
             context,
@@ -182,7 +249,16 @@ object ConquistasManager {
         context: Context
     ) {
 
+        Log.d(
+            "CONQUISTA",
+            "FINALIZOU UMA CONQUISTA"
+        )
+
         exibindoConquista = false
+
+        if (filaConquistas.isEmpty()) {
+            verificandoConquistas = false
+        }
 
         exibirProximaConquista(context)
     }
