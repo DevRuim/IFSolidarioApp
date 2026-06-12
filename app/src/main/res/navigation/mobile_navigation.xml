@@ -18,6 +18,14 @@
         tools:layout="@layout/fragment_doacao" />
 
     <fragment
+        android:id="@+id/historicoFragment"
+        android:name="com.ifpr.ifsolidarioapp.ui.usuario.HistoricoFragment"
+        android:label="Historico" />
+    <action
+        android:id="@+id/action_profile_to_historico"
+        app:destination="@id/historicoFragment"/>
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.ifpr.ifsolidarioapp.ui.notifications.NotificationsFragment"
         android:label="Notifications"

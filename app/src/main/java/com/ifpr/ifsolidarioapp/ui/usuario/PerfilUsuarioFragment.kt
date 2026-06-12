@@ -70,8 +70,16 @@ class PerfilUsuarioFragment : Fragment() {
         binding.buttonEditarPerfilUsuario.setOnClickListener {
             abrirTelaEditarPerfil()
         }
+
         binding.buttonEditarPerfilOng.setOnClickListener {
             abrirTelaEditarPerfil()
+        }
+
+        binding.buttonHistoricoDoacao.setOnClickListener {
+
+            findNavController().navigate(
+                R.id.action_profile_to_historico
+            )
         }
 
         binding.buttonSairUsuario.setOnClickListener {
