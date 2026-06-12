@@ -41,13 +41,6 @@ class HistoricoFragment : Fragment() {
 
         carregarHistorico()
 
-        view.findViewById<FrameLayout>(R.id.btnVoltar)
-            .setOnClickListener {
-
-                findNavController().navigateUp()
-
-            }
-
         return view
     }
 
