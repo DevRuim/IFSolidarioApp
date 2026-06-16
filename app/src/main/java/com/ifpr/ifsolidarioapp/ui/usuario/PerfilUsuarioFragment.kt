@@ -154,7 +154,6 @@ class PerfilUsuarioFragment : Fragment() {
         val nome = snapshot.child("nome_usuario").getValue(String::class.java) ?: ""
         val email = snapshot.child("email_usuario").getValue(String::class.java) ?: ""
         val telefone = snapshot.child("telefone_usuario").getValue(String::class.java) ?: ""
-        val conquistas = snapshot.child("conquistas").getValue(Int::class.java) ?: 0
         val alimentos = snapshot.child("alimentos").getValue(Int::class.java) ?: 0
         val brinquedos = snapshot.child("brinquedos").getValue(Int::class.java) ?: 0
         val roupas = snapshot.child("roupas").getValue(Int::class.java) ?: 0
@@ -168,7 +167,6 @@ class PerfilUsuarioFragment : Fragment() {
             brinquedos,
             roupas,
             total,
-            conquistas,
         )
 
         carregarConquistas(
@@ -246,7 +244,6 @@ class PerfilUsuarioFragment : Fragment() {
         brinquedos: Int,
         roupas: Int,
         total: Int,
-        conquistas: Int
     ) {
 
         binding.textViewName.text = nome
@@ -259,7 +256,6 @@ class PerfilUsuarioFragment : Fragment() {
         binding.textViewBrinquedos.text = brinquedos.toString()
         binding.textViewRoupas.text = roupas.toString()
 
-        binding.textViewConquistas.text = conquistas.toString()
     }
 
     private fun carregarInformacoesOng(
