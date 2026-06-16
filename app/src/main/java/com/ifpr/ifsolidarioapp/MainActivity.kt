@@ -99,12 +99,12 @@ class MainActivity : AppCompatActivity() {
         tipo: String?
     ) {
 
+        menu.findItem(R.id.navigation_ranking)
+            .isVisible = true
+
         when (tipo) {
 
             "ONG" -> {
-
-                menu.findItem(R.id.navigation_dashboard)
-                    .isVisible = false
 
                 menu.findItem(R.id.navigation_notifications)
                     .isVisible = true
@@ -112,23 +112,14 @@ class MainActivity : AppCompatActivity() {
 
             "Doador" -> {
 
-                menu.findItem(R.id.navigation_dashboard)
-                    .isVisible = true
-
                 menu.findItem(R.id.navigation_notifications)
                     .isVisible = false
             }
 
             "VISITANTE" -> {
 
-                menu.findItem(R.id.navigation_dashboard)
-                    .isVisible = false
-
                 menu.findItem(R.id.navigation_notifications)
                     .isVisible = false
-
-                // opcionalmente esconder perfil também
-                // menu.findItem(R.id.navigation_profile).isVisible = false
             }
         }
     }

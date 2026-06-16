@@ -26,6 +26,12 @@
         app:destination="@id/historicoFragment"/>
 
     <fragment
+        android:id="@+id/navigation_ranking"
+        android:name="com.ifpr.ifsolidarioapp.ui.ranking.RankingFragment"
+        android:label="Ranking"
+        tools:layout="@layout/ranking_fragment" />
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.ifpr.ifsolidarioapp.ui.notifications.NotificationsFragment"
         android:label="Notifications"
