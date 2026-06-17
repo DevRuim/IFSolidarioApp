@@ -45,9 +45,17 @@ class ConquistaActivity : AppCompatActivity() {
             binding.imageInsignia.setImageResource(insigniaDrawable)
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        Handler(
+            Looper.getMainLooper()
+        ).postDelayed({
+
             setResult(RESULT_OK)
+
+            ConquistasManager
+                .conquistaFinalizada(this)
+
             finish()
+
         }, tempoDuracao)
     }
 }
