@@ -12,7 +12,7 @@ android {
         applicationId = "com.ifpr.ifsolidarioapp"
         minSdk = 24
         targetSdk = 35
-        versionCode = 3
+        versionCode = 4
         versionName = "São Francisco de Assis"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
