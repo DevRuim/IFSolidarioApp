@@ -1,162 +1,468 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<!-- TELA COMPLETA: fundo roxo com triângulos amarelos -->
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7A2ECE">
+    android:background="@drawable/bgdoacao">
 
+    <!-- ════════════════════════════════════════
+         PASSO 1 — Quantidade
+         ════════════════════════════════════════ -->
     <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/button_finalizar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:id="@+id/layoutPasso1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
+            android:paddingHorizontal="24dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="24dp">
 
+            <!-- Card branco -->
             <LinearLayout
-                android:id="@+id/constraintLayout"
-                android:layout_width="309dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/bg_rounded_white"
+                android:layout_width="match_parent"
+                android:layout_height="566dp"
+                android:background="@drawable/bg_card_white_rounded"
+                android:elevation="4dp"
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- IMAGEM -->
+                <!-- Título "Primeiro passo:" -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Primeiro passo:"
+                    android:textColor="#7B2FBE"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
-                <ImageView
-                    android:id="@+id/imagePreview"
-                    android:layout_width="match_parent"
-                    android:layout_height="149dp"
-                    android:background="#D9D7D7"
-                    android:scaleType="centerCrop"
-                    android:src="@android:drawable/gallery_thumb" />
+                <!-- Pergunta dinâmica baseada na categoria -->
+                <TextView
+                    android:id="@+id/tvPerguntaCategoria"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Quantas roupas você está doando?"
+                    android:textColor="#1A1A1A"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                <!-- BOTÕES -->
-
+                <!-- Info box -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:gravity="center"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/buttonNext"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_marginEnd="12dp"
-                        android:src="@drawable/ic_arrow_left_line_foreground"
-                        app:backgroundTint="#4CAF50"
-                        app:maxImageSize="36dp"
-                        app:tint="@android:color/white" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="6dp"
+                        android:text="ⓘ"
+                        android:textColor="#7B2FBE"
+                        android:textSize="16sp" />
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/addImageButton"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_marginEnd="12dp"
-                        android:src="@android:drawable/ic_input_add"
-                        app:backgroundTint="#FFFFFF" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/editImageButton"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_marginEnd="12dp"
-                        android:src="@android:drawable/ic_menu_edit"
-                        app:backgroundTint="#FFFFFF" />
+                        <TextView
+                            android:id="@+id/tvInfoTitulo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Itens aceitos (Qualquer tamanho e em bom estado):"
+                            android:textColor="#333333"
+                            android:textSize="13sp" />
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/buttonPrev"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:src="@drawable/ic_arrow_right_line_foreground"
-                        app:backgroundTint="#4CAF50"
-                        app:maxImageSize="36dp"
-                        app:tint="@android:color/white" />
+                        <!-- Itens aceitos em duas colunas -->
+                        <LinearLayout
+                            android:id="@+id/layoutItensAceitos"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal">
 
+                            <!-- Coluna esquerda -->
+                            <LinearLayout
+                                android:id="@+id/colunaDireita"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvItem1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:drawablePadding="4dp"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:text="• Camisetas"
+                                    android:textColor="#333333"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/tvItem2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:text="• Calças"
+                                    android:textColor="#333333"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <!-- Coluna direita -->
+                            <LinearLayout
+                                android:id="@+id/colunaEsquerda"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvItem3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:text="• Cobertores"
+                                    android:textColor="#333333"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/tvItem4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:text="• Blusas"
+                                    android:textColor="#333333"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Dica de contagem -->
+                        <TextView
+                            android:id="@+id/tvDicaContagem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Você pode doar vários itens\nde diferentes tipos\n(Ex. 2 blusas + 1 coberta = 3 itens )"
+                            android:textColor="#333333"
+                            android:textSize="13sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <!-- CATEGORIA -->
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="20dp"
+                    android:background="#E0E0E0" />
+
+                <!-- Label campo número -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Digite o número de itens:"
+                    android:textColor="#7B2FBE"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- Campo de quantidade -->
+                <EditText
+                    android:id="@+id/editQuantidade"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/edittext_background"
+                    android:hint="3"
+                    android:inputType="number"
+                    android:paddingHorizontal="14dp"
+                    android:textColor="#1A1A1A"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="16sp" />
+
+                <!-- Spinner oculto (mantido para compatibilidade) -->
+                <Button
+                    android:id="@+id/btnProximo"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_button_purple"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Próximo"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:visibility="gone" />
+
+                <!-- Botão "Sair" (texto) -->
+                <TextView
+                    android:id="@+id/tvSair"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:text="Sair"
+                    android:textColor="#7B2FBE"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- ════════════════════════════════════════
+         PASSO 2 — Fotos + Doação
+         ════════════════════════════════════════ -->
+    <ScrollView
+        android:id="@+id/layoutPasso2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="24dp">
+
+            <!-- Card branco -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_white_rounded"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Título "Segundo passo:" -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Segundo passo:"
+                    android:textColor="#7B2FBE"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Tire algumas fotos dos itens"
+                    android:textColor="#1A1A1A"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <!-- Info box -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="6dp"
+                        android:text="ⓘ"
+                        android:textColor="#7B2FBE"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Você pode tirar uma foto item por item ao doar ou (maneira mais fácil) tirar foto de todos itens juntos:"
+                        android:textColor="#333333"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <!-- Preview de imagens (galeria horizontal) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <!-- Imagem principal (grande) -->
+                    <ImageView
+                        android:id="@+id/imagePreview"
+                        android:layout_width="0dp"
+                        android:layout_height="110dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_image_placeholder"
+                        android:contentDescription="Imagem da doação"
+                        android:scaleType="centerCrop" />
+
+                    <View android:layout_width="8dp" android:layout_height="1dp" />
+
+                    <!-- Imagem secundária (mini) -->
+                    <ImageView
+                        android:id="@+id/imagePreview2"
+                        android:layout_width="0dp"
+                        android:layout_height="110dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_image_placeholder"
+                        android:contentDescription="Imagem adicional"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Botões: Adicionar foto + navegar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/buttonPrev"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Anterior"
+                        android:src="@drawable/ic_arrow_left_line_foreground"
+                        android:tint="#7B2FBE"
+                        android:visibility="gone" />
+
+                    <ImageButton
+                        android:id="@+id/buttonNext"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Próxima"
+                        android:src="@drawable/ic_arrow_right_line_foreground"
+                        android:tint="#7B2FBE"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="16dp"
+                    android:background="#E0E0E0" />
+
+                <!-- "Escolha/Tire uma foto:" + botão DOAR -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Escolha/Tire uma foto:"
+                    android:textColor="#7B2FBE"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <!-- CATEGORIA -->
+                    <!-- Botão adicionar imagem (estilo pilha de fotos) -->
+                    <FrameLayout
+                        android:id="@+id/addImageButton"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackgroundBorderless">
 
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"
-                        android:text="Categoria"
-                        android:textColor="#000000"
-                        android:textSize="20sp" />
+                        <!-- Sombra / pilha fundo -->
+                        <View
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:layout_gravity="bottom|end"
+                            android:background="@drawable/bg_photo_stack_back" />
 
-                    <Spinner
-                        android:id="@+id/spinnerCategoria"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/edittext_background"
-                        android:layout_marginTop="8dp" />
+                        <!-- Card frontal com "+" -->
+                        <LinearLayout
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
+                            android:layout_gravity="top|start"
+                            android:background="@drawable/bg_photo_stack_front"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                    <!-- QUANTIDADE -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="+"
+                                android:textColor="#888888"
+                                android:textSize="28sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </FrameLayout>
 
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"
-                        android:layout_marginTop="24dp"
-                        android:text="Quantidade"
-                        android:textColor="#000000"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/editQuantidade"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="8dp"
-                        android:hint="  Kg / Peças / Unidades"
-                        android:background="@drawable/edittext_background"
-                        android:inputType="numberDecimal" />
-
+                    <!-- Botão DOAR -->
+                    <Button
+                        android:id="@+id/buttonFinalizar"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_purple"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="DOAR"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
+
+                <!-- Spinner oculto (editar imagem — mantido para lógica) -->
+                <ImageButton
+                    android:id="@+id/editImageButton"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
-        </LinearLayout>
+            <!-- Botão "Voltar" (texto) -->
+            <TextView
+                android:id="@+id/tvVoltar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/poppins_regular"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="Voltar"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
 
+        </LinearLayout>
     </ScrollView>
 
-    <!-- BOTÃO FINALIZAR -->
-
-    <Button
-        android:id="@+id/button_finalizar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp"
-        android:layout_marginHorizontal="20dp"
-        android:backgroundTint="#278017"
-        android:text="Finalizar"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
