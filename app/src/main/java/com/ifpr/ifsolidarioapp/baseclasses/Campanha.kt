@@ -12,7 +12,9 @@ data class Campanha(
     var criadorId: String = "",
     var criador_nome: String = "",
     var imagemBase64: String = "",
-    var data_termino: String = ""
+    var data_termino: String = "",
+    var instagram: String = ""
+
 
 
 )

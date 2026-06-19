@@ -158,6 +158,8 @@ HomeFragment : Fragment() {
                         val data =
                             itemView.findViewById<TextView>(R.id.item_data)
 
+                        val instagram = campanha.instagram
+
                         val progresso =
                             itemView.findViewById<TextView>(R.id.item_progresso)
 
@@ -171,6 +173,9 @@ HomeFragment : Fragment() {
 
                         val doarBotao =
                             itemView.findViewById<Button>(R.id.doarButton)
+
+                        val instagramBotao =
+                            itemView.findViewById<ImageButton>(R.id.btnInstagram)
 
                         nome.text = campanha.nome_campanha
 
@@ -287,6 +292,18 @@ HomeFragment : Fragment() {
                                     Intent(context, LoginActivity::class.java)
                                 )
                             }
+                        }
+
+                        instagramBotao.setOnClickListener {
+
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                android.net.Uri.parse(
+                                    "https://instagram.com/$instagram"
+                                )
+                            )
+
+                            startActivity(intent)
                         }
 
                         // ANIMAÇÃO DOS CARDS
