@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_perfil"
+    android:background="@drawable/bgdoacao"
     android:fitsSystemWindows="true"
     tools:context=".ui.usuario.CadastroUsuarioActivity">
 
@@ -19,229 +19,322 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
+            <!-- ── Header roxo com triângulos (mesmo padrão da doação) ── -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
+                android:layout_height="220dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="24dp"
+                android:paddingBottom="16dp">
 
+                <!-- Logo / avatar -->
                 <FrameLayout
-                    android:layout_width="160dp"
-                    android:layout_height="160dp">
+                    android:layout_width="96dp"
+                    android:layout_height="96dp">
 
-
+                    <!-- FAB amarelo de editar -->
                     <ImageView
                         android:id="@+id/imagemOng"
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                        android:background="@drawable/bg_circle"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:background="@drawable/bg_avatar_circle"
                         android:clipToOutline="true"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_profile_black_24dp" />
-
+                        android:src="@drawable/ic_profile_black_24dp"
+                        app:tint="#F5C518"
+                        android:elevation="0dp"/>
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/escolherImagemButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|end"
-                        android:layout_margin="4dp"
+                        android:layout_marginEnd="-5dp"
+                        android:layout_marginBottom="-5dp"
                         android:src="@drawable/ic_add_custom"
-                        app:backgroundTint="#F4D03F"
-                        app:elevation="4dp"
+                        app:backgroundTint="#F5C518"
+                        android:elevation="10dp"
                         app:fabSize="mini"
-                        app:maxImageSize="30dp"
-                        app:tint="#673AB7"
-                        app:useCompatPadding="false" />
-
+                        app:maxImageSize="18dp"
+                        app:tint="#7B2FBE"
+                        app:useCompatPadding="false"
+/>
                 </FrameLayout>
 
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_rounded_white"
-                android:orientation="vertical"
-                android:padding="24dp">
+                <!-- Títulos -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Crie sua conta"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Faça parte do IF Solidário"
+                    android:textColor="#E0CCFF"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <!-- ── Card branco (mesmo estilo bg_card_white_rounded) ── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_white_rounded"
+                android:elevation="6dp"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:paddingBottom="32dp">
+
+                <!-- Seção: Tipo de usuário -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Tipo de Usuário"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="#7B2FBE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="20dp"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="#C49EE8"
+                    app:hintTextColor="#7B2FBE">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/selectUsuario"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="52dp"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Selecionar"
                         android:inputType="none"
-                        android:textColor="#000000" />
+                        android:paddingHorizontal="12dp"
+                        android:textColor="#1A1A1A"
+                        android:textSize="14sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="#F0E6FF" />
 
+                <!-- Label nome usuário -->
                 <TextView
                     android:id="@+id/textViewUsuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Nome do Usuário"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="#7B2FBE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
-
+                <!-- Label nome ONG -->
                 <TextView
                     android:id="@+id/textViewOng"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Nome Fantasia da ONG"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="#7B2FBE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
+                <!-- Campo nome -->
                 <EditText
                     android:id="@+id/registerNameEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/edittext_background"
+                    android:fontFamily="@font/poppins_regular"
                     android:hint="Preencher"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
+                    android:textColor="#1A1A1A"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="14sp" />
 
-
+                <!-- Telefone -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Telefone"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="#7B2FBE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/registerTelefoneEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/edittext_background"
-                    android:hint="Preencher"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="(00) 00000-0000"
                     android:inputType="phone"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
+                    android:textColor="#1A1A1A"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="14sp" />
 
-
+                <!-- CNPJ -->
                 <TextView
                     android:id="@+id/textViewCNPJ"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="CNPJ"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="#7B2FBE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/registerCNPJEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/edittext_background"
-                    android:hint="Preencher"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="00.000.000/0000-00"
                     android:inputType="number"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
+                    android:textColor="#1A1A1A"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="14sp" />
 
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="#F0E6FF" />
+
+                <!-- Email -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Email"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="#7B2FBE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/registerEmailEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/edittext_background"
-                    android:hint="Preencher"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="seu@email.com"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
+                    android:textColor="#1A1A1A"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="14sp" />
 
-
+                <!-- Senha -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Senha"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="#7B2FBE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/registerPasswordEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/edittext_background"
-                    android:hint="Preencher"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="Mínimo 6 caracteres"
                     android:inputType="textPassword"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
+                    android:textColor="#1A1A1A"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="14sp" />
 
-
+                <!-- Confirmar senha -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Confirmar Senha"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="#7B2FBE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/registerConfirmPasswordEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="32dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="28dp"
                     android:background="@drawable/edittext_background"
-                    android:hint="Preencher"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="Repita a senha"
                     android:inputType="textPassword"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#8A8A8A" />
+                    android:textColor="#1A1A1A"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="14sp" />
 
-
+                <!-- Botão Criar Conta (mesmo estilo bg_button_purple da doação) -->
                 <Button
                     android:id="@+id/registerButton"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:layout_marginBottom="24dp"
-                    android:backgroundTint="#7A2ECE"
-                    android:text="Cadastrar"
+                    android:background="@drawable/bg_button_purple"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Criar Conta"
+                    android:textAllCaps="false"
                     android:textColor="#FFFFFF"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
+
+                <!-- Link "já tenho conta" -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="Já tem uma conta? Faça login"
+                    android:textColor="#9B7DBE"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
