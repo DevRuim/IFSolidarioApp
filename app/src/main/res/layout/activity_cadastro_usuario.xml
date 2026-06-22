@@ -45,21 +45,20 @@
                         app:tint="#F5C518"
                         android:elevation="0dp"/>
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/escolherImagemButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="bottom|end"
-                        android:layout_marginEnd="-5dp"
-                        android:layout_marginBottom="-5dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@drawable/bg_add_photo_button"
+                        android:elevation="8dp"
+                        android:padding="6dp"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/ic_add_custom"
-                        app:backgroundTint="#F5C518"
-                        android:elevation="10dp"
-                        app:fabSize="mini"
-                        app:maxImageSize="18dp"
-                        app:tint="#7B2FBE"
-                        app:useCompatPadding="false"
-/>
+                        android:tint="#FFFFFF"
+                        android:contentDescription="Adicionar foto"/>
                 </FrameLayout>
 
                 <!-- Títulos -->
