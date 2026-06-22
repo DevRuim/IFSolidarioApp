@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <!-- Corpo principal do troféu -->
+    <path
+        android:fillColor="#F5C518"
+        android:pathData="
+            M20,8 L44,8
+            L44,34
+            C44,43.9 36.8,52 28,52
+            C19.2,52 12,43.9 12,34
+            Z" />
+
+    <!-- Alça esquerda -->
+    <path
+        android:fillColor="#F5C518"
+        android:pathData="
+            M12,14 C6,14 4,20 4,25
+            C4,31 8,36 14,37
+            L14,30
+            C11,29 10,27 10,25
+            C10,22 11,20 12,20
+            Z" />
+
+    <!-- Alça direita -->
+    <path
+        android:fillColor="#F5C518"
+        android:pathData="
+            M52,14 C58,14 60,20 60,25
+            C60,31 56,36 50,37
+            L50,30
+            C53,29 54,27 54,25
+            C54,22 53,20 52,20
+            Z" />
+
+    <!-- Haste -->
+    <path
+        android:fillColor="#E6A800"
+        android:pathData="M25,52 L39,52 L39,56 L25,56 Z" />
+
+    <!-- Base -->
+    <path
+        android:fillColor="#E6A800"
+        android:pathData="M18,56 L46,56 L46,60 L18,60 Z"
+        android:strokeColor="#CC9500"
+        android:strokeWidth="0.5" />
+
+    <!-- Estrela central (highlight) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.35"
+        android:pathData="
+            M28,18 L29.5,23 L34.5,23 L30.5,26 L32,31 L28,28 L24,31 L25.5,26 L21.5,23 L26.5,23 Z" />
+
+    <!-- Reflexo no corpo -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.18"
+        android:pathData="M16,12 L22,12 L16,32 Z" />
+
+</vector>
