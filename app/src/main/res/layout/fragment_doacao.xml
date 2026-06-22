@@ -81,7 +81,7 @@
                             android:id="@+id/tvInfoTitulo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
+                            android:fontFamily="@font/poppins_bold"
                             android:text="Itens aceitos (Qualquer tamanho e em bom estado):"
                             android:textColor="#7B2FBE"
                             android:textStyle="bold"
@@ -253,6 +253,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_card_white_rounded"
                 android:elevation="6dp"
+                android:layout_marginBottom="30dp"
                 android:orientation="vertical"
                 android:padding="20dp">
 
@@ -331,7 +332,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Como tirar as fotos:"
-                        android:textColor="#5A1A9B"
+                        android:textColor="#7B2FBE"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -341,7 +342,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Você pode fotografar uma peça ou todos os itens juntos."
-                        android:textColor="#5A1A9B"
+                        android:textColor="#7B2FBE"
                         android:textSize="11sp" />
 
                     <LinearLayout
@@ -387,7 +388,7 @@
                                 android:fontFamily="@font/poppins_regular"
                                 android:gravity="center"
                                 android:text="Foto de\num item só"
-                                android:textColor="#5A1A9B"
+                                android:textColor="#7B2FBE"
                                 android:textSize="11sp" />
                         </LinearLayout>
 
@@ -428,7 +429,7 @@
                                 android:fontFamily="@font/poppins_regular"
                                 android:gravity="center"
                                 android:text="Foto com\ntodos os itens"
-                                android:textColor="#5A1A9B"
+                                android:textColor="#7B2FBE"
                                 android:textSize="11sp" />
                         </LinearLayout>
 
