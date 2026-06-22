@@ -35,10 +35,10 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/item_image"
             android:layout_width="match_parent"
-            android:layout_height="210dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:layout_marginBottom="16dp"
-            android:background="#DDDDDD"
-            android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/RoundedImage"/>
 
         <!-- DESCRIÇÃO -->
@@ -56,21 +56,63 @@
             android:textColor="#444444"
             android:textSize="15sp" />
 
-        <!-- CATEGORIA -->
-
-        <TextView
-            android:id="@+id/item_categoria"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:background="@drawable/bg_categoria_soft"
-            android:fontFamily="@font/poppins_bold"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="7dp"
-            android:textColor="#7717AB"
-            android:textSize="13sp" />
 
         <!-- PROGRESSO -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/item_categoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_categoria_soft"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="7dp"
+                android:textColor="#7717AB"
+                android:textSize="13sp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtConhecaInstituicao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Conheça mais:"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="#444444"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginBottom="2dp"/>
+
+                <ImageButton
+                    android:id="@+id/btnInstagram"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_instagram"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="Instagram"/>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/item_progresso"

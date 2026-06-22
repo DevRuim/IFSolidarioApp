@@ -67,6 +67,200 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
+                <LinearLayout
+                    android:id="@+id/cardOpcoesUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="194dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/bg_rounded_white"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/buttonEditarPerfilUsuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_edit_profile" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Editar perfil"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_black" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/buttonHistoricoDoacao"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_historical" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Histórico de Doações"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_black" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/buttonSairUsuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_exit" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Sair"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_black" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardOpcoesOng"
+                    android:layout_width="match_parent"
+                    android:layout_height="128dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/bg_rounded_white"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/buttonEditarPerfilOng"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_edit_profile" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Editar perfil"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_black" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/buttonSairOng"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_exit" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text="Sair"
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_arrow_right_black" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                <LinearLayout
                     android:id="@+id/cardInfoUsuario"
@@ -144,35 +338,6 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Conquistas:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewConquistas"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                    </LinearLayout>
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
@@ -230,6 +395,17 @@
 
                         <TextView
                             android:id="@+id/textViewAlimentos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textViewAlimentosMeta"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="10dp"
@@ -259,6 +435,17 @@
 
                         <TextView
                             android:id="@+id/textViewBrinquedos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textViewBrinquedosMeta"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="10dp"
@@ -288,7 +475,7 @@
 
                         <TextView
                             android:id="@+id/textViewRoupas"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginStart="10dp"
                             android:fontFamily="@font/poppins_regular"
@@ -297,32 +484,14 @@
                             android:textColor="#2A2A2A"
                             android:textSize="18sp" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Última Doacão:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewUltimaDoacao"
+                            android:id="@+id/textViewRoupasMeta"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="10dp"
                             android:fontFamily="@font/poppins_regular"
                             android:gravity="center_vertical"
-                            android:text="20/05/2026"
+                            android:text=""
                             android:textColor="#2A2A2A"
                             android:textSize="18sp" />
 
@@ -441,7 +610,7 @@
                     android:id="@+id/cardConquistas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="50dp"
                     android:background="@drawable/bg_rounded_white"
                     android:orientation="vertical"
                     android:padding="20dp">
@@ -624,262 +793,6 @@
                                 android:src="@drawable/ic_roupa_40_disabled" />
 
                         </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:paddingTop="10dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="Mostrar Mais"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="8dp"
-                            android:rotation="90"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/cardOpcoesUsuario"
-                    android:layout_width="match_parent"
-                    android:layout_height="256dp"
-                    android:layout_marginBottom="50dp"
-                    android:background="@drawable/bg_rounded_white"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/buttonEditarPerfilUsuario"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_edit_profile" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Editar perfil"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/buttonHistoricoDoacao"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/ic_historical" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="2dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Histórico de Doações"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/buttonProgressoConquista"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_conquista" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Progresso"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/buttonSairUsuario"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_exit" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Sair"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/cardOpcoesOng"
-                    android:layout_width="match_parent"
-                    android:layout_height="128dp"
-                    android:layout_marginBottom="50dp"
-                    android:background="@drawable/bg_rounded_white"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/buttonEditarPerfilOng"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_edit_profile" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Editar perfil"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/buttonSairOng"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_exit" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Sair"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
 
                     </LinearLayout>
 

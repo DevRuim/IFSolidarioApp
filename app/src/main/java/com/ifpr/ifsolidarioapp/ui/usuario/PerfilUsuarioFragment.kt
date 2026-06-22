@@ -162,7 +162,6 @@ class PerfilUsuarioFragment : Fragment() {
         val nome = snapshot.child("nome_usuario").getValue(String::class.java) ?: ""
         val email = snapshot.child("email_usuario").getValue(String::class.java) ?: ""
         val telefone = snapshot.child("telefone_usuario").getValue(String::class.java) ?: ""
-        val conquistas = snapshot.child("conquistas").getValue(Int::class.java) ?: 0
         val alimentos = snapshot.child("alimentos").getValue(Int::class.java) ?: 0
         val brinquedos = snapshot.child("brinquedos").getValue(Int::class.java) ?: 0
         val roupas = snapshot.child("roupas").getValue(Int::class.java) ?: 0
@@ -176,7 +175,6 @@ class PerfilUsuarioFragment : Fragment() {
             brinquedos,
             roupas,
             total,
-            conquistas,
         )
 
         carregarConquistas(
@@ -185,6 +183,22 @@ class PerfilUsuarioFragment : Fragment() {
             brinquedos,
             total
         )
+    }
+
+    private fun proximaMeta(
+        total: Int
+    ): Int? {
+
+        val metas = listOf(
+            5,
+            10,
+            20,
+            40
+        )
+
+        return metas.firstOrNull {
+            total < it
+        }
     }
 
     private fun carregarDadosOng(
@@ -254,7 +268,6 @@ class PerfilUsuarioFragment : Fragment() {
         brinquedos: Int,
         roupas: Int,
         total: Int,
-        conquistas: Int
     ) {
 
         binding.textViewName.text = nome
@@ -267,7 +280,34 @@ class PerfilUsuarioFragment : Fragment() {
         binding.textViewBrinquedos.text = brinquedos.toString()
         binding.textViewRoupas.text = roupas.toString()
 
-        binding.textViewConquistas.text = conquistas.toString()
+        val metaAlimentos =
+            proximaMeta(alimentos)
+
+        binding.textViewAlimentosMeta.text =
+            if (metaAlimentos != null)
+                "($alimentos/$metaAlimentos)"
+            else
+                "(Máx.)"
+
+
+        val metaBrinquedos =
+            proximaMeta(brinquedos)
+
+        binding.textViewBrinquedosMeta.text =
+            if (metaBrinquedos != null)
+                "($brinquedos/$metaBrinquedos)"
+            else
+                "(Máx.)"
+
+
+        val metaRoupas =
+            proximaMeta(roupas)
+
+        binding.textViewRoupasMeta.text =
+            if (metaRoupas != null)
+                "($roupas/$metaRoupas)"
+            else
+                "(Máx.)"
     }
 
     private fun carregarInformacoesOng(
