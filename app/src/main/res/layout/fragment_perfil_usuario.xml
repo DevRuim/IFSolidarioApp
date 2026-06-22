@@ -395,6 +395,17 @@
 
                         <TextView
                             android:id="@+id/textViewAlimentos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textViewAlimentosMeta"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="10dp"
@@ -424,6 +435,17 @@
 
                         <TextView
                             android:id="@+id/textViewBrinquedos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textViewBrinquedosMeta"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="10dp"
@@ -453,6 +475,17 @@
 
                         <TextView
                             android:id="@+id/textViewRoupas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="#2A2A2A"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textViewRoupasMeta"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="10dp"
