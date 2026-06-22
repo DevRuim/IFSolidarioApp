@@ -3,6 +3,7 @@ package com.ifpr.ifsolidarioapp.ui.conquista
 import android.content.Context
 import android.content.Intent
 import com.google.firebase.database.FirebaseDatabase
+import com.ifpr.ifsolidarioapp.MainActivity
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Conquista
 
@@ -10,9 +11,9 @@ object ConquistasManager {
 
     private val filaConquistas = mutableListOf<Conquista>()
     private var verificandoConquistas = false
-    private val conquistasPendentes =
-        mutableSetOf<String>()
+    private val conquistasPendentes = mutableSetOf<String>()
     private var exibindoConquista = false
+    private var abriuConquistaNestaDoacao = false
 
 
     fun verificarConquistas(
@@ -23,6 +24,7 @@ object ConquistasManager {
         brinquedos: Int,
         total: Int
     ) {
+        abriuConquistaNestaDoacao = false
 
         if (verificandoConquistas) return
 
@@ -70,6 +72,7 @@ object ConquistasManager {
 
                             if (conquistasPendentes.add(conquista.key)) {
                                 filaConquistas.add(conquista)
+                                abriuConquistaNestaDoacao = true
                             }
 
                             verificacoesRestantes--
@@ -223,7 +226,32 @@ object ConquistasManager {
         exibindoConquista = false
 
         if (filaConquistas.isEmpty()) {
+
             verificandoConquistas = false
+
+            if (abriuConquistaNestaDoacao) {
+
+                val intent = Intent(
+                    context,
+                    MainActivity::class.java
+                )
+
+                intent.putExtra(
+                    "abrirConquistas",
+                    true
+                )
+
+                intent.addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP
+                )
+
+                context.startActivity(intent)
+
+                abriuConquistaNestaDoacao = false
+            }
+
+            return
         }
 
         exibirProximaConquista(context)

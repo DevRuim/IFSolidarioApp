@@ -132,4 +132,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (intent.getBooleanExtra("abrirConquistas", false)) {
+
+            binding.navView.selectedItemId =
+                R.id.navigation_profile
+
+            intent.removeExtra("abrirConquistas")
+        }
+    }
 }

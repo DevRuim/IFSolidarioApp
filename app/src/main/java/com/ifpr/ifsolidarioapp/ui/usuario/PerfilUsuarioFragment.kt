@@ -17,6 +17,7 @@ import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.databinding.FragmentPerfilUsuarioBinding
 import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
 import androidx.navigation.fragment.findNavController
+import android.view.ViewTreeObserver
 
 class PerfilUsuarioFragment : Fragment() {
 
@@ -60,10 +61,12 @@ class PerfilUsuarioFragment : Fragment() {
         }
 
         carregarDadosUsuario()
+
         setupClicks()
 
         return binding.root
     }
+
 
     private fun setupClicks() {
 
@@ -115,7 +118,7 @@ class PerfilUsuarioFragment : Fragment() {
             if (usuarioSnapshot.exists()) {
 
                 binding.cardInfoUsuario.visibility = View.VISIBLE
-                binding.cardConquistas.visibility = View.VISIBLE
+                binding.cardConquista.visibility = View.VISIBLE
                 binding.cardOpcoesUsuario.visibility = View.VISIBLE
 
                 binding.cardInfoOng.visibility = View.GONE
@@ -131,7 +134,7 @@ class PerfilUsuarioFragment : Fragment() {
                         if (ongSnapshot.exists()) {
 
                             binding.cardInfoUsuario.visibility = View.GONE
-                            binding.cardConquistas.visibility = View.GONE
+                            binding.cardConquista.visibility = View.GONE
                             binding.cardOpcoesUsuario.visibility = View.GONE
 
                             binding.cardInfoOng.visibility = View.VISIBLE
@@ -425,6 +428,10 @@ class PerfilUsuarioFragment : Fragment() {
             R.drawable.ic_roupa_40_enabled,
             R.drawable.ic_roupa_40_disabled
         )
+
+        binding.scrollView.postDelayed({
+            binding.scrollView.smoothScrollTo(0, binding.cardConquista.top)
+        }, 200)
     }
 
     private fun habilitarPrimeiraConquista(
