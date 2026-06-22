@@ -185,6 +185,22 @@ class PerfilUsuarioFragment : Fragment() {
         )
     }
 
+    private fun proximaMeta(
+        total: Int
+    ): Int? {
+
+        val metas = listOf(
+            5,
+            10,
+            20,
+            40
+        )
+
+        return metas.firstOrNull {
+            total < it
+        }
+    }
+
     private fun carregarDadosOng(
         snapshot: DataSnapshot
     ) {
@@ -264,6 +280,34 @@ class PerfilUsuarioFragment : Fragment() {
         binding.textViewBrinquedos.text = brinquedos.toString()
         binding.textViewRoupas.text = roupas.toString()
 
+        val metaAlimentos =
+            proximaMeta(alimentos)
+
+        binding.textViewAlimentosMeta.text =
+            if (metaAlimentos != null)
+                "($alimentos/$metaAlimentos)"
+            else
+                "(Máx.)"
+
+
+        val metaBrinquedos =
+            proximaMeta(brinquedos)
+
+        binding.textViewBrinquedosMeta.text =
+            if (metaBrinquedos != null)
+                "($brinquedos/$metaBrinquedos)"
+            else
+                "(Máx.)"
+
+
+        val metaRoupas =
+            proximaMeta(roupas)
+
+        binding.textViewRoupasMeta.text =
+            if (metaRoupas != null)
+                "($roupas/$metaRoupas)"
+            else
+                "(Máx.)"
     }
 
     private fun carregarInformacoesOng(
