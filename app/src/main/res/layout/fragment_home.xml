@@ -64,13 +64,25 @@
                         <!-- PARTÍCULAS -->
 
                         <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/particlesAnimation"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             android:alpha="0.18"
+                            android:visibility="gone"
                             app:lottie_autoPlay="true"
                             app:lottie_loop="true"
                             app:lottie_rawRes="@raw/particles"/>
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/loadingTotalDoacoes"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            app:lottie_rawRes="@raw/loading"
+                            android:visibility="visible"/>
 
                         <!-- NÚMERO -->
 
@@ -83,6 +95,7 @@
                             android:textColor="#FFFFFF"
                             android:textSize="34sp"
                             android:textStyle="bold"
+                            android:visibility="gone"
                             android:fontFamily="@font/poppins_bold"
                             android:shadowColor="#80000000"
                             android:shadowDx="0"
