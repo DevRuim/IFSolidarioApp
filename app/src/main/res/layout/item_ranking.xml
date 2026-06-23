@@ -30,13 +30,14 @@
         android:layout_height="52dp"
         android:layout_marginStart="12dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_usuario"
+        android:src="@drawable/ic_profile_comum"
         app:shapeAppearanceOverlay="@style/CircleImageView"
         app:strokeColor="#C49EE8"
         app:strokeWidth="1.5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/txtPosicao"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="1dp" />
 
     <!-- Nome + tag "Você" na mesma linha -->
     <LinearLayout
