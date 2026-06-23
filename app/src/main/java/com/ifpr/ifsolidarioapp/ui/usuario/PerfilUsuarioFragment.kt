@@ -429,9 +429,20 @@ class PerfilUsuarioFragment : Fragment() {
             R.drawable.ic_roupa_40_disabled
         )
 
-        binding.scrollView.postDelayed({
-            binding.scrollView.smoothScrollTo(0, binding.cardConquista.top)
-        }, 200)
+        val shouldFocus =
+            arguments?.getBoolean("FOCUS_CONQUISTAS") ?: false
+
+        if (shouldFocus) {
+
+            binding.scrollView.post {
+                binding.scrollView.smoothScrollTo(
+                    0,
+                    binding.cardConquista.top
+                )
+            }
+
+            arguments?.remove("FOCUS_CONQUISTAS")
+        }
     }
 
     private fun habilitarPrimeiraConquista(

@@ -138,8 +138,16 @@ class MainActivity : AppCompatActivity() {
 
         if (intent.getBooleanExtra("abrirConquistas", false)) {
 
-            binding.navView.selectedItemId =
-                R.id.navigation_profile
+            val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
+            val bundle = Bundle().apply {
+                putBoolean("FOCUS_CONQUISTAS", true)
+            }
+
+            navController.navigate(
+                R.id.navigation_profile,
+                bundle
+            )
 
             intent.removeExtra("abrirConquistas")
         }
