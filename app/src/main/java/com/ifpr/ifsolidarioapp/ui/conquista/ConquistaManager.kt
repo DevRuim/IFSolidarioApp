@@ -14,6 +14,8 @@ object ConquistasManager {
         mutableSetOf<String>()
     private var exibindoConquista = false
 
+    private var desbloqueouNovaConquista = false
+
 
     fun verificarConquistas(
         context: Context,
@@ -30,6 +32,8 @@ object ConquistasManager {
 
         filaConquistas.clear()
         conquistasPendentes.clear()
+
+        desbloqueouNovaConquista = false
 
         var verificacoesRestantes = listaConquistas.size
 
@@ -69,6 +73,9 @@ object ConquistasManager {
                             }
 
                             if (conquistasPendentes.add(conquista.key)) {
+
+                                desbloqueouNovaConquista = true
+
                                 filaConquistas.add(conquista)
                             }
 
@@ -107,6 +114,10 @@ object ConquistasManager {
                 }
             }
         }
+    }
+
+    fun desbloqueouConquista(): Boolean {
+        return desbloqueouNovaConquista
     }
 
     private fun exibirProximaConquista(

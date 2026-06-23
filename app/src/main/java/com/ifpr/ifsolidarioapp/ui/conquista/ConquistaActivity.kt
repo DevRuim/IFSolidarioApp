@@ -1,9 +1,11 @@
 package com.ifpr.ifsolidarioapp.ui.conquista
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.ifpr.ifsolidarioapp.MainActivity
 import com.ifpr.ifsolidarioapp.databinding.ActivityConquistaBinding
 
 class ConquistaActivity : AppCompatActivity() {
@@ -55,6 +57,23 @@ class ConquistaActivity : AppCompatActivity() {
                 .conquistaFinalizada(this)
 
             finish()
+
+            val intent = Intent(
+                this,
+                MainActivity::class.java
+            )
+
+            intent.putExtra(
+                "abrirPerfil",
+                true
+            )
+
+            intent.addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+            )
+
+            startActivity(intent)
 
         }, tempoDuracao)
     }
