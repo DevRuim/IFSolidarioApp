@@ -15,6 +15,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Usuario
+import com.google.firebase.auth.FirebaseAuth
 
 class RankingFragment : Fragment() {
 
@@ -43,7 +44,12 @@ class RankingFragment : Fragment() {
 
         recycler = view.findViewById(R.id.recyclerRanking)
         recycler.layoutManager = LinearLayoutManager(requireContext())
-        adapter = RankingAdapter()
+
+        val uidAtual =
+            FirebaseAuth.getInstance()
+                .currentUser?.uid ?: ""
+
+        adapter = RankingAdapter(uidAtual)
         recycler.adapter = adapter
 
         layoutPodio     = view.findViewById(R.id.layoutPodio)
@@ -67,20 +73,66 @@ class RankingFragment : Fragment() {
             .addListenerForSingleValueEvent(object : ValueEventListener {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
+
                     listaUsuarios.clear()
+
                     for (item in snapshot.children) {
-                        item.getValue(Usuario::class.java)?.let { listaUsuarios.add(it) }
+
+                        val usuario =
+                            item.getValue(Usuario::class.java)
+
+                        if (usuario != null) {
+
+                            usuario.key = item.key ?: ""
+
+                            listaUsuarios.add(usuario)
+                        }
                     }
-                    listaUsuarios.sortByDescending { it.total_doacoes }
+
+                    listaUsuarios.sortByDescending {
+                        it.total_doacoes
+                    }
+
+                    // Salva a posição real no ranking
+                    listaUsuarios.forEachIndexed { index, usuario ->
+                        usuario.posicaoRanking = index + 1
+                    }
 
                     atualizarPodio()
 
-                    val restante: List<Usuario> =
-                        if (listaUsuarios.size > 3)
-                            ArrayList(listaUsuarios.subList(3, listaUsuarios.size))
-                        else emptyList()
+                    val uidAtual =
+                        com.google.firebase.auth.FirebaseAuth
+                            .getInstance()
+                            .currentUser?.uid ?: ""
 
-                    adapter.atualizarLista(restante)
+                    val exibicao = mutableListOf<Usuario>()
+
+                    // Adiciona apenas 4º ao 10º lugar
+                    val limite = minOf(
+                        listaUsuarios.size,
+                        10
+                    )
+
+                    for (i in 3 until limite) {
+                        exibicao.add(listaUsuarios[i])
+                    }
+
+                    // Procura usuário logado
+                    val usuarioLogado =
+                        listaUsuarios.find {
+                            it.key == uidAtual
+                        }
+
+                    // Se estiver fora do Top 10, adiciona ao final
+                    if (
+                        usuarioLogado != null &&
+                        !exibicao.contains(usuarioLogado) &&
+                        usuarioLogado.posicaoRanking > 10
+                    ) {
+                        exibicao.add(usuarioLogado)
+                    }
+
+                    adapter.atualizarLista(exibicao)
                 }
 
                 override fun onCancelled(error: DatabaseError) {}

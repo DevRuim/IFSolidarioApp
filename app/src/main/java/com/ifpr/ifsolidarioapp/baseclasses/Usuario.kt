@@ -13,4 +13,7 @@ data class Usuario(
     var total_doacoes: Int = 0,
     var tipo_usuario: String = "Doador",
 
+    // NÃO SALVAR NO FIREBASE
+    var posicaoRanking: Int = 0
+
 )

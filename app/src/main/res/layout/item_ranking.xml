@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardRanking"
     android:layout_width="match_parent"
-    android:layout_height="68dp"
+    android:layout_height="80dp"
     android:background="@android:color/white"
     android:paddingHorizontal="20dp">
 
@@ -23,11 +23,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Avatar circular com borda lilás -->
+    <!-- Avatar circular -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgFoto"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
         android:layout_marginStart="12dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_usuario"
@@ -38,23 +38,48 @@
         app:layout_constraintStart_toEndOf="@id/txtPosicao"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Nome -->
-    <TextView
-        android:id="@+id/txtNome"
+    <!-- Nome + tag "Você" na mesma linha -->
+    <LinearLayout
+        android:id="@+id/layoutNome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/poppins_bold"
-        android:maxLines="1"
-        android:textColor="#1A1A1A"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/txtDoacoes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgFoto"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <TextView
+            android:id="@+id/txtNome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_bold"
+            android:maxLines="1"
+            android:textColor="#1A1A1A"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- Tag "Você" — visível só para o usuário logado -->
+        <TextView
+            android:id="@+id/tvVoce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_tag_voce"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:text="Você"
+            android:textColor="#7B2FBE"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <!-- Badge de doações -->
     <TextView
@@ -69,10 +94,10 @@
         android:textColor="#7B2FBE"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/txtNome"
-        app:layout_constraintTop_toBottomOf="@id/txtNome" />
+        app:layout_constraintStart_toStartOf="@id/layoutNome"
+        app:layout_constraintTop_toBottomOf="@id/layoutNome" />
 
-    <!-- Medalha oculta (mantida por compatibilidade) -->
+    <!-- Medalha oculta (compatibilidade) -->
     <ImageView
         android:id="@+id/imgMedalha"
         android:layout_width="0dp"

@@ -158,6 +158,7 @@
                     android:layout_height="80dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_usuario"
+
                     app:shapeAppearanceOverlay="@style/CircleImageView"
                     app:strokeColor="#F5C518"
                     app:strokeWidth="3dp" />
@@ -236,6 +237,7 @@
                     android:layout_height="62dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_usuario"
+
                     app:shapeAppearanceOverlay="@style/CircleImageView"
                     app:strokeColor="#CD7F32"
                     app:strokeWidth="2dp" />
