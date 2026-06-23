@@ -16,6 +16,8 @@ object ConquistasManager {
 
     private var desbloqueouNovaConquista = false
 
+    private var conquistaDesbloqueadaNestaVerificacao = false
+
 
     fun verificarConquistas(
         context: Context,
@@ -23,8 +25,11 @@ object ConquistasManager {
         alimentos: Int,
         roupas: Int,
         brinquedos: Int,
-        total: Int
+        total: Int,
+        callback: (Boolean) -> Unit
     ) {
+
+        conquistaDesbloqueadaNestaVerificacao = false
 
         if (verificandoConquistas) return
 
@@ -66,6 +71,7 @@ object ConquistasManager {
 
                                 if (verificacoesRestantes == 0) {
                                     verificandoConquistas = false
+                                    callback(desbloqueouNovaConquista)
                                     exibirProximaConquista(context)
                                 }
 
@@ -73,6 +79,8 @@ object ConquistasManager {
                             }
 
                             if (conquistasPendentes.add(conquista.key)) {
+
+                                conquistaDesbloqueadaNestaVerificacao = true
 
                                 desbloqueouNovaConquista = true
 
@@ -84,6 +92,8 @@ object ConquistasManager {
                             if (verificacoesRestantes == 0) {
 
                                 verificandoConquistas = false
+
+                                callback(desbloqueouNovaConquista)
 
                                 exibirProximaConquista(context)
                             }
@@ -97,6 +107,8 @@ object ConquistasManager {
 
                             verificandoConquistas = false
 
+                            callback(desbloqueouNovaConquista)
+
                             exibirProximaConquista(context)
                         }
                     }
@@ -109,6 +121,8 @@ object ConquistasManager {
                 if (verificacoesRestantes == 0) {
 
                     verificandoConquistas = false
+
+                    callback(desbloqueouNovaConquista)
 
                     exibirProximaConquista(context)
                 }

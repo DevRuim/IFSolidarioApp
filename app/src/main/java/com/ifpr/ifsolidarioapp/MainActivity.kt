@@ -33,18 +33,50 @@ class MainActivity : AppCompatActivity() {
         val navController =
             findNavController(R.id.nav_host_fragment_activity_main)
 
-        if (intent.getBooleanExtra("abrirPerfil", false)) {
+        navView.setOnItemSelectedListener {
 
-            navController.navigate(
-                R.id.navigation_profile
+            when (it.itemId) {
+
+                R.id.navigation_home -> {
+                    navController.navigate(R.id.navigation_home)
+                    true
+                }
+
+                R.id.navigation_ranking -> {
+                    navController.navigate(R.id.navigation_ranking)
+                    true
+                }
+
+                R.id.navigation_profile -> {
+                    navController.navigate(R.id.navigation_profile)
+                    true
+                }
+
+                R.id.navigation_notifications -> {
+                    navController.navigate(R.id.navigation_notifications)
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+
+            android.util.Log.d(
+                "NAV_TEST",
+                "Destino atual = ${destination.label}"
             )
         }
 
-        // REMOVEU setupActionBarWithNavController
+        if (intent.getBooleanExtra("abrirPerfil", false)) {
 
-        navView.setupWithNavController(navController)
+            navView.selectedItemId =
+                R.id.navigation_profile
+        }
 
         carregarTipoUsuario(navView)
+
     }
 
     private fun carregarTipoUsuario(navView: BottomNavigationView) {

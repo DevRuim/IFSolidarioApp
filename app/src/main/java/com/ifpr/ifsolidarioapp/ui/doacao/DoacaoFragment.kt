@@ -25,10 +25,9 @@ import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import com.ifpr.ifsolidarioapp.databinding.FragmentDoacaoBinding
 import com.ifpr.ifsolidarioapp.ui.conquista.ConquistasManager
 import java.io.ByteArrayOutputStream
-import android.view.ViewGroup.LayoutParams
 import android.widget.LinearLayout
 import android.graphics.Color
-import android.view.Gravity
+import androidx.navigation.NavOptions
 
 class DoacaoFragment : Fragment() {
 
@@ -50,9 +49,11 @@ class DoacaoFragment : Fragment() {
         private const val PICK_IMAGE_CODE = 1000
     }
 
+    // ── Launcher da ConquistaActivity ────────────────────────────────────────
+    // Quando a conquista termina, navega para o ranking limpando a pilha
     private val conquistaLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            findNavController().navigate(R.id.navigation_home)
+            navegarParaRankingLimpandoPilha()
         }
 
     override fun onCreateView(
@@ -62,7 +63,7 @@ class DoacaoFragment : Fragment() {
     ): View {
         _binding = FragmentDoacaoBinding.inflate(inflater, container, false)
 
-        auth = FirebaseAuth.getInstance()
+        auth     = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
         campanha_id   = arguments?.getString("campanha_id")   ?: ""
@@ -75,6 +76,27 @@ class DoacaoFragment : Fragment() {
         setupClicks()
 
         return binding.root
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Navegação — lógica central
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Navega para o Ranking limpando TODO o back stack até a Home.
+     * Resultado: Home → Ranking  (sem Doacao nem Campanha no histórico)
+     * O usuário consegue voltar para Home normalmente pelo BottomNav.
+     */
+    private fun navegarParaRankingLimpandoPilha() {
+
+        findNavController().popBackStack(
+            R.id.navigation_home,
+            false
+        )
+
+        findNavController().navigate(
+            R.id.navigation_ranking
+        )
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -104,7 +126,7 @@ class DoacaoFragment : Fragment() {
                 binding.tvDicaContagem.text =
                     "Você pode doar vários itens de diferentes tipos\n(Ex. 2 carrinhos + 1 boneca = 3 itens)"
             }
-            else -> { // Roupa
+            else -> {
                 binding.tvPerguntaCategoria.text = "Quantas roupas você está doando?"
                 binding.tvInfoTitulo.text = "Itens aceitos (Qualquer tamanho e em bom estado):"
                 binding.tvItem1.text = "• Camisetas"
@@ -118,7 +140,7 @@ class DoacaoFragment : Fragment() {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // Spinner (mantido para compatibilidade)
+    // Spinner
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun setupCategoria() {
@@ -143,30 +165,19 @@ class DoacaoFragment : Fragment() {
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun setupClicks() {
-        // Passo 1
-        binding.btnProximo.setOnClickListener { avancarParaPasso2() }
-        binding.tvSair.setOnClickListener { findNavController().popBackStack() }
-
-        // Passo 2 — navegação carrossel
-        binding.buttonPrev.setOnClickListener { navegarCarrossel(-1) }
-        binding.buttonNext.setOnClickListener { navegarCarrossel(+1) }
-
-        // Passo 2 — adicionar foto
-        binding.addImageButton.setOnClickListener { selecionarImagem() }
-        binding.editImageButton.setOnClickListener { selecionarImagem() }
-
-        // Remover foto atual
-        binding.btnRemoverFoto.setOnClickListener { removerFotoAtual() }
-
-        // Finalizar
-        binding.buttonFinalizar.setOnClickListener { finalizarDoacao() }
-
-        // Voltar
-        binding.tvVoltar.setOnClickListener { voltarParaPasso1() }
+        binding.btnProximo.setOnClickListener        { avancarParaPasso2() }
+        binding.tvSair.setOnClickListener            { findNavController().popBackStack() }
+        binding.buttonPrev.setOnClickListener        { navegarCarrossel(-1) }
+        binding.buttonNext.setOnClickListener        { navegarCarrossel(+1) }
+        binding.addImageButton.setOnClickListener    { selecionarImagem() }
+        binding.editImageButton.setOnClickListener   { selecionarImagem() }
+        binding.btnRemoverFoto.setOnClickListener    { removerFotoAtual() }
+        binding.buttonFinalizar.setOnClickListener   { finalizarDoacao() }
+        binding.tvVoltar.setOnClickListener          { voltarParaPasso1() }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // Navegação entre passos
+    // Passos
     // ─────────────────────────────────────────────────────────────────────────
 
     fun avancarParaPasso2() {
@@ -188,59 +199,41 @@ class DoacaoFragment : Fragment() {
     // Carrossel
     // ─────────────────────────────────────────────────────────────────────────
 
-    /** Avança ou recua no carrossel. delta = +1 ou -1 */
     private fun navegarCarrossel(delta: Int) {
         if (imageList.isEmpty()) return
         currentImageIndex = (currentImageIndex + delta + imageList.size) % imageList.size
         atualizarCarrossel()
     }
 
-    /** Atualiza toda a UI do carrossel: imagem, setas, dots, thumbnails, contadores */
     private fun atualizarCarrossel() {
         val temFotos = imageList.isNotEmpty()
 
-        // Estado vazio vs com foto
-        binding.layoutSemFotos.visibility  = if (temFotos) View.GONE  else View.VISIBLE
-        binding.tvPosicaoFoto.visibility   = if (temFotos) View.VISIBLE else View.GONE
-        binding.btnRemoverFoto.visibility  = if (temFotos) View.VISIBLE else View.GONE
+        binding.layoutSemFotos.visibility = if (temFotos) View.GONE  else View.VISIBLE
+        binding.tvPosicaoFoto.visibility  = if (temFotos) View.VISIBLE else View.GONE
+        binding.btnRemoverFoto.visibility = if (temFotos) View.VISIBLE else View.GONE
 
         if (temFotos) {
-            // Limita índice
             if (currentImageIndex >= imageList.size) currentImageIndex = imageList.size - 1
-
             binding.imagePreview.setImageURI(imageList[currentImageIndex])
             binding.tvPosicaoFoto.text = "${currentImageIndex + 1}/${imageList.size}"
         } else {
             binding.imagePreview.setImageDrawable(null)
         }
 
-        // Setas: visíveis só com 2+ fotos
         val mostrarSetas = imageList.size > 1
         binding.buttonPrev.visibility = if (mostrarSetas) View.VISIBLE else View.INVISIBLE
         binding.buttonNext.visibility = if (mostrarSetas) View.VISIBLE else View.INVISIBLE
 
-        // Contador badge
         binding.tvContadorFotos.text = "${imageList.size} / $MAX_FOTOS"
-
-        // Dots
         atualizarDots()
-
-        // Thumbnails
         atualizarThumbnails()
-
-        // Mostrar scroll de miniaturas só com 2+ fotos
         binding.scrollThumbnails.visibility = if (imageList.size > 1) View.VISIBLE else View.GONE
     }
 
-    /** Reconstrói os dots indicadores */
     private fun atualizarDots() {
         binding.layoutDots.removeAllViews()
         if (imageList.size <= 1) return
-
-        val dp6 = dpToPx(6)
-        val dp4 = dpToPx(4)
-        val dp8 = dpToPx(8)
-
+        val dp6 = dpToPx(6); val dp4 = dpToPx(4); val dp8 = dpToPx(8)
         imageList.forEachIndexed { i, _ ->
             val dot = View(requireContext()).apply {
                 layoutParams = LinearLayout.LayoutParams(
@@ -249,42 +242,31 @@ class DoacaoFragment : Fragment() {
                 ).also { it.setMargins(dp4, 0, dp4, 0) }
                 background = ContextCompat.getDrawable(
                     requireContext(),
-                    if (i == currentImageIndex) R.drawable.bg_dot_active
-                    else R.drawable.bg_dot_inactive
+                    if (i == currentImageIndex) R.drawable.bg_dot_active else R.drawable.bg_dot_inactive
                 )
             }
             binding.layoutDots.addView(dot)
         }
     }
 
-    /** Reconstrói as miniaturas clicáveis */
     private fun atualizarThumbnails() {
         binding.layoutThumbnails.removeAllViews()
-        val dp56  = dpToPx(56)
-        val dp4   = dpToPx(4)
-        val dp2   = dpToPx(2)
-
+        val dp56 = dpToPx(56); val dp2 = dpToPx(2)
         imageList.forEachIndexed { i, uri ->
             val thumb = ImageView(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(dp56, dp56).also {
-                    it.setMargins(dp2, 0, dp2, 0)
-                }
+                layoutParams = LinearLayout.LayoutParams(dp56, dp56).also { it.setMargins(dp2, 0, dp2, 0) }
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 setImageURI(uri)
                 background = if (i == currentImageIndex)
                     ContextCompat.getDrawable(requireContext(), R.drawable.bg_thumb_selected)
                 else
                     ContextCompat.getDrawable(requireContext(), R.drawable.bg_thumb_normal)
-                setOnClickListener {
-                    currentImageIndex = i
-                    atualizarCarrossel()
-                }
+                setOnClickListener { currentImageIndex = i; atualizarCarrossel() }
             }
             binding.layoutThumbnails.addView(thumb)
         }
     }
 
-    /** Remove a foto exibida no momento */
     private fun removerFotoAtual() {
         if (imageList.isEmpty()) return
         imageList.removeAt(currentImageIndex)
@@ -293,16 +275,12 @@ class DoacaoFragment : Fragment() {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // Seleção de imagem
+    // Imagem
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun selecionarImagem() {
         if (imageList.size >= MAX_FOTOS) {
-            Toast.makeText(
-                requireContext(),
-                "Limite de $MAX_FOTOS fotos atingido",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Limite de $MAX_FOTOS fotos atingido", Toast.LENGTH_SHORT).show()
             return
         }
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "image/*" }
@@ -310,7 +288,7 @@ class DoacaoFragment : Fragment() {
         startActivityForResult(intent, PICK_IMAGE_CODE)
     }
 
-    @Deprecated("Usa ActivityResultLauncher onde possível")
+    @Deprecated("Legado")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -333,20 +311,18 @@ class DoacaoFragment : Fragment() {
             Toast.makeText(requireContext(), "Digite uma quantidade", Toast.LENGTH_SHORT).show()
             return
         }
-        val quantidade = qtdTexto.toDouble()
-        val categoria  = binding.spinnerCategoria.selectedItem?.toString()
+        val quantidade    = qtdTexto.toDouble()
+        val categoria     = binding.spinnerCategoria.selectedItem?.toString()
             ?: arguments?.getString("categoria_campanha") ?: "Roupa"
         val imagensBase64 = imageList.map { uriToBase64(it) }
 
-        salvarNoBanco(
-            DoacaoData(
-                imagens       = imagensBase64,
-                quantidade    = quantidade,
-                categoria     = categoria,
-                campanha_id   = campanha_id,
-                campanha_nome = campanha_nome
-            )
-        )
+        salvarNoBanco(DoacaoData(
+            imagens       = imagensBase64,
+            quantidade    = quantidade,
+            categoria     = categoria,
+            campanha_id   = campanha_id,
+            campanha_nome = campanha_nome
+        ))
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -355,31 +331,35 @@ class DoacaoFragment : Fragment() {
 
     private fun salvarNoBanco(item: DoacaoData) {
         val uid = auth.currentUser?.uid ?: return
+
         database.child("doacoes").child(uid).push().setValue(item)
             .addOnSuccessListener {
                 atualizarEstatisticasUsuario(uid, item.categoria, item.quantidade) { _, _ ->
                     atualizarQuantidadeCampanha(item.quantidade) {
                         database.child("usuarios").child(uid).get()
                             .addOnSuccessListener { snap ->
+
                                 ConquistasManager.verificarConquistas(
                                     requireContext(),
                                     uid,
-                                    snap.child("alimentos").getValue(Int::class.java) ?: 0,
-                                    snap.child("roupas").getValue(Int::class.java) ?: 0,
-                                    snap.child("brinquedos").getValue(Int::class.java) ?: 0,
+                                    snap.child("alimentos").getValue(Int::class.java)   ?: 0,
+                                    snap.child("roupas").getValue(Int::class.java)      ?: 0,
+                                    snap.child("brinquedos").getValue(Int::class.java)  ?: 0,
                                     snap.child("total_doacoes").getValue(Double::class.java)?.toInt() ?: 0
-                                )
+                                ) { ganhouConquista ->
 
-                                binding.root.postDelayed({
-
-                                    if (!ConquistasManager.desbloqueouConquista()) {
-
-                                        findNavController().navigate(
-                                            R.id.navigation_ranking
-                                        )
+                                    // ── Sem conquista → vai direto para o Ranking ──
+                                    // ── Com conquista → ConquistaActivity abre e,
+                                    //    ao fechar, o conquistaLauncher chama
+                                    //    navegarParaRankingLimpandoPilha() ──
+                                    if (!ganhouConquista) {
+                                        navegarParaRankingLimpandoPilha()
                                     }
-
-                                }, 1500)
+                                    // Se ganhou conquista, o ConquistasManager já abre
+                                    // a ConquistaActivity via Intent. O conquistaLauncher
+                                    // não é mais necessário aqui pois a Activity usa
+                                    // FLAG_ACTIVITY_CLEAR_TOP e navega sozinha.
+                                }
                             }
                     }
                 }
@@ -427,16 +407,13 @@ class DoacaoFragment : Fragment() {
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun uriToBase64(uri: Uri): String {
-        val bitmap = BitmapFactory.decodeStream(
-            requireContext().contentResolver.openInputStream(uri)
-        )
-        val out = ByteArrayOutputStream()
+        val bitmap = BitmapFactory.decodeStream(requireContext().contentResolver.openInputStream(uri))
+        val out    = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out)
         return Base64.encodeToString(out.toByteArray(), Base64.DEFAULT)
     }
 
-    private fun dpToPx(dp: Int): Int =
-        (dp * resources.displayMetrics.density).toInt()
+    private fun dpToPx(dp: Int): Int = (dp * resources.displayMetrics.density).toInt()
 
     override fun onDestroyView() {
         super.onDestroyView()

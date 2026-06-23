@@ -11,19 +11,35 @@
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
+    <!--
+        DoacaoFragment → após salvar vai para o Ranking.
+        popUpTo=navigation_home / inclusive=false:
+        remove Doacao e qualquer tela acima da Home da pilha,
+        mas MANTÉM a Home. Resultado: Home → Ranking.
+    -->
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.ifpr.ifsolidarioapp.ui.doacao.DoacaoFragment"
         android:label="Doação"
-        tools:layout="@layout/fragment_doacao" />
+        tools:layout="@layout/fragment_doacao">
+
+        <action
+            android:id="@+id/action_doacao_to_ranking"
+            app:destination="@id/navigation_ranking"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="false"
+            app:launchSingleTop="true" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/historicoFragment"
         android:name="com.ifpr.ifsolidarioapp.ui.usuario.HistoricoFragment"
         android:label="Historico" />
+
     <action
         android:id="@+id/action_profile_to_historico"
-        app:destination="@id/historicoFragment"/>
+        app:destination="@id/historicoFragment" />
 
     <fragment
         android:id="@+id/navigation_ranking"
@@ -53,7 +69,6 @@
         android:id="@+id/navigation_editar_perfil"
         android:name="com.ifpr.ifsolidarioapp.ui.usuario.EditarPerfilFragment"
         android:label="Editar Perfil"
-        tools:layout="@layout/fragment_editar_perfil">
-    </fragment>
+        tools:layout="@layout/fragment_editar_perfil" />
 
 </navigation>
