@@ -33,6 +33,13 @@ class MainActivity : AppCompatActivity() {
         val navController =
             findNavController(R.id.nav_host_fragment_activity_main)
 
+        if (intent.getBooleanExtra("abrirPerfil", false)) {
+
+            navController.navigate(
+                R.id.navigation_profile
+            )
+        }
+
         // REMOVEU setupActionBarWithNavController
 
         navView.setupWithNavController(navController)

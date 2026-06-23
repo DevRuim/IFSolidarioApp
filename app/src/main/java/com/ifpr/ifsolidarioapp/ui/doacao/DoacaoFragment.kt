@@ -362,12 +362,24 @@ class DoacaoFragment : Fragment() {
                         database.child("usuarios").child(uid).get()
                             .addOnSuccessListener { snap ->
                                 ConquistasManager.verificarConquistas(
-                                    requireContext(), uid,
-                                    snap.child("alimentos").getValue(Int::class.java)  ?: 0,
-                                    snap.child("roupas").getValue(Int::class.java)     ?: 0,
+                                    requireContext(),
+                                    uid,
+                                    snap.child("alimentos").getValue(Int::class.java) ?: 0,
+                                    snap.child("roupas").getValue(Int::class.java) ?: 0,
                                     snap.child("brinquedos").getValue(Int::class.java) ?: 0,
                                     snap.child("total_doacoes").getValue(Double::class.java)?.toInt() ?: 0
                                 )
+
+                                binding.root.postDelayed({
+
+                                    if (!ConquistasManager.desbloqueouConquista()) {
+
+                                        findNavController().navigate(
+                                            R.id.navigation_ranking
+                                        )
+                                    }
+
+                                }, 1500)
                             }
                     }
                 }
