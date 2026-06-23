@@ -21,7 +21,11 @@ import androidx.navigation.fragment.findNavController
 class PerfilUsuarioFragment : Fragment() {
 
     private var _binding: FragmentPerfilUsuarioBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding
+            ?: throw IllegalStateException(
+                "Binding acessado após onDestroyView()"
+            )
     private lateinit var auth: FirebaseAuth
 
 
@@ -112,14 +116,16 @@ class PerfilUsuarioFragment : Fragment() {
 
         usuariosRef.get().addOnSuccessListener { usuarioSnapshot ->
 
+            val b = _binding ?: return@addOnSuccessListener
+
             if (usuarioSnapshot.exists()) {
 
-                binding.cardInfoUsuario.visibility = View.VISIBLE
-                binding.cardConquistas.visibility = View.VISIBLE
-                binding.cardOpcoesUsuario.visibility = View.VISIBLE
+                b.cardInfoUsuario.visibility = View.VISIBLE
+                b.cardConquistas.visibility = View.VISIBLE
+                b.cardOpcoesUsuario.visibility = View.VISIBLE
 
-                binding.cardInfoOng.visibility = View.GONE
-                binding.cardOpcoesOng.visibility = View.GONE
+                b.cardInfoOng.visibility = View.GONE
+                b.cardOpcoesOng.visibility = View.GONE
 
                 carregarDadosDoador(usuarioSnapshot)
 
@@ -128,29 +134,32 @@ class PerfilUsuarioFragment : Fragment() {
                 ongsRef.get()
                     .addOnSuccessListener { ongSnapshot ->
 
+                        val b2 = _binding ?: return@addOnSuccessListener
+
                         if (ongSnapshot.exists()) {
 
-                            binding.cardInfoUsuario.visibility = View.GONE
-                            binding.cardConquistas.visibility = View.GONE
-                            binding.cardOpcoesUsuario.visibility = View.GONE
+                            b2.cardInfoUsuario.visibility = View.GONE
+                            b2.cardConquistas.visibility = View.GONE
+                            b2.cardOpcoesUsuario.visibility = View.GONE
 
-                            binding.cardInfoOng.visibility = View.VISIBLE
-                            binding.cardOpcoesOng.visibility = View.VISIBLE
+                            b2.cardInfoOng.visibility = View.VISIBLE
+                            b2.cardOpcoesOng.visibility = View.VISIBLE
 
                             carregarDadosOng(ongSnapshot)
                         }
                     }
             }
         }
+            .addOnFailureListener {
 
-        .addOnFailureListener {
+                if (_binding == null) return@addOnFailureListener
 
-            Toast.makeText(
-                context,
-                "Erro ao carregar usuário",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+                Toast.makeText(
+                    context,
+                    "Erro ao carregar usuário",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
     private fun carregarDadosDoador(
@@ -229,7 +238,7 @@ class PerfilUsuarioFragment : Fragment() {
         if (imagemBase64.isNullOrEmpty()) {
 
             binding.imageViewFoto.setImageResource(
-                R.drawable.ic_profile_black_24dp
+                R.drawable.ic_profile_white
             )
 
             return
@@ -255,7 +264,7 @@ class PerfilUsuarioFragment : Fragment() {
             e.printStackTrace()
 
             binding.imageViewFoto.setImageResource(
-                R.drawable.ic_profile_black_24dp
+                R.drawable.ic_profile_white
             )
         }
     }

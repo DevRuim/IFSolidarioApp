@@ -35,25 +35,23 @@
                         android:id="@+id/imageViewUsuario"
                         android:layout_width="160dp"
                         android:layout_height="160dp"
-                        android:background="@drawable/bg_circle"
+                        android:background="@drawable/bg_avatar_circle"
                         android:clipToOutline="true"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_profile_black_24dp" />
+                        android:src="@drawable/ic_profile_yellow" />
 
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/editarFoto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
                         android:layout_gravity="bottom|end"
                         android:layout_margin="4dp"
-                        android:src="@drawable/ic_camera"
-                        app:backgroundTint="#F4D03F"
-                        app:elevation="4dp"
-                        app:fabSize="mini"
-                        app:maxImageSize="30dp"
-                        app:tint="#673AB7"
-                        app:useCompatPadding="false" />
+                        android:background="@drawable/bg_add_photo_button"
+                        android:contentDescription="Editar foto"
+                        android:padding="6dp"
+                        android:elevation="8dp"
+                        android:src="@drawable/ic_add_custom" />
 
                 </FrameLayout>
 
@@ -147,8 +145,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginBottom="24dp"
-                    android:backgroundTint="#7A2ECE"
-                    android:text="Salvar"
+                    android:background="@drawable/bg_button_purple"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Confirmar"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
 

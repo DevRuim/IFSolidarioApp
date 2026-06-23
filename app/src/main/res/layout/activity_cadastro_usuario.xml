@@ -41,8 +41,7 @@
                         android:background="@drawable/bg_avatar_circle"
                         android:clipToOutline="true"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_profile_black_24dp"
-                        app:tint="#F5C518"
+                        android:src="@drawable/ic_profile_yellow"
                         android:elevation="0dp"/>
 
                     <ImageButton
@@ -321,6 +320,7 @@
 
                 <!-- Link "já tenho conta" -->
                 <TextView
+                    android:id="@+id/textLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

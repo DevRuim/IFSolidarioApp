@@ -42,7 +42,7 @@
                         android:background="@drawable/bg_circle"
                         android:clipToOutline="true"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_profile_black_24dp" />
+                        android:src="@drawable/ic_profile_white" />
 
 
                 </FrameLayout>
