@@ -321,7 +321,8 @@ class DoacaoFragment : Fragment() {
             quantidade    = quantidade,
             categoria     = categoria,
             campanha_id   = campanha_id,
-            campanha_nome = campanha_nome
+            campanha_nome = campanha_nome,
+            dataDoacao    = System.currentTimeMillis()
         ))
     }
 
