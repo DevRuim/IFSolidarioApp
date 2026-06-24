@@ -80,9 +80,13 @@ class HistoricoFragment : Fragment() {
                                 )
 
                             if (doacao != null) {
-
                                 lista.add(doacao)
                             }
+                        }
+
+                        // Mais recente → mais antigo
+                        lista.sortByDescending {
+                            it.dataDoacao
                         }
 
                         recycler.adapter =

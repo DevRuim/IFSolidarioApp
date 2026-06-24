@@ -32,7 +32,7 @@ class HistoricoAdapter(
         val quantidade =
             view.findViewById<TextView>(R.id.txtQuantidade)
 
-        val txtDataDoacao =
+        val data =
             view.findViewById<TextView>(R.id.txtDataDoacao)
     }
 
@@ -62,19 +62,6 @@ class HistoricoAdapter(
 
         val item = lista[position]
 
-        val formato =
-            SimpleDateFormat(
-                "dd/MM/yyyy HH:mm",
-                Locale("pt", "BR")
-            )
-
-        holder.txtDataDoacao.text =
-            "Doado em: ${
-                formato.format(
-                    Date(item.dataDoacao)
-                )
-            }"
-
         holder.campanha.text =
             item.campanha_nome
 
@@ -83,6 +70,19 @@ class HistoricoAdapter(
 
         holder.quantidade.text =
             "Quantidade: ${item.quantidade}"
+
+        val formato =
+            SimpleDateFormat(
+                "dd/MM/yyyy",
+                Locale("pt", "BR")
+            )
+
+        holder.data.text =
+            "Doado em: ${
+                formato.format(
+                    Date(item.dataDoacao)
+                )
+            }"
 
         if (item.imagens.isNotEmpty()) {
 
