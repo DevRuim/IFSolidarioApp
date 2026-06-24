@@ -6,22 +6,37 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.ifpr.ifsolidarioapp.MainActivity
+import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.databinding.ActivityConquistaBinding
 
 class ConquistaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConquistaBinding
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityConquistaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mensagem        = intent.getStringExtra("mensagem")        ?: "Parabéns!"
-        val lottieResName   = intent.getStringExtra("lottieResName")   ?: "conquista"
+        carregarDados(intent)
+    }
+
+    // onNewIntent é chamado quando singleTop impede nova instância
+    // (útil para fila de conquistas)
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let { carregarDados(it) }
+    }
+
+    private fun carregarDados(intent: Intent) {
+        // Cancela qualquer delayed anterior antes de iniciar novo
+        handler.removeCallbacksAndMessages(null)
+
+        val mensagem         = intent.getStringExtra("mensagem")         ?: "Parabéns!"
+        val lottieResName    = intent.getStringExtra("lottieResName")    ?: "conquista"
         val insigniaDrawable = intent.getIntExtra("insigniaDrawable", 0)
-        val tempoDuracao    = intent.getLongExtra("tempoDuracao", 5000L)
+        val tempoDuracao     = intent.getLongExtra("tempoDuracao", 5000L)
 
         binding.textMensagem.text = mensagem
 
@@ -35,24 +50,33 @@ class ConquistaActivity : AppCompatActivity() {
             binding.imageInsignia.setImageResource(insigniaDrawable)
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
-
-            // Avisa o ConquistasManager que essa conquista foi exibida
-            // (ele usará isso para exibir a próxima da fila, se houver)
+        handler.postDelayed({
+            // Avisa o manager — se houver fila, ele abrirá a próxima conquista
             ConquistasManager.conquistaFinalizada(this)
 
-            // ── Volta para a MainActivity abrindo o Perfil ──────────────────
-            // FLAG_ACTIVITY_CLEAR_TOP fecha todas as Activities empilhadas
-            // acima da MainActivity (incluindo esta própria ConquistaActivity)
-            // e entrega o Intent para a instância existente da MainActivity.
-            val intent = Intent(this, MainActivity::class.java).apply {
-                putExtra("abrirPerfil", true)
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            // Se não há mais conquistas na fila, volta para a MainActivity no Ranking
+            if (!ConquistasManager.temConquistasPendentes()) {
+                navegarParaRanking()
             }
-
-            startActivity(intent)
-            finish()
+            // Se há mais conquistas, o Manager abrirá a próxima via Intent (onNewIntent)
 
         }, tempoDuracao)
+    }
+
+    private fun navegarParaRanking() {
+        // CLEAR_TOP garante que a MainActivity não seja recriada —
+        // ela recebe o Intent via onNewIntent e seleciona o Ranking.
+        // SINGLE_TOP evita criar uma nova instância da MainActivity.
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("abrirRanking", true)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
     }
 }
