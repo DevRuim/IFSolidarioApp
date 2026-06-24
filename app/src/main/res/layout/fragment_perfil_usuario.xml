@@ -469,7 +469,7 @@
                                 android:id="@+id/progressAlimentos"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/bg_progress_alimento" />
+                                android:background="@drawable/progress_bar_custom" />
                         </FrameLayout>
                     </LinearLayout>
 
@@ -534,7 +534,7 @@
                                 android:id="@+id/progressBrinquedos"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/bg_progress_brinquedo" />
+                                android:background="@drawable/progress_bar_custom" />
                         </FrameLayout>
                     </LinearLayout>
 
@@ -596,7 +596,7 @@
                                 android:id="@+id/progressRoupas"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/bg_progress_roupa" />
+                                android:background="@drawable/progress_bar_custom" />
                         </FrameLayout>
                     </LinearLayout>
 
