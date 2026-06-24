@@ -414,6 +414,12 @@ class EditarPerfilFragment : Fragment() {
 
             selecionarImagem.launch("image/*")
         }
+
+        binding.btnVoltar.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+
     }
 
     private fun uriToBase64(uri: Uri): String {

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.R
@@ -29,6 +30,8 @@ class RankingFragment : Fragment() {
     private lateinit var imgPodio1: ShapeableImageView
     private lateinit var imgPodio2: ShapeableImageView
     private lateinit var imgPodio3: ShapeableImageView
+
+    private lateinit var imgFoto: ShapeableImageView
     private lateinit var tvNomePodio1: TextView
     private lateinit var tvNomePodio2: TextView
     private lateinit var tvNomePodio3: TextView
@@ -69,6 +72,7 @@ class RankingFragment : Fragment() {
         imgPodio1        = view.findViewById(R.id.imgPodio1)
         imgPodio2        = view.findViewById(R.id.imgPodio2)
         imgPodio3        = view.findViewById(R.id.imgPodio3)
+        imgFoto          = view.findViewById(R.id.imgFoto)
         tvNomePodio1     = view.findViewById(R.id.tvNomePodio1)
         tvNomePodio2     = view.findViewById(R.id.tvNomePodio2)
         tvNomePodio3     = view.findViewById(R.id.tvNomePodio3)
@@ -180,20 +184,77 @@ class RankingFragment : Fragment() {
     //   • Oculto   → usuário está no Top 3 (pódio) ou no 4º–10º (lista)
     // ─────────────────────────────────────────────────────────────────────────
 
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density).toInt()
+    }
     private fun mostrarCardSuaPosicao(usuarioLogado: Usuario?) {
+
         if (usuarioLogado == null || usuarioLogado.posicaoRanking <= 10) {
+
             cardSuaPosicao.visibility = View.GONE
+
             return
         }
 
         cardSuaPosicao.visibility = View.VISIBLE
-        tvSuaPosicaoNome.text    = usuarioLogado.nome_usuario ?: ""
-        tvSuaPosicaoNumero.text  = "${usuarioLogado.posicaoRanking}º"
+
+        tvSuaPosicaoNome.text =
+            usuarioLogado.nome_usuario ?: ""
+
+        tvSuaPosicaoNumero.text =
+            "${usuarioLogado.posicaoRanking}º"
+
         tvSuaPosicaoDoacoes.text =
             "Total de ${usuarioLogado.total_doacoes.toInt()} doações"
+
+        carregarFotoUser(
+            usuarioLogado.imagemBase64,
+            imgFoto
+        )
+
+        // espaço extra para o card fixo
+        recycler.setPadding(
+            0,
+            0,
+            0,
+            dpToPx(140)
+        )
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+
+    private fun carregarFotoUser(
+        base64: String?,
+        imgView: ShapeableImageView
+    ) {
+        if (!base64.isNullOrEmpty()) {
+            try {
+
+                val bytes =
+                    Base64.decode(base64, Base64.DEFAULT)
+
+                val options = BitmapFactory.Options().apply {
+                    inSampleSize = 4
+                }
+
+                val bitmap =
+                    BitmapFactory.decodeByteArray(
+                        bytes,
+                        0,
+                        bytes.size,
+                        options
+                    )
+
+                imgView.setImageBitmap(bitmap)
+                return
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        imgView.setImageResource(R.drawable.ic_usuario)
+    }
 
     private fun carregarFotoPodio(base64: String?, imgView: ShapeableImageView) {
         if (!base64.isNullOrEmpty()) {

@@ -381,20 +381,30 @@
             android:orientation="horizontal"
             android:paddingHorizontal="20dp"
             android:paddingVertical="12dp"
+            android:layout_marginBottom="50dp"
             android:visibility="gone">
 
-            <!-- Ícone de localização -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:text="📍"
-                android:textSize="18sp" />
+            <!-- Foto usuario -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgFoto"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_profile_comum"
+                app:shapeAppearanceOverlay="@style/CircleImageView"
+                app:strokeColor="#C49EE8"
+                app:strokeWidth="1.5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/txtPosicao"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="1dp" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginStart="12dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -421,8 +431,9 @@
                     android:id="@+id/tvSuaPosicaoDoacoes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_doacoes"
                     android:fontFamily="@font/poppins_regular"
-                    android:textColor="#7B7B7B"
+                    android:textColor="#7B2FBE"
                     android:textSize="11sp" />
             </LinearLayout>
 
