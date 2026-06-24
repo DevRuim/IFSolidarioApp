@@ -26,7 +26,7 @@ object ConquistasManager {
         roupas: Int,
         brinquedos: Int,
         total: Int,
-        callback: (Boolean) -> Unit
+        callback: (Boolean, Boolean) -> Unit
     ) {
 
         conquistaDesbloqueadaNestaVerificacao = false
@@ -71,7 +71,7 @@ object ConquistasManager {
 
                                 if (verificacoesRestantes == 0) {
                                     verificandoConquistas = false
-                                    callback(desbloqueouNovaConquista)
+                                    callback(desbloqueouNovaConquista, filaConquistas.isNotEmpty())
                                     exibirProximaConquista(context)
                                 }
 
@@ -93,7 +93,7 @@ object ConquistasManager {
 
                                 verificandoConquistas = false
 
-                                callback(desbloqueouNovaConquista)
+                                callback(desbloqueouNovaConquista, filaConquistas.isNotEmpty())
 
                                 exibirProximaConquista(context)
                             }
@@ -107,7 +107,7 @@ object ConquistasManager {
 
                             verificandoConquistas = false
 
-                            callback(desbloqueouNovaConquista)
+                            callback(desbloqueouNovaConquista, filaConquistas.isNotEmpty())
 
                             exibirProximaConquista(context)
                         }
@@ -122,7 +122,7 @@ object ConquistasManager {
 
                     verificandoConquistas = false
 
-                    callback(desbloqueouNovaConquista)
+                    callback(desbloqueouNovaConquista, filaConquistas.isNotEmpty())
 
                     exibirProximaConquista(context)
                 }

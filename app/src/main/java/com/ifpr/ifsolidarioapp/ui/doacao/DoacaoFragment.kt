@@ -49,6 +49,8 @@ class DoacaoFragment : Fragment() {
         private const val PICK_IMAGE_CODE = 1000
     }
 
+    //) { resultado ->
+
     // ── Launcher da ConquistaActivity ────────────────────────────────────────
     // Quando a conquista termina, navega para o ranking limpando a pilha
     private val conquistaLauncher =
@@ -347,19 +349,16 @@ class DoacaoFragment : Fragment() {
                                     snap.child("roupas").getValue(Int::class.java)      ?: 0,
                                     snap.child("brinquedos").getValue(Int::class.java)  ?: 0,
                                     snap.child("total_doacoes").getValue(Double::class.java)?.toInt() ?: 0
-                                ) { ganhouConquista ->
+                                ) { ganhou, temFila ->
 
-                                    // ── Sem conquista → vai direto para o Ranking ──
-                                    // ── Com conquista → ConquistaActivity abre e,
-                                    //    ao fechar, o conquistaLauncher chama
-                                    //    navegarParaRankingLimpandoPilha() ──
-                                    if (!ganhouConquista) {
+                                    if (ganhou) {
+
+                                        // quem controla isso é a ConquistaActivity
+
+                                    } else {
+
                                         navegarParaRankingLimpandoPilha()
                                     }
-                                    // Se ganhou conquista, o ConquistasManager já abre
-                                    // a ConquistaActivity via Intent. O conquistaLauncher
-                                    // não é mais necessário aqui pois a Activity usa
-                                    // FLAG_ACTIVITY_CLEAR_TOP e navega sozinha.
                                 }
                             }
                     }
@@ -408,9 +407,28 @@ class DoacaoFragment : Fragment() {
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun uriToBase64(uri: Uri): String {
-        val bitmap = BitmapFactory.decodeStream(requireContext().contentResolver.openInputStream(uri))
-        val out    = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out)
+
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+
+        val original = BitmapFactory.decodeStream(inputStream)
+
+        inputStream?.close()
+
+        // 🔥 REDUÇÃO DE MEMÓRIA (ESSENCIAL)
+        val resized = Bitmap.createScaledBitmap(
+            original,
+            800,
+            (original.height * 800) / original.width,
+            true
+        )
+
+        val out = ByteArrayOutputStream()
+
+        resized.compress(Bitmap.CompressFormat.JPEG, 70, out)
+
+        original.recycle()
+        resized.recycle()
+
         return Base64.encodeToString(out.toByteArray(), Base64.DEFAULT)
     }
 

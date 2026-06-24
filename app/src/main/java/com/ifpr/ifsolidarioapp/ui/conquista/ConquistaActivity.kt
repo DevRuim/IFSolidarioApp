@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.ifpr.ifsolidarioapp.MainActivity
 import com.ifpr.ifsolidarioapp.databinding.ActivityConquistaBinding
@@ -25,10 +26,17 @@ class ConquistaActivity : AppCompatActivity() {
 
         binding.textMensagem.text = mensagem
 
-        val lottieResId = resources.getIdentifier(lottieResName, "raw", packageName)
-        if (lottieResId != 0) {
-            binding.lottieBackground.setAnimation(lottieResId)
-            binding.lottieBackground.playAnimation()
+        binding.lottieBackground.post {
+
+            val lottieResId = resources.getIdentifier(lottieResName, "raw", packageName)
+
+            if (lottieResId != 0) {
+                binding.lottieBackground.setAnimation(lottieResId)
+                binding.lottieBackground.cancelAnimation()
+                binding.lottieBackground.progress = 0f
+                binding.lottieBackground.visibility = View.VISIBLE
+                binding.lottieBackground.playAnimation()
+            }
         }
 
         if (insigniaDrawable != 0) {
@@ -37,21 +45,16 @@ class ConquistaActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
 
-            // Avisa o ConquistasManager que essa conquista foi exibida
-            // (ele usará isso para exibir a próxima da fila, se houver)
             ConquistasManager.conquistaFinalizada(this)
 
-            // ── Volta para a MainActivity abrindo o Perfil ──────────────────
-            // FLAG_ACTIVITY_CLEAR_TOP fecha todas as Activities empilhadas
-            // acima da MainActivity (incluindo esta própria ConquistaActivity)
-            // e entrega o Intent para a instância existente da MainActivity.
+
             val intent = Intent(this, MainActivity::class.java).apply {
                 putExtra("abrirPerfil", true)
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
 
             startActivity(intent)
-            finish()
+            finishAffinity()
 
         }, tempoDuracao)
     }
