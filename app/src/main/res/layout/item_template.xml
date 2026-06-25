@@ -51,6 +51,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/poppins_regular"
             android:lineSpacingExtra="3dp"
+            android:justificationMode="inter_word"
             android:maxLines="5"
             android:paddingHorizontal="6dp"
             android:textColor="#444444"
