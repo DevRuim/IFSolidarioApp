@@ -35,14 +35,13 @@
                     android:layout_height="125dp">
 
 
-                    <ImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/imageViewFoto"
                         android:layout_width="125dp"
                         android:layout_height="125dp"
-                        android:background="@drawable/bg_circle"
-                        android:clipToOutline="true"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_profile_black_24dp" />
+                        android:src="@drawable/ic_profile_white"
+                        app:shapeAppearanceOverlay="@style/CircleImageView"/>
 
 
                 </FrameLayout>
@@ -98,6 +97,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/poppins_regular"
+                            android:textStyle="bold"
                             android:gravity="center_vertical"
                             android:text="Editar perfil"
                             android:textColor="#2A2A2A"
@@ -133,6 +133,7 @@
                             android:layout_marginStart="2dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/poppins_regular"
+                            android:textStyle="bold"
                             android:gravity="center_vertical"
                             android:text="Histórico de Doações"
                             android:textColor="#2A2A2A"
@@ -168,6 +169,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/poppins_regular"
+                            android:textStyle="bold"
                             android:gravity="center_vertical"
                             android:text="Sair"
                             android:textColor="#2A2A2A"
@@ -262,206 +264,340 @@
 
                 </LinearLayout>
 
-               <LinearLayout
+                <LinearLayout
                     android:id="@+id/cardInfoUsuario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:background="@drawable/bg_rounded_white"
+                    android:background="@drawable/bg_card_white_rounded"
+                    android:elevation="4dp"
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:gravity="center_horizontal"
-                        android:text="Informações do Doador"
-                        android:textColor="#2A2A2A"
-                        android:textSize="22sp" />
-
+                    <!-- ── Cabeçalho: Informações do Doador ── -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
+                        <View
+                            android:layout_width="4dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_accent_bar" />
+
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Email:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
+                            android:text="Informações do Doador"
+                            android:textColor="#333333"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="14dp"
+                        android:background="#F0E6FF" />
+
+                    <!-- Email -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="Email: "
+                            android:textColor="#333333"
+                            android:textSize="13sp"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:id="@+id/textViewEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="41dp"
-                            android:layout_marginStart="10dp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
                             android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
+                            android:maxLines="1"
+                            android:textColor="#1A1A1A"
                             android:textSize="13sp" />
-
                     </LinearLayout>
 
+                    <!-- Telefone -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
+
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Telefone:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="Telefone: "
+                            android:textColor="#333333"
+                            android:textSize="13sp"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:id="@+id/textViewTelefone"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
+                            android:textColor="#1A1A1A"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
-                    <TextView
+                    <!-- ── Divider + título Doações ── -->
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:gravity="center_horizontal"
-                        android:text="Doações"
-                        android:textColor="#2A2A2A"
-                        android:textSize="22sp" />
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="14dp"
+                        android:background="#F0E6FF" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp">
+
+                        <View
+                            android:layout_width="4dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_accent_bar" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Total:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
+                            android:text="Minhas Doações"
+                            android:textColor="#333333"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
+                        <!-- Badge total -->
                         <TextView
                             android:id="@+id/textViewTotal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_total"
+                            android:fontFamily="@font/poppins_bold"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="4dp"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
+                    <!-- ── Alimentos ── -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Alimentos:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewAlimentos"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/poppins_regular"
+                            android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="5dp">
 
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_bold"
+                                android:text="Alimentos"
+                                android:textColor="#333333"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <!-- "X / próxima meta" -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textViewAlimentos"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:textColor="#7B2FBE"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textViewAlimentosMeta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:textColor="#9BA3B5"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Barra de progresso alimentos -->
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:background="@drawable/bg_progress_track">
+
+                            <View
+                                android:id="@+id/progressAlimentos"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/progress_bar_custom" />
+                        </FrameLayout>
                     </LinearLayout>
 
+                    <!-- ── Brinquedos ── -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Brinquedos:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewBrinquedos"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/poppins_regular"
+                            android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="5dp">
 
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_bold"
+                                android:text="Brinquedos"
+                                android:textColor="#333333"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textViewBrinquedos"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:textColor="#7B2FBE"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textViewBrinquedosMeta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:textColor="#9BA3B5"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Barra de progresso brinquedos -->
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:background="@drawable/bg_progress_track">
+
+                            <View
+                                android:id="@+id/progressBrinquedos"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/progress_bar_custom" />
+                        </FrameLayout>
                     </LinearLayout>
 
+                    <!-- ── Roupas ── -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Roupas:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewRoupas"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/poppins_regular"
+                            android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="5dp">
 
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_bold"
+                                android:text="Roupas"
+                                android:textColor="#333333"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textViewRoupas"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:textColor="#7B2FBE"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textViewRoupasMeta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:textColor="#9BA3B5"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Barra de progresso roupas -->
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:background="@drawable/bg_progress_track">
+
+                            <View
+                                android:id="@+id/progressRoupas"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/progress_bar_custom" />
+                        </FrameLayout>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -586,9 +722,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:fontFamily="@font/poppins_regular"
+                        android:textStyle="bold"
                         android:gravity="center_horizontal"
                         android:text="Primeira Doação"
-                        android:textColor="#2A2A2A"
+                        android:textColor="#333333"
                         android:textSize="22sp" />
 
                         <LinearLayout
@@ -618,9 +755,10 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/poppins_regular"
+                        android:textStyle="bold"
                         android:gravity="center_horizontal"
                         android:text="Doação de Alimentos"
-                        android:textColor="#2A2A2A"
+                        android:textColor="#333333"
                         android:textSize="22sp" />
 
                     <LinearLayout
@@ -668,9 +806,10 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/poppins_regular"
+                        android:textStyle="bold"
                         android:gravity="center_horizontal"
                         android:text="Doação de Brinquedos"
-                        android:textColor="#2A2A2A"
+                        android:textColor="#333333"
                         android:textSize="22sp" />
 
                     <LinearLayout
@@ -718,9 +857,10 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/poppins_regular"
+                        android:textStyle="bold"
                         android:gravity="center_horizontal"
                         android:text="Doação de Roupas"
-                        android:textColor="#2A2A2A"
+                        android:textColor="#333333"
                         android:textSize="22sp" />
 
                     <LinearLayout

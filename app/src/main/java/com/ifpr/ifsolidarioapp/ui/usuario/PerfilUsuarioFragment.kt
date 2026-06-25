@@ -21,7 +21,11 @@ import androidx.navigation.fragment.findNavController
 class PerfilUsuarioFragment : Fragment() {
 
     private var _binding: FragmentPerfilUsuarioBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding
+            ?: throw IllegalStateException(
+                "Binding acessado após onDestroyView()"
+            )
     private lateinit var auth: FirebaseAuth
 
 
@@ -96,6 +100,7 @@ class PerfilUsuarioFragment : Fragment() {
             R.id.action_profile_to_editarPerfil
         )
     }
+
     private fun carregarDadosUsuario() {
 
         val uid = auth.currentUser?.uid ?: return
@@ -112,14 +117,16 @@ class PerfilUsuarioFragment : Fragment() {
 
         usuariosRef.get().addOnSuccessListener { usuarioSnapshot ->
 
+            val b = _binding ?: return@addOnSuccessListener
+
             if (usuarioSnapshot.exists()) {
 
-                binding.cardInfoUsuario.visibility = View.VISIBLE
-                binding.cardConquistas.visibility = View.VISIBLE
-                binding.cardOpcoesUsuario.visibility = View.VISIBLE
+                b.cardInfoUsuario.visibility = View.VISIBLE
+                b.cardConquistas.visibility = View.VISIBLE
+                b.cardOpcoesUsuario.visibility = View.VISIBLE
 
-                binding.cardInfoOng.visibility = View.GONE
-                binding.cardOpcoesOng.visibility = View.GONE
+                b.cardInfoOng.visibility = View.GONE
+                b.cardOpcoesOng.visibility = View.GONE
 
                 carregarDadosDoador(usuarioSnapshot)
 
@@ -128,29 +135,32 @@ class PerfilUsuarioFragment : Fragment() {
                 ongsRef.get()
                     .addOnSuccessListener { ongSnapshot ->
 
+                        val b2 = _binding ?: return@addOnSuccessListener
+
                         if (ongSnapshot.exists()) {
 
-                            binding.cardInfoUsuario.visibility = View.GONE
-                            binding.cardConquistas.visibility = View.GONE
-                            binding.cardOpcoesUsuario.visibility = View.GONE
+                            b2.cardInfoUsuario.visibility = View.GONE
+                            b2.cardConquistas.visibility = View.GONE
+                            b2.cardOpcoesUsuario.visibility = View.GONE
 
-                            binding.cardInfoOng.visibility = View.VISIBLE
-                            binding.cardOpcoesOng.visibility = View.VISIBLE
+                            b2.cardInfoOng.visibility = View.VISIBLE
+                            b2.cardOpcoesOng.visibility = View.VISIBLE
 
                             carregarDadosOng(ongSnapshot)
                         }
                     }
             }
         }
+            .addOnFailureListener {
 
-        .addOnFailureListener {
+                if (_binding == null) return@addOnFailureListener
 
-            Toast.makeText(
-                context,
-                "Erro ao carregar usuário",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+                Toast.makeText(
+                    context,
+                    "Erro ao carregar usuário",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
     private fun carregarDadosDoador(
@@ -185,6 +195,11 @@ class PerfilUsuarioFragment : Fragment() {
         )
     }
 
+    private fun proximaMeta(total: Int): Int? {
+        val metas = listOf(5, 10, 20, 40)
+        return metas.firstOrNull { total < it }
+    }
+
     private fun carregarDadosOng(
         snapshot: DataSnapshot
     ) {
@@ -213,7 +228,7 @@ class PerfilUsuarioFragment : Fragment() {
         if (imagemBase64.isNullOrEmpty()) {
 
             binding.imageViewFoto.setImageResource(
-                R.drawable.ic_profile_black_24dp
+                R.drawable.ic_profile_white
             )
 
             return
@@ -239,7 +254,7 @@ class PerfilUsuarioFragment : Fragment() {
             e.printStackTrace()
 
             binding.imageViewFoto.setImageResource(
-                R.drawable.ic_profile_black_24dp
+                R.drawable.ic_profile_white
             )
         }
     }
@@ -264,6 +279,53 @@ class PerfilUsuarioFragment : Fragment() {
         binding.textViewBrinquedos.text = brinquedos.toString()
         binding.textViewRoupas.text = roupas.toString()
 
+        val metaAlimentos = proximaMeta(alimentos)
+        binding.textViewAlimentosMeta.text =
+            if (metaAlimentos != null) "($alimentos/$metaAlimentos)" else "(Máx.)"
+
+        val metaBrinquedos = proximaMeta(brinquedos)
+        binding.textViewBrinquedosMeta.text =
+            if (metaBrinquedos != null) "($brinquedos/$metaBrinquedos)" else "(Máx.)"
+
+        val metaRoupas = proximaMeta(roupas)
+        binding.textViewRoupasMeta.text =
+            if (metaRoupas != null) "($roupas/$metaRoupas)" else "(Máx.)"
+
+        // Atualiza as barras de progresso após o layout ser desenhado,
+        // pois a largura real do pai só está disponível nesse momento.
+        binding.progressAlimentos.post {
+            atualizarBarra(binding.progressAlimentos, alimentos, metaAlimentos)
+        }
+        binding.progressBrinquedos.post {
+            atualizarBarra(binding.progressBrinquedos, brinquedos, metaBrinquedos)
+        }
+        binding.progressRoupas.post {
+            atualizarBarra(binding.progressRoupas, roupas, metaRoupas)
+        }
+    }
+
+    /**
+     * Calcula a largura proporcional da barra de progresso.
+     *
+     * - Se [meta] é null o usuário atingiu o máximo (40) → barra cheia.
+     * - Caso contrário: percentual = atual / meta, limitado a [0, 1].
+     * - A largura é aplicada diretamente nos LayoutParams da View filha,
+     *   usando a largura real do pai (já disponível pois chamamos via .post{}).
+     */
+    private fun atualizarBarra(barraView: View, atual: Int, meta: Int?) {
+        val pai = barraView.parent as? View ?: return
+        val larguraPai = pai.width
+        if (larguraPai == 0) return
+
+        val percentual = if (meta == null) {
+            1f // atingiu o máximo
+        } else {
+            (atual.toFloat() / meta.toFloat()).coerceIn(0f, 1f)
+        }
+
+        val params = barraView.layoutParams
+        params.width = (larguraPai * percentual).toInt()
+        barraView.layoutParams = params
     }
 
     private fun carregarInformacoesOng(
@@ -277,7 +339,6 @@ class PerfilUsuarioFragment : Fragment() {
         binding.textViewEmailOng.text = email
         binding.textViewTelefoneOng.text = telefone
         binding.textViewCNPJ.text = cnpj
-
     }
 
     private fun carregarConquistas(
@@ -290,114 +351,86 @@ class PerfilUsuarioFragment : Fragment() {
         habilitarPrimeiraConquista(total)
 
         atualizarConquista(
-            alimentos,
-            5,
+            alimentos, 5,
             binding.imageViewIconAlimento5,
             R.drawable.ic_alimento_5_enabled,
             R.drawable.ic_alimento_5_disabled
         )
         atualizarConquista(
-            alimentos,
-            10,
+            alimentos, 10,
             binding.imageViewIconAlimento10,
             R.drawable.ic_alimento_10_enabled,
             R.drawable.ic_alimento_10_disabled
         )
         atualizarConquista(
-            alimentos,
-            20,
+            alimentos, 20,
             binding.imageViewIconAlimento20,
             R.drawable.ic_alimento_20_enabled,
             R.drawable.ic_alimento_20_disabled
         )
         atualizarConquista(
-            alimentos,
-            40,
+            alimentos, 40,
             binding.imageViewIconAlimento40,
             R.drawable.ic_alimento_40_enabled,
             R.drawable.ic_alimento_40_disabled
         )
 
-
         atualizarConquista(
-            brinquedos,
-            5,
+            brinquedos, 5,
             binding.imageViewIconBrinquedo5,
             R.drawable.ic_brinquedo_5_enabled,
             R.drawable.ic_brinquedo_5_disabled
         )
         atualizarConquista(
-            brinquedos,
-            10,
+            brinquedos, 10,
             binding.imageViewIconBrinquedo10,
             R.drawable.ic_brinquedo_10_enabled,
             R.drawable.ic_brinquedo_10_disabled
         )
         atualizarConquista(
-            brinquedos,
-            20,
+            brinquedos, 20,
             binding.imageViewIconBrinquedo20,
             R.drawable.ic_brinquedo_20_enabled,
             R.drawable.ic_brinquedo_20_disabled
         )
         atualizarConquista(
-            brinquedos,
-            40,
+            brinquedos, 40,
             binding.imageViewIconBrinquedo40,
             R.drawable.ic_brinquedo_40_enabled,
             R.drawable.ic_brinquedo_40_disabled
         )
 
-        // ROUPAS
-
         atualizarConquista(
-            roupas,
-            5,
+            roupas, 5,
             binding.imageViewIconRoupa5,
             R.drawable.ic_roupa_5_enabled,
             R.drawable.ic_roupa_5_disabled
         )
-
         atualizarConquista(
-            roupas,
-            10,
+            roupas, 10,
             binding.imageViewIconRoupa10,
             R.drawable.ic_roupa_10_enabled,
             R.drawable.ic_roupa_10_disabled
         )
-
         atualizarConquista(
-            roupas,
-            20,
+            roupas, 20,
             binding.imageViewIconRoupa20,
             R.drawable.ic_roupa_20_enabled,
             R.drawable.ic_roupa_20_disabled
         )
-
         atualizarConquista(
-            roupas,
-            40,
+            roupas, 40,
             binding.imageViewIconRoupa40,
             R.drawable.ic_roupa_40_enabled,
             R.drawable.ic_roupa_40_disabled
         )
     }
 
-    private fun habilitarPrimeiraConquista(
-        total: Int
-    ) {
-
-        if (total >= 1) {
-            binding.imageViewIconPrimeiraConquista
-                .setImageResource(
-                    R.drawable.ic_primeira_doacao_enabled
-                )
-        } else {
-            binding.imageViewIconPrimeiraConquista
-                .setImageResource(
-                    R.drawable.ic_primeira_doacao_disabled
-                )
-        }
+    private fun habilitarPrimeiraConquista(total: Int) {
+        binding.imageViewIconPrimeiraConquista.setImageResource(
+            if (total >= 1) R.drawable.ic_primeira_doacao_enabled
+            else R.drawable.ic_primeira_doacao_disabled
+        )
     }
 
     private fun atualizarConquista(
@@ -407,13 +440,8 @@ class PerfilUsuarioFragment : Fragment() {
         enabled: Int,
         disabled: Int
     ) {
-
         imageView.setImageResource(
-            if (quantidade >= meta) {
-                enabled
-            } else {
-                disabled
-            }
+            if (quantidade >= meta) enabled else disabled
         )
     }
 
@@ -434,9 +462,7 @@ class PerfilUsuarioFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-
         super.onDestroyView()
-
         _binding = null
     }
 }

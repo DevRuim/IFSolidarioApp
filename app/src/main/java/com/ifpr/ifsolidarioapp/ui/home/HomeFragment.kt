@@ -24,6 +24,7 @@ import java.util.Locale
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import android.widget.FrameLayout
+import com.airbnb.lottie.LottieAnimationView
 
 data class CampanhaItem(
     val campanha: Campanha,
@@ -158,6 +159,8 @@ HomeFragment : Fragment() {
                         val data =
                             itemView.findViewById<TextView>(R.id.item_data)
 
+                        val instagram = campanha.instagram
+
                         val progresso =
                             itemView.findViewById<TextView>(R.id.item_progresso)
 
@@ -171,6 +174,9 @@ HomeFragment : Fragment() {
 
                         val doarBotao =
                             itemView.findViewById<Button>(R.id.doarButton)
+
+                        val instagramBotao =
+                            itemView.findViewById<ImageButton>(R.id.btnInstagram)
 
                         nome.text = campanha.nome_campanha
 
@@ -289,6 +295,18 @@ HomeFragment : Fragment() {
                             }
                         }
 
+                        instagramBotao.setOnClickListener {
+
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                android.net.Uri.parse(
+                                    "https://instagram.com/$instagram"
+                                )
+                            )
+
+                            startActivity(intent)
+                        }
+
                         // ANIMAÇÃO DOS CARDS
 
                         itemView.alpha = 0f
@@ -374,6 +392,15 @@ HomeFragment : Fragment() {
         val totalText =
             view.findViewById<TextView>(R.id.textTotalDoacoes)
 
+        val loading =
+            view.findViewById<com.airbnb.lottie.LottieAnimationView>(
+                R.id.loadingTotalDoacoes
+            )
+        val particles =
+            view.findViewById<LottieAnimationView>(
+                R.id.particlesAnimation
+            )
+
         val ref = FirebaseDatabase.getInstance()
             .getReference("doacoes")
 
@@ -404,11 +431,42 @@ HomeFragment : Fragment() {
                     }
                 }
 
+                loading.visibility = View.GONE
+
+                particles.visibility = View.VISIBLE
+                particles.playAnimation()
+
+                totalText.visibility = View.VISIBLE
+
                 totalText.text =
                     totalQuantidade.toInt().toString()
+
+                // Animação de fade
+
+                totalText.animate()
+                    .alpha(1f)
+                    .setDuration(400)
+                    .start()
+
+                totalText.scaleX = 0.8f
+                totalText.scaleY = 0.8f
+                totalText.alpha = 0f
+
+                totalText.animate()
+                    .alpha(1f)
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(500)
+                    .start()
             }
 
             override fun onCancelled(error: DatabaseError) {
+
+                loading.visibility = View.GONE
+
+                totalText.visibility = View.VISIBLE
+
+                totalText.text = "--"
 
                 Toast.makeText(
                     context,

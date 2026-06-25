@@ -88,7 +88,7 @@ class EditarPerfilFragment : Fragment() {
         if (imagemBase64.isNullOrEmpty()) {
 
             binding.imageViewUsuario.setImageResource(
-                R.drawable.ic_profile_black_24dp
+                R.drawable.ic_profile_white
             )
 
             return
@@ -114,7 +114,7 @@ class EditarPerfilFragment : Fragment() {
             e.printStackTrace()
 
             binding.imageViewUsuario.setImageResource(
-                R.drawable.ic_profile_black_24dp
+                R.drawable.ic_profile_white
             )
         }
     }
@@ -414,6 +414,12 @@ class EditarPerfilFragment : Fragment() {
 
             selecionarImagem.launch("image/*")
         }
+
+        binding.btnVoltar.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+
     }
 
     private fun uriToBase64(uri: Uri): String {

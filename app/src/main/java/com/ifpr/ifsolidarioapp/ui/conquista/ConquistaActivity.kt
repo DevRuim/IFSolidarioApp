@@ -1,41 +1,46 @@
 package com.ifpr.ifsolidarioapp.ui.conquista
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.ifpr.ifsolidarioapp.MainActivity
+import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.databinding.ActivityConquistaBinding
 
 class ConquistaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConquistaBinding
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityConquistaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mensagem =
-            intent.getStringExtra("mensagem") ?: "Parabéns!"
+        carregarDados(intent)
+    }
 
-        val lottieResName =
-            intent.getStringExtra("lottieResName") ?: "conquista"
+    // onNewIntent é chamado quando singleTop impede nova instância
+    // (útil para fila de conquistas)
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let { carregarDados(it) }
+    }
 
-        val insigniaDrawable =
-            intent.getIntExtra("insigniaDrawable", 0)
+    private fun carregarDados(intent: Intent) {
+        // Cancela qualquer delayed anterior antes de iniciar novo
+        handler.removeCallbacksAndMessages(null)
 
-        val tempoDuracao =
-            intent.getLongExtra("tempoDuracao", 5000L)
+        val mensagem         = intent.getStringExtra("mensagem")         ?: "Parabéns!"
+        val lottieResName    = intent.getStringExtra("lottieResName")    ?: "conquista"
+        val insigniaDrawable = intent.getIntExtra("insigniaDrawable", 0)
+        val tempoDuracao     = intent.getLongExtra("tempoDuracao", 5000L)
 
         binding.textMensagem.text = mensagem
 
-        val lottieResId = resources.getIdentifier(
-            lottieResName,
-            "raw",
-            packageName
-        )
-
+        val lottieResId = resources.getIdentifier(lottieResName, "raw", packageName)
         if (lottieResId != 0) {
             binding.lottieBackground.setAnimation(lottieResId)
             binding.lottieBackground.playAnimation()
@@ -45,17 +50,33 @@ class ConquistaActivity : AppCompatActivity() {
             binding.imageInsignia.setImageResource(insigniaDrawable)
         }
 
-        Handler(
-            Looper.getMainLooper()
-        ).postDelayed({
+        handler.postDelayed({
+            // Avisa o manager — se houver fila, ele abrirá a próxima conquista
+            ConquistasManager.conquistaFinalizada(this)
 
-            setResult(RESULT_OK)
-
-            ConquistasManager
-                .conquistaFinalizada(this)
-
-            finish()
+            // Se não há mais conquistas na fila, volta para a MainActivity no Ranking
+            if (!ConquistasManager.temConquistasPendentes()) {
+                navegarParaRanking()
+            }
+            // Se há mais conquistas, o Manager abrirá a próxima via Intent (onNewIntent)
 
         }, tempoDuracao)
+    }
+
+    private fun navegarParaRanking() {
+        // CLEAR_TOP garante que a MainActivity não seja recriada —
+        // ela recebe o Intent via onNewIntent e seleciona o Ranking.
+        // SINGLE_TOP evita criar uma nova instância da MainActivity.
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("abrirRanking", true)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
     }
 }

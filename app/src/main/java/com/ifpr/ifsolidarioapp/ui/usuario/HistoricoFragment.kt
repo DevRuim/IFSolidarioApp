@@ -18,6 +18,7 @@ import com.ifpr.ifsolidarioapp.R
 class HistoricoFragment : Fragment() {
 
     private lateinit var recycler: RecyclerView
+    private lateinit var layoutVazio: View
 
     private val lista =
         mutableListOf<HistoricoDoacao>()
@@ -34,6 +35,8 @@ class HistoricoFragment : Fragment() {
                 container,
                 false
             )
+
+        layoutVazio = view.findViewById(R.id.layoutVazio)
 
         view.findViewById<ImageView>(R.id.btnVoltar)
             .setOnClickListener {
@@ -78,15 +81,24 @@ class HistoricoFragment : Fragment() {
                                 doacaoSnapshot.getValue(
                                     HistoricoDoacao::class.java
                                 )
-
                             if (doacao != null) {
-
                                 lista.add(doacao)
                             }
                         }
 
-                        recycler.adapter =
-                            HistoricoAdapter(lista)
+                        // Mais recente → mais antigo
+                        lista.sortByDescending {
+                            it.dataDoacao
+                        }
+
+                        if (lista.isEmpty()) {
+                            layoutVazio.visibility = View.VISIBLE
+                            recycler.visibility = View.GONE
+                        } else {
+                            layoutVazio.visibility = View.GONE
+                            recycler.visibility = View.VISIBLE
+                            recycler.adapter = HistoricoAdapter(lista)
+                        }
                     }
 
                     override fun onCancelled(

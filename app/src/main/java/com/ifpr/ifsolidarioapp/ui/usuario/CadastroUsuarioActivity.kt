@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Ong
 import com.ifpr.ifsolidarioapp.baseclasses.Usuario
+import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
 
 class CadastroUsuarioActivity : AppCompatActivity() {
 
@@ -38,7 +40,9 @@ class CadastroUsuarioActivity : AppCompatActivity() {
     private lateinit var registerConfirmPasswordEditText: EditText
     private lateinit var registerButton: Button
     private lateinit var imagemOng: ImageView
-    private lateinit var escolherImagemButton: FloatingActionButton
+    private lateinit var escolherImagemButton: ImageButton
+
+    private lateinit var textLogin: TextView
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private var imageUri: Uri? = null
@@ -71,6 +75,8 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
         registerButton = findViewById(R.id.registerButton)
 
+        textLogin = findViewById(R.id.textLogin)
+
         imagemOng = findViewById(R.id.imagemOng)
         escolherImagemButton = findViewById(R.id.escolherImagemButton)
 
@@ -87,6 +93,18 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
         registerButton.setOnClickListener {
             createAccount()
+        }
+
+        textLogin.setOnClickListener {
+
+            startActivity(
+                Intent(
+                    this,
+                    LoginActivity::class.java
+                )
+            )
+
+            finish()
         }
     }
 
