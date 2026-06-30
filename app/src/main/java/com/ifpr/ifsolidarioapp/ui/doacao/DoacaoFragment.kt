@@ -20,8 +20,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 import com.ifpr.ifsolidarioapp.MainActivity
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
@@ -360,13 +364,58 @@ class DoacaoFragment : Fragment() {
     ) {
         val ref = database.child("usuarios").child(uid)
         ref.child("total_doacoes").get().addOnSuccessListener { snap ->
-            ref.child("total_doacoes").setValue(
+
+            val novoTotal =
                 (snap.getValue(Double::class.java) ?: 0.0) + quantidade
-            )
-            atualizarTotalCategoria(ref, categoria, quantidade, onFinish)
+
+            ref.child("total_doacoes")
+                .setValue(novoTotal)
+                .addOnSuccessListener {
+
+                    atualizarTotalInterface(quantidade)
+
+                    atualizarTotalCategoria(
+                        ref,
+                        categoria,
+                        quantidade,
+                        onFinish
+                    )
+                }
         }
     }
 
+    private fun atualizarTotalInterface(
+        quantidade: Double
+    ) {
+
+        val ref = database
+            .child("estatisticas")
+            .child("interface")
+            .child("total_doacoes")
+
+        ref.runTransaction(object : Transaction.Handler {
+
+            override fun doTransaction(
+                currentData: MutableData
+            ): Transaction.Result {
+
+                val totalAtual =
+                    currentData.getValue(Double::class.java) ?: 0.0
+
+                currentData.value =
+                    totalAtual + quantidade
+
+                return Transaction.success(currentData)
+            }
+
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+            }
+        })
+    }
     private fun atualizarTotalCategoria(
         ref: DatabaseReference, categoria: String, quantidade: Double,
         onFinish: (Int?, Int) -> Unit
