@@ -14,10 +14,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -351,7 +349,7 @@ class DoacaoFragment : Fragment() {
                                     snap.child("roupas").getValue(Int::class.java)               ?: 0,
                                     snap.child("brinquedos").getValue(Int::class.java)           ?: 0,
                                     snap.child("total_doacoes").getValue(Double::class.java)?.toInt() ?: 0
-                                ) { /* resultado ignorado — navegação já ocorreu */ }
+                                )
                             }
                     }
                 }
