@@ -13,4 +13,7 @@ data class Usuario(
     var total_doacoes: Int = 0,
     var tipo_usuario: String = "Doador",
 
+
+    var posicaoRanking: Int = 0
+
 )

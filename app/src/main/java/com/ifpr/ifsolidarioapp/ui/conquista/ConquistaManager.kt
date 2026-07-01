@@ -38,11 +38,11 @@ object ConquistasManager {
         listaConquistas.forEach { conquista ->
 
             val progresso = when (conquista.categoria) {
-                "ALIMENTO" -> alimentos
-                "ROUPA" -> roupas
+                "ALIMENTO"  -> alimentos
+                "ROUPA"     -> roupas
                 "BRINQUEDO" -> brinquedos
-                "TOTAL" -> total
-                else -> 0
+                "TOTAL"     -> total
+                else        -> 0
             }
 
             if (progresso >= conquista.meta) {
@@ -72,7 +72,6 @@ object ConquistasManager {
 
                             if (conquistasPendentes.add(conquista.key)) {
                                 filaConquistas.add(conquista)
-                                abriuConquistaNestaDoacao = true
                             }
 
                             verificacoesRestantes--
@@ -260,152 +259,44 @@ object ConquistasManager {
     private val listaConquistas = listOf(
 
         Conquista(
-            key = "primeira_doacao",
-            titulo = "Primeira Doação",
-            descricao = "Realizou sua primeira doação",
-            meta = 1,
-            categoria = "TOTAL",
-            insigniaHabilitada = R.drawable.ic_primeira_doacao_enabled,
+            key                 = "primeira_doacao",
+            titulo              = "Primeira Doação",
+            descricao           = "Realizou sua primeira doação",
+            meta                = 1,
+            categoria           = "TOTAL",
+            insigniaHabilitada  = R.drawable.ic_primeira_doacao_enabled,
             insigniaDesabilitada = R.drawable.ic_primeira_doacao_disabled,
-            lottieAnimation = "success_congrats"
+            lottieAnimation     = "success_congrats"
         ),
 
         // ALIMENTOS
-
-        Conquista(
-            key = "alimento_5",
-            titulo = "5 Alimentos",
-            descricao = "Doe 5 alimentos",
-            meta = 5,
-            categoria = "ALIMENTO",
-            insigniaHabilitada = R.drawable.ic_alimento_5_enabled,
-            insigniaDesabilitada = R.drawable.ic_alimento_5_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "alimento_10",
-            titulo = "10 Alimentos",
-            descricao = "Doe 10 alimentos",
-            meta = 10,
-            categoria = "ALIMENTO",
-            insigniaHabilitada = R.drawable.ic_alimento_10_enabled,
-            insigniaDesabilitada = R.drawable.ic_alimento_10_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "alimento_20",
-            titulo = "20 Alimentos",
-            descricao = "Doe 20 alimentos",
-            meta = 20,
-            categoria = "ALIMENTO",
-            insigniaHabilitada = R.drawable.ic_alimento_20_enabled,
-            insigniaDesabilitada = R.drawable.ic_alimento_20_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "alimento_40",
-            titulo = "40 Alimentos",
-            descricao = "Doe 40 alimentos",
-            meta = 40,
-            categoria = "ALIMENTO",
-            insigniaHabilitada = R.drawable.ic_alimento_40_enabled,
-            insigniaDesabilitada = R.drawable.ic_alimento_40_disabled,
-            lottieAnimation = "success_congrats"
-        ),
+        Conquista("alimento_5",  "5 Alimentos",  "Doe 5 alimentos",  5,  "ALIMENTO",
+            R.drawable.ic_alimento_5_enabled,  R.drawable.ic_alimento_5_disabled,  "success_congrats"),
+        Conquista("alimento_10", "10 Alimentos", "Doe 10 alimentos", 10, "ALIMENTO",
+            R.drawable.ic_alimento_10_enabled, R.drawable.ic_alimento_10_disabled, "success_congrats"),
+        Conquista("alimento_20", "20 Alimentos", "Doe 20 alimentos", 20, "ALIMENTO",
+            R.drawable.ic_alimento_20_enabled, R.drawable.ic_alimento_20_disabled, "success_congrats"),
+        Conquista("alimento_40", "40 Alimentos", "Doe 40 alimentos", 40, "ALIMENTO",
+            R.drawable.ic_alimento_40_enabled, R.drawable.ic_alimento_40_disabled, "success_congrats"),
 
         // BRINQUEDOS
-
-        Conquista(
-            key = "brinquedo_5",
-            titulo = "5 Brinquedos",
-            descricao = "Doe 5 brinquedos",
-            meta = 5,
-            categoria = "BRINQUEDO",
-            insigniaHabilitada = R.drawable.ic_brinquedo_5_enabled,
-            insigniaDesabilitada = R.drawable.ic_brinquedo_5_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "brinquedo_10",
-            titulo = "10 Brinquedos",
-            descricao = "Doe 10 brinquedos",
-            meta = 10,
-            categoria = "BRINQUEDO",
-            insigniaHabilitada = R.drawable.ic_brinquedo_10_enabled,
-            insigniaDesabilitada = R.drawable.ic_brinquedo_10_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "brinquedo_20",
-            titulo = "20 Brinquedos",
-            descricao = "Doe 20 brinquedos",
-            meta = 20,
-            categoria = "BRINQUEDO",
-            insigniaHabilitada = R.drawable.ic_brinquedo_20_enabled,
-            insigniaDesabilitada = R.drawable.ic_brinquedo_20_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "brinquedo_40",
-            titulo = "40 Brinquedos",
-            descricao = "Doe 40 brinquedos",
-            meta = 40,
-            categoria = "BRINQUEDO",
-            insigniaHabilitada = R.drawable.ic_brinquedo_40_enabled,
-            insigniaDesabilitada = R.drawable.ic_brinquedo_40_disabled,
-            lottieAnimation = "success_congrats"
-        ),
+        Conquista("brinquedo_5",  "5 Brinquedos",  "Doe 5 brinquedos",  5,  "BRINQUEDO",
+            R.drawable.ic_brinquedo_5_enabled,  R.drawable.ic_brinquedo_5_disabled,  "success_congrats"),
+        Conquista("brinquedo_10", "10 Brinquedos", "Doe 10 brinquedos", 10, "BRINQUEDO",
+            R.drawable.ic_brinquedo_10_enabled, R.drawable.ic_brinquedo_10_disabled, "success_congrats"),
+        Conquista("brinquedo_20", "20 Brinquedos", "Doe 20 brinquedos", 20, "BRINQUEDO",
+            R.drawable.ic_brinquedo_20_enabled, R.drawable.ic_brinquedo_20_disabled, "success_congrats"),
+        Conquista("brinquedo_40", "40 Brinquedos", "Doe 40 brinquedos", 40, "BRINQUEDO",
+            R.drawable.ic_brinquedo_40_enabled, R.drawable.ic_brinquedo_40_disabled, "success_congrats"),
 
         // ROUPAS
-
-        Conquista(
-            key = "roupa_5",
-            titulo = "5 Roupas",
-            descricao = "Doe 5 roupas",
-            meta = 5,
-            categoria = "ROUPA",
-            insigniaHabilitada = R.drawable.ic_roupa_5_enabled,
-            insigniaDesabilitada = R.drawable.ic_roupa_5_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "roupa_10",
-            titulo = "10 Roupas",
-            descricao = "Doe 10 roupas",
-            meta = 10,
-            categoria = "ROUPA",
-            insigniaHabilitada = R.drawable.ic_roupa_10_enabled,
-            insigniaDesabilitada = R.drawable.ic_roupa_10_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "roupa_20",
-            titulo = "20 Roupas",
-            descricao = "Doe 20 roupas",
-            meta = 20,
-            categoria = "ROUPA",
-            insigniaHabilitada = R.drawable.ic_roupa_20_enabled,
-            insigniaDesabilitada = R.drawable.ic_roupa_20_disabled,
-            lottieAnimation = "success_congrats"
-        ),
-
-        Conquista(
-            key = "roupa_40",
-            titulo = "40 Roupas",
-            descricao = "Doe 40 roupas",
-            meta = 40,
-            categoria = "ROUPA",
-            insigniaHabilitada = R.drawable.ic_roupa_40_enabled,
-            insigniaDesabilitada = R.drawable.ic_roupa_40_disabled,
-            lottieAnimation = "success_congrats"
-        )
+        Conquista("roupa_5",  "5 Roupas",  "Doe 5 roupas",  5,  "ROUPA",
+            R.drawable.ic_roupa_5_enabled,  R.drawable.ic_roupa_5_disabled,  "success_congrats"),
+        Conquista("roupa_10", "10 Roupas", "Doe 10 roupas", 10, "ROUPA",
+            R.drawable.ic_roupa_10_enabled, R.drawable.ic_roupa_10_disabled, "success_congrats"),
+        Conquista("roupa_20", "20 Roupas", "Doe 20 roupas", 20, "ROUPA",
+            R.drawable.ic_roupa_20_enabled, R.drawable.ic_roupa_20_disabled, "success_congrats"),
+        Conquista("roupa_40", "40 Roupas", "Doe 40 roupas", 40, "ROUPA",
+            R.drawable.ic_roupa_40_enabled, R.drawable.ic_roupa_40_disabled, "success_congrats")
     )
 }

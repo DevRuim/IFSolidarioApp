@@ -99,8 +99,8 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
             // Navegue para a proxima atividade
-            //val intent = Intent(applicationContext, MainActivity::class.java)
-            //startActivity(intent)
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
             this.finish()
         } else {
             Toast.makeText(

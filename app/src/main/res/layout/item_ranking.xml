@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardRanking"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@android:color/white"
+    android:paddingHorizontal="20dp">
+
+    <!-- Posição -->
+    <TextView
+        android:id="@+id/txtPosicao"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/bg_posicao_lista"
+        android:gravity="center"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="#7B2FBE"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Avatar circular -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgFoto"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="12dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_profile_comum"
+        app:shapeAppearanceOverlay="@style/CircleImageView"
+        app:strokeColor="#C49EE8"
+        app:strokeWidth="1.5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtPosicao"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="1dp" />
+
+    <!-- Nome + tag "Você" na mesma linha -->
+    <LinearLayout
+        android:id="@+id/layoutNome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/txtDoacoes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgFoto"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <TextView
+            android:id="@+id/txtNome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_bold"
+            android:maxLines="1"
+            android:textColor="#1A1A1A"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- Tag "Você" — visível só para o usuário logado -->
+        <TextView
+            android:id="@+id/tvVoce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_tag_voce"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:text="Você"
+            android:textColor="#7B2FBE"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- Badge de doações -->
+    <TextView
+        android:id="@+id/txtDoacoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/bg_badge_doacoes"
+        android:fontFamily="@font/poppins_regular"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp"
+        android:textColor="#7B2FBE"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/layoutNome"
+        app:layout_constraintTop_toBottomOf="@id/layoutNome" />
+
+    <!-- Medalha oculta (compatibilidade) -->
+    <ImageView
+        android:id="@+id/imgMedalha"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Divisor -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="68dp"
+        android:background="#F0E6FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

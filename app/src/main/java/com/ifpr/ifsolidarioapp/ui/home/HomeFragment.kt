@@ -24,6 +24,7 @@ import java.util.Locale
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import android.widget.FrameLayout
+import com.airbnb.lottie.LottieAnimationView
 
 data class CampanhaItem(
     val campanha: Campanha,
@@ -51,6 +52,19 @@ HomeFragment : Fragment() {
         val totalContainer =
             view.findViewById<FrameLayout>(R.id.totalDoacoesContainer)
 
+        val totalText =
+            view.findViewById<TextView>(R.id.textTotalDoacoes)
+
+        val loading =
+            view.findViewById<LottieAnimationView>(
+                R.id.loadingTotalDoacoes
+            )
+
+        val particles =
+            view.findViewById<LottieAnimationView>(
+                R.id.particlesAnimation
+            )
+
         scrollView.viewTreeObserver.addOnScrollChangedListener {
 
             val scrollY = scrollView.scrollY
@@ -65,13 +79,86 @@ HomeFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        contarTotalDoacoes(view)
+        FirebaseDatabase.getInstance()
+            .getReference("estatisticas")
+            .child("interface")
+            .child("total_doacoes")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
 
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    val total =
+                        snapshot.getValue(Double::class.java) ?: 0.0
+
+                    loading.visibility = View.GONE
+
+                    particles.visibility = View.VISIBLE
+                    particles.playAnimation()
+
+                    totalText.visibility = View.VISIBLE
+
+                    totalText.text = total.toInt().toString()
+
+                    totalText.alpha = 0f
+                    totalText.scaleX = 0.8f
+                    totalText.scaleY = 0.8f
+
+                    totalText.animate()
+                        .alpha(1f)
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(500)
+                        .start()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Erro ao carregar total",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+
+        //recalcularTotalInterface()
         carregarCampanhas(containerLayout)
 
         return view
     }
 
+    private fun recalcularTotalInterface() {
+
+        val usuariosRef = FirebaseDatabase.getInstance()
+            .getReference("usuarios")
+
+        val interfaceRef = FirebaseDatabase.getInstance()
+            .getReference("estatisticas")
+            .child("interface")
+            .child("total_doacoes")
+
+        usuariosRef.get()
+            .addOnSuccessListener { snapshot ->
+
+                var total = 0.0
+
+                for (usuario in snapshot.children) {
+
+                    val valor =
+                        usuario.child("total_doacoes")
+                            .getValue(Double::class.java) ?: 0.0
+
+                    total += valor
+                }
+
+                interfaceRef.setValue(total)
+
+                Toast.makeText(
+                    requireContext(),
+                    "Total recalculado: ${total.toInt()}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+    }
     private fun carregarCampanhas(container: LinearLayout) {
 
         val db = FirebaseDatabase.getInstance().reference
@@ -385,54 +472,5 @@ HomeFragment : Fragment() {
                     Toast.makeText(container.context, "Erro ao carregar", Toast.LENGTH_SHORT).show()
                 }
             })
-    }
-    private fun contarTotalDoacoes(view: View) {
-
-        val totalText =
-            view.findViewById<TextView>(R.id.textTotalDoacoes)
-
-        val ref = FirebaseDatabase.getInstance()
-            .getReference("doacoes")
-
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                var totalQuantidade = 0.0
-
-                for (usuarioSnapshot in snapshot.children) {
-                    for (doacaoSnapshot in usuarioSnapshot.children) {
-                        val valor =
-                            doacaoSnapshot.child("quantidade").value
-
-                        when (valor) {
-                            is Long -> {
-                                totalQuantidade += valor.toDouble()
-                            }
-
-                            is Double -> {
-                                totalQuantidade += valor
-                            }
-
-                            is Int -> {
-                                totalQuantidade += valor.toDouble()
-                            }
-                        }
-                    }
-                }
-
-                totalText.text =
-                    totalQuantidade.toInt().toString()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-                Toast.makeText(
-                    context,
-                    error.message,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        })
     }
 }

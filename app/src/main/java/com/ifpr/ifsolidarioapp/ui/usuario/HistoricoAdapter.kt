@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ifpr.ifsolidarioapp.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HistoricoAdapter(
     private val lista: List<HistoricoDoacao>
@@ -28,6 +31,9 @@ class HistoricoAdapter(
 
         val quantidade =
             view.findViewById<TextView>(R.id.txtQuantidade)
+
+        val data =
+            view.findViewById<TextView>(R.id.txtDataDoacao)
     }
 
     override fun onCreateViewHolder(
@@ -64,6 +70,19 @@ class HistoricoAdapter(
 
         holder.quantidade.text =
             "Quantidade: ${item.quantidade}"
+
+        val formato =
+            SimpleDateFormat(
+                "dd/MM/yyyy",
+                Locale("pt", "BR")
+            )
+
+        holder.data.text =
+            "Doado em: ${
+                formato.format(
+                    Date(item.dataDoacao)
+                )
+            }"
 
         if (item.imagens.isNotEmpty()) {
 
