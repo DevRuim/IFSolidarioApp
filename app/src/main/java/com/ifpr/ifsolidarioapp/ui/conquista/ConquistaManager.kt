@@ -13,7 +13,6 @@ object ConquistasManager {
     private var verificandoConquistas = false
     private val conquistasPendentes = mutableSetOf<String>()
     private var exibindoConquista = false
-    private var abriuConquistaNestaDoacao = false
 
 
     fun verificarConquistas(
@@ -24,9 +23,9 @@ object ConquistasManager {
         brinquedos: Int,
         total: Int
     ) {
-        abriuConquistaNestaDoacao = false
-
-        if (verificandoConquistas) return
+        if (verificandoConquistas) {
+            return
+        }
 
         verificandoConquistas = true
 
@@ -63,24 +62,22 @@ object ConquistasManager {
                                 verificacoesRestantes--
 
                                 if (verificacoesRestantes == 0) {
-                                    verificandoConquistas = false
-                                    exibirProximaConquista(context)
+                                    finalizarVerificacao(context)
                                 }
 
                                 return@desbloquearConquista
                             }
 
                             if (conquistasPendentes.add(conquista.key)) {
+
                                 filaConquistas.add(conquista)
+
                             }
 
                             verificacoesRestantes--
 
                             if (verificacoesRestantes == 0) {
-
-                                verificandoConquistas = false
-
-                                exibirProximaConquista(context)
+                                finalizarVerificacao(context)
                             }
                         }
 
@@ -89,10 +86,7 @@ object ConquistasManager {
                         verificacoesRestantes--
 
                         if (verificacoesRestantes == 0) {
-
-                            verificandoConquistas = false
-
-                            exibirProximaConquista(context)
+                            finalizarVerificacao(context)
                         }
                     }
                 }
@@ -102,13 +96,46 @@ object ConquistasManager {
                 verificacoesRestantes--
 
                 if (verificacoesRestantes == 0) {
-
-                    verificandoConquistas = false
-
-                    exibirProximaConquista(context)
+                    finalizarVerificacao(context)
                 }
             }
         }
+    }
+
+    private fun finalizarVerificacao(context: Context) {
+
+        verificandoConquistas = false
+
+        if (filaConquistas.isEmpty()) {
+
+            abrirRanking(context)
+
+        } else {
+
+            exibirProximaConquista(context)
+
+        }
+    }
+
+    private fun abrirRanking(context: Context) {
+
+        val intent = Intent(
+            context,
+            MainActivity::class.java
+        )
+
+        intent.putExtra(
+            "abrirRanking",
+            true
+        )
+
+        intent.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
+
+        context.startActivity(intent)
     }
 
     private fun exibirProximaConquista(
@@ -218,42 +245,36 @@ object ConquistasManager {
         context.startActivity(intent)
     }
 
-    fun conquistaFinalizada(
-        context: Context
-    ) {
+    fun conquistaFinalizada(context: Context) {
 
         exibindoConquista = false
 
-        if (filaConquistas.isEmpty()) {
+        if (filaConquistas.isNotEmpty()) {
 
-            verificandoConquistas = false
-
-            if (abriuConquistaNestaDoacao) {
-
-                val intent = Intent(
-                    context,
-                    MainActivity::class.java
-                )
-
-                intent.putExtra(
-                    "abrirConquistas",
-                    true
-                )
-
-                intent.addFlags(
-                    Intent.FLAG_ACTIVITY_NEW_TASK or
-                            Intent.FLAG_ACTIVITY_CLEAR_TOP
-                )
-
-                context.startActivity(intent)
-
-                abriuConquistaNestaDoacao = false
-            }
+            exibirProximaConquista(context)
 
             return
         }
 
-        exibirProximaConquista(context)
+        verificandoConquistas = false
+
+        val intent = Intent(
+            context,
+            MainActivity::class.java
+        )
+
+        intent.putExtra(
+            "abrirConquistas",
+            true
+        )
+
+        intent.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
+
+        context.startActivity(intent)
     }
 
     private val listaConquistas = listOf(

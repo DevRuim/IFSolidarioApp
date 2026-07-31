@@ -13,6 +13,7 @@ class ConquistaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConquistaBinding
     private val handler = Handler(Looper.getMainLooper())
+    private var terminou = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,27 +53,6 @@ class ConquistaActivity : AppCompatActivity() {
         }
 
         handler.postDelayed({
-            // Avisa o manager — se houver fila, ele abrirá a próxima conquista
-            ConquistasManager.conquistaFinalizada(this)
-
-            ConquistasManager
-                .conquistaFinalizada(this)
-
-            if (intent.getBooleanExtra(
-                    "abrirPerfilConquistas",
-                    false
-                )
-            ) {
-
-                val perfilIntent = Intent(this,MainActivity::class.java                )
-
-                perfilIntent.putExtra(
-                    "abrirConquistas",
-                    true
-                )
-
-                startActivity(perfilIntent)
-            }
 
             finish()
 
@@ -93,6 +73,12 @@ class ConquistaActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+
         handler.removeCallbacksAndMessages(null)
+
+        if (!terminou) {
+            terminou = true
+            ConquistasManager.conquistaFinalizada(applicationContext)
+        }
     }
 }

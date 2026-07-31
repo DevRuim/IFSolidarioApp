@@ -15,7 +15,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.ifpr.ifsolidarioapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
+    companion object {
+        var focarCardConquista = false
+    }
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         tratarIntentDeNavegacao(intent, navView)
     }
 
+
     /**
      * Chamado quando a MainActivity já existe em memória e recebe um novo
      * Intent via FLAG_ACTIVITY_SINGLE_TOP (vindo do ConquistaActivity).
@@ -47,13 +50,27 @@ class MainActivity : AppCompatActivity() {
         intent?.let { tratarIntentDeNavegacao(it, binding.navView) }
     }
 
-    private fun tratarIntentDeNavegacao(intent: Intent, navView: BottomNavigationView) {
+    private fun tratarIntentDeNavegacao(
+        intent: Intent,
+        navView: BottomNavigationView
+    ) {
+
         when {
-            intent.getBooleanExtra("abrirPerfil",  false) -> {
+
+            intent.getBooleanExtra("abrirConquistas", false) -> {
+
+                focarCardConquista = true
+
                 navView.selectedItemId = R.id.navigation_profile
+
+                intent.removeExtra("abrirConquistas")
             }
+
             intent.getBooleanExtra("abrirRanking", false) -> {
+
                 navView.selectedItemId = R.id.navigation_ranking
+
+                intent.removeExtra("abrirRanking")
             }
         }
     }

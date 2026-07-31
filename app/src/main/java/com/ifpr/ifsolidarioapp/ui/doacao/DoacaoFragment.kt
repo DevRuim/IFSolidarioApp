@@ -333,24 +333,20 @@ class DoacaoFragment : Fragment() {
             .addOnSuccessListener {
                 atualizarEstatisticasUsuario(uid, item.categoria, item.quantidade) { _, _ ->
                     atualizarQuantidadeCampanha(item.quantidade) {
-
-                        // Navega para o Ranking imediatamente, sem esperar conquistas.
-                        // Os lotties aparecem por cima do Ranking se alguma conquista
-                        // for desbloqueada (ConquistasManager abre a ConquistaActivity).
-                        irParaRankingAposDoacao()
-
-                        // Verifica conquistas em background — não bloqueia a navegação
                         database.child("usuarios").child(uid).get()
                             .addOnSuccessListener { snap ->
+
                                 ConquistasManager.verificarConquistas(
                                     requireContext(),
                                     uid,
-                                    snap.child("alimentos").getValue(Int::class.java)            ?: 0,
-                                    snap.child("roupas").getValue(Int::class.java)               ?: 0,
-                                    snap.child("brinquedos").getValue(Int::class.java)           ?: 0,
+                                    snap.child("alimentos").getValue(Int::class.java) ?: 0,
+                                    snap.child("roupas").getValue(Int::class.java) ?: 0,
+                                    snap.child("brinquedos").getValue(Int::class.java) ?: 0,
                                     snap.child("total_doacoes").getValue(Double::class.java)?.toInt() ?: 0
                                 )
+                                findNavController().popBackStack(R.id.navigation_home, false)
                             }
+
                     }
                 }
             }

@@ -17,6 +17,7 @@ import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.databinding.FragmentPerfilUsuarioBinding
 import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
 import androidx.navigation.fragment.findNavController
+import com.ifpr.ifsolidarioapp.MainActivity
 
 class PerfilUsuarioFragment : Fragment() {
 
@@ -426,19 +427,17 @@ class PerfilUsuarioFragment : Fragment() {
             R.drawable.ic_roupa_40_disabled
         )
 
-        val shouldFocus =
-            arguments?.getBoolean("FOCUS_CONQUISTAS") ?: false
-
-        if (shouldFocus) {
+        if (MainActivity.focarCardConquista) {
 
             binding.scrollView.post {
+
                 binding.scrollView.smoothScrollTo(
                     0,
                     binding.cardConquista.top
                 )
-            }
 
-            arguments?.remove("FOCUS_CONQUISTAS")
+                MainActivity.focarCardConquista = false
+            }
         }
     }
 
