@@ -141,7 +141,6 @@ object ConquistasManager {
     private fun exibirProximaConquista(
         context: Context
     ) {
-
         if (exibindoConquista) {
             return
         }
@@ -191,7 +190,6 @@ object ConquistasManager {
         callback: (Boolean) -> Unit
     ) {
 
-
         FirebaseDatabase.getInstance()
             .getReference("usuarios")
             .child(uid)
@@ -239,7 +237,9 @@ object ConquistasManager {
         )
 
         intent.addFlags(
-            Intent.FLAG_ACTIVITY_NEW_TASK
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
         )
 
         context.startActivity(intent)

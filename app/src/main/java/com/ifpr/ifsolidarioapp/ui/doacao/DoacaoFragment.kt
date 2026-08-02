@@ -327,13 +327,26 @@ class DoacaoFragment : Fragment() {
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun salvarNoBanco(item: DoacaoData) {
+
         val uid = auth.currentUser?.uid ?: return
 
-        database.child("doacoes").child(uid).push().setValue(item)
+        database.child("doacoes")
+            .child(uid)
+            .push()
+            .setValue(item)
             .addOnSuccessListener {
-                atualizarEstatisticasUsuario(uid, item.categoria, item.quantidade) { _, _ ->
+
+                atualizarEstatisticasUsuario(
+                    uid,
+                    item.categoria,
+                    item.quantidade
+                ) { _, _ ->
+
                     atualizarQuantidadeCampanha(item.quantidade) {
-                        database.child("usuarios").child(uid).get()
+
+                        database.child("usuarios")
+                            .child(uid)
+                            .get()
                             .addOnSuccessListener { snap ->
 
                                 ConquistasManager.verificarConquistas(
@@ -342,11 +355,11 @@ class DoacaoFragment : Fragment() {
                                     snap.child("alimentos").getValue(Int::class.java) ?: 0,
                                     snap.child("roupas").getValue(Int::class.java) ?: 0,
                                     snap.child("brinquedos").getValue(Int::class.java) ?: 0,
-                                    snap.child("total_doacoes").getValue(Double::class.java)?.toInt() ?: 0
+                                    snap.child("total_doacoes")
+                                        .getValue(Double::class.java)
+                                        ?.toInt() ?: 0
                                 )
-                                findNavController().popBackStack(R.id.navigation_home, false)
                             }
-
                     }
                 }
             }
