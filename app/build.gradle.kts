@@ -12,7 +12,7 @@ android {
         applicationId = "com.ifpr.ifsolidarioapp"
         minSdk = 24
         targetSdk = 35
-        versionCode = 5
+        versionCode = 6
         versionName = "São Francisco de Assis"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.jetbrains.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    implementation("com.airbnb.android:lottie:6.4.0")
+    implementation(libs.lottie)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
