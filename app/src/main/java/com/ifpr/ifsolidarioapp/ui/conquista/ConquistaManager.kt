@@ -3,22 +3,17 @@ package com.ifpr.ifsolidarioapp.ui.conquista
 import android.content.Context
 import android.content.Intent
 import com.google.firebase.database.FirebaseDatabase
+import com.ifpr.ifsolidarioapp.MainActivity
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Conquista
 
 object ConquistasManager {
 
-    private val filaConquistas       = mutableListOf<Conquista>()
-    private val conquistasPendentes  = mutableSetOf<String>()
+    private val filaConquistas = mutableListOf<Conquista>()
     private var verificandoConquistas = false
-    private var exibindoConquista     = false
-    private var desbloqueouNovaConquista = false
+    private val conquistasPendentes = mutableSetOf<String>()
+    private var exibindoConquista = false
 
-    // ── Nova função usada pela ConquistaActivity ──────────────────────────────
-    /** Retorna true se ainda há conquistas na fila esperando para ser exibidas */
-    fun temConquistasPendentes(): Boolean = filaConquistas.isNotEmpty()
-
-    // ─────────────────────────────────────────────────────────────────────────
 
     fun verificarConquistas(
         context: Context,
@@ -26,15 +21,16 @@ object ConquistasManager {
         alimentos: Int,
         roupas: Int,
         brinquedos: Int,
-        total: Int,
-        callback: (Boolean) -> Unit
+        total: Int
     ) {
-        if (verificandoConquistas) return
+        if (verificandoConquistas) {
+            return
+        }
+
         verificandoConquistas = true
 
         filaConquistas.clear()
         conquistasPendentes.clear()
-        desbloqueouNovaConquista = false
 
         var verificacoesRestantes = listaConquistas.size
 
@@ -50,96 +46,142 @@ object ConquistasManager {
 
             if (progresso >= conquista.meta) {
 
-                conquistaJaDesbloqueada(uid, conquista.key) { jaDesbloqueada ->
+                conquistaJaDesbloqueada(
+                    uid,
+                    conquista.key
+                ) { desbloqueada ->
 
-                    if (!jaDesbloqueada) {
+                    if (!desbloqueada) {
 
-                        desbloquearConquista(uid, conquista) { sucesso ->
+                        desbloquearConquista(
+                            uid,
+                            conquista
+                        ) { sucesso ->
 
-                            if (sucesso && conquistasPendentes.add(conquista.key)) {
-                                desbloqueouNovaConquista = true
+                            if (!sucesso) {
+                                verificacoesRestantes--
+
+                                if (verificacoesRestantes == 0) {
+                                    finalizarVerificacao(context)
+                                }
+
+                                return@desbloquearConquista
+                            }
+
+                            if (conquistasPendentes.add(conquista.key)) {
+
                                 filaConquistas.add(conquista)
+
                             }
 
                             verificacoesRestantes--
+
                             if (verificacoesRestantes == 0) {
-                                verificandoConquistas = false
-                                callback(desbloqueouNovaConquista)
-                                // Só começa a exibir após o callback —
-                                // assim o DoacaoFragment sabe se vai para
-                                // Ranking (sem conquista) antes da Activity abrir
-                                if (desbloqueouNovaConquista) {
-                                    exibirProximaConquista(context)
-                                }
+                                finalizarVerificacao(context)
                             }
                         }
 
                     } else {
+
                         verificacoesRestantes--
+
                         if (verificacoesRestantes == 0) {
-                            verificandoConquistas = false
-                            callback(desbloqueouNovaConquista)
+                            finalizarVerificacao(context)
                         }
                     }
                 }
 
             } else {
+
                 verificacoesRestantes--
+
                 if (verificacoesRestantes == 0) {
-                    verificandoConquistas = false
-                    callback(desbloqueouNovaConquista)
+                    finalizarVerificacao(context)
                 }
             }
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    private fun finalizarVerificacao(context: Context) {
 
-    fun conquistaFinalizada(context: Context) {
-        exibindoConquista = false
-        // Se há mais na fila, exibe a próxima
-        if (filaConquistas.isNotEmpty()) {
+        verificandoConquistas = false
+
+        if (filaConquistas.isEmpty()) {
+
+            abrirRanking(context)
+
+        } else {
+
             exibirProximaConquista(context)
+
         }
     }
 
-    private fun exibirProximaConquista(context: Context) {
-        if (exibindoConquista || filaConquistas.isEmpty()) return
-        exibindoConquista = true
+    private fun abrirRanking(context: Context) {
 
-        val conquista = filaConquistas.removeAt(0)
-        conquistasPendentes.remove(conquista.key)
-        mostrarConquista(context, conquista)
-    }
+        val intent = Intent(
+            context,
+            MainActivity::class.java
+        )
 
-    private fun mostrarConquista(context: Context, conquista: Conquista) {
-        val intent = Intent(context, ConquistaActivity::class.java).apply {
-            putExtra("mensagem",         "Parabéns, você conquistou ${conquista.titulo}!")
-            putExtra("lottieResName",    conquista.lottieAnimation)
-            putExtra("insigniaDrawable", conquista.insigniaHabilitada)
-            putExtra("tempoDuracao",     5000L)
-            // FLAG_ACTIVITY_NEW_TASK necessário pois o context pode ser
-            // de um Fragment/Application e não de uma Activity
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
+        intent.putExtra(
+            "abrirRanking",
+            true
+        )
+
+        intent.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
+
         context.startActivity(intent)
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    private fun exibirProximaConquista(
+        context: Context
+    ) {
+        if (exibindoConquista) {
+            return
+        }
+
+        if (filaConquistas.isEmpty()) {
+            return
+        }
+
+        exibindoConquista = true
+
+        val conquista =
+            filaConquistas.removeAt(0)
+
+        conquistasPendentes.remove(
+            conquista.key
+        )
+
+        mostrarConquista(
+            context,
+            conquista
+        )
+    }
 
     private fun conquistaJaDesbloqueada(
         uid: String,
         conquistaId: String,
         callback: (Boolean) -> Unit
     ) {
+
         FirebaseDatabase.getInstance()
             .getReference("usuarios")
             .child(uid)
             .child("conquistas_desbloqueadas")
             .child(conquistaId)
             .get()
-            .addOnSuccessListener { callback(it.exists()) }
-            .addOnFailureListener { callback(false) }
+            .addOnSuccessListener {
+                callback(it.exists())
+            }
+            .addOnFailureListener {
+                callback(false)
+            }
     }
 
     private fun desbloquearConquista(
@@ -147,19 +189,93 @@ object ConquistasManager {
         conquista: Conquista,
         callback: (Boolean) -> Unit
     ) {
+
         FirebaseDatabase.getInstance()
             .getReference("usuarios")
             .child(uid)
             .child("conquistas_desbloqueadas")
             .child(conquista.key)
             .setValue(true)
-            .addOnSuccessListener { callback(true) }
-            .addOnFailureListener { callback(false) }
+
+            .addOnSuccessListener {
+                callback(true)
+            }
+
+            .addOnFailureListener {
+                callback(false)
+            }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Lista de conquistas
-    // ─────────────────────────────────────────────────────────────────────────
+    private fun mostrarConquista(
+        context: Context,
+        conquista: Conquista
+    ) {
+
+        val intent = Intent(
+            context,
+            ConquistaActivity::class.java
+        )
+
+        intent.putExtra(
+            "mensagem",
+            "Parabéns, você conquistou ${conquista.titulo}!"
+        )
+
+        intent.putExtra(
+            "lottieResName",
+            conquista.lottieAnimation
+        )
+
+        intent.putExtra(
+            "insigniaDrawable",
+            conquista.insigniaHabilitada
+        )
+
+        intent.putExtra(
+            "tempoDuracao",
+            5000L
+        )
+
+        intent.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+        )
+
+        context.startActivity(intent)
+    }
+
+    fun conquistaFinalizada(context: Context) {
+
+        exibindoConquista = false
+
+        if (filaConquistas.isNotEmpty()) {
+
+            exibirProximaConquista(context)
+
+            return
+        }
+
+        verificandoConquistas = false
+
+        val intent = Intent(
+            context,
+            MainActivity::class.java
+        )
+
+        intent.putExtra(
+            "abrirConquistas",
+            true
+        )
+
+        intent.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
+
+        context.startActivity(intent)
+    }
 
     private val listaConquistas = listOf(
 

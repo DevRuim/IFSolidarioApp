@@ -14,13 +14,19 @@ import androidx.navigation.ui.setupWithNavController
 import com.ifpr.ifsolidarioapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
+    companion object {
+        var focarCardConquista = false
+    }
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
+
         FirebaseApp.initializeApp(this)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
@@ -33,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         tratarIntentDeNavegacao(intent, navView)
     }
 
+
     /**
      * Chamado quando a MainActivity já existe em memória e recebe um novo
      * Intent via FLAG_ACTIVITY_SINGLE_TOP (vindo do ConquistaActivity).
@@ -42,13 +49,27 @@ class MainActivity : AppCompatActivity() {
         intent?.let { tratarIntentDeNavegacao(it, binding.navView) }
     }
 
-    private fun tratarIntentDeNavegacao(intent: Intent, navView: BottomNavigationView) {
+    private fun tratarIntentDeNavegacao(
+        intent: Intent,
+        navView: BottomNavigationView
+    ) {
+
         when {
-            intent.getBooleanExtra("abrirPerfil",  false) -> {
+
+            intent.getBooleanExtra("abrirConquistas", false) -> {
+
+                focarCardConquista = true
+
                 navView.selectedItemId = R.id.navigation_profile
+
+                intent.removeExtra("abrirConquistas")
             }
+
             intent.getBooleanExtra("abrirRanking", false) -> {
+
                 navView.selectedItemId = R.id.navigation_ranking
+
+                intent.removeExtra("abrirRanking")
             }
         }
     }
@@ -63,8 +84,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun carregarTipoUsuario(navView: BottomNavigationView) {
+
         val user = FirebaseAuth.getInstance().currentUser
+
         if (user == null) {
+
             configurarMenu(navView.menu, "VISITANTE")
             return
         }
@@ -77,6 +101,7 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { snap ->
                 if (snap.exists()) {
                     configurarMenu(navView.menu, "Doador")
+
                 } else {
                     ongsRef.get().addOnSuccessListener { ongSnap ->
                         configurarMenu(navView.menu, if (ongSnap.exists()) "ONG" else "VISITANTE")
@@ -84,6 +109,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener {
+
                 configurarMenu(navView.menu, "VISITANTE")
                 Toast.makeText(this, "Erro ao carregar usuário", Toast.LENGTH_SHORT).show()
             }

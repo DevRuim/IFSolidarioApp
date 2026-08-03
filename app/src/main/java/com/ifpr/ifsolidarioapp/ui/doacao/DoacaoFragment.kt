@@ -14,14 +14,16 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 import com.ifpr.ifsolidarioapp.MainActivity
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
@@ -325,29 +327,38 @@ class DoacaoFragment : Fragment() {
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun salvarNoBanco(item: DoacaoData) {
+
         val uid = auth.currentUser?.uid ?: return
 
-        database.child("doacoes").child(uid).push().setValue(item)
+        database.child("doacoes")
+            .child(uid)
+            .push()
+            .setValue(item)
             .addOnSuccessListener {
-                atualizarEstatisticasUsuario(uid, item.categoria, item.quantidade) { _, _ ->
+
+                atualizarEstatisticasUsuario(
+                    uid,
+                    item.categoria,
+                    item.quantidade
+                ) { _, _ ->
+
                     atualizarQuantidadeCampanha(item.quantidade) {
 
-                        // Navega para o Ranking imediatamente, sem esperar conquistas.
-                        // Os lotties aparecem por cima do Ranking se alguma conquista
-                        // for desbloqueada (ConquistasManager abre a ConquistaActivity).
-                        irParaRankingAposDoacao()
-
-                        // Verifica conquistas em background — não bloqueia a navegação
-                        database.child("usuarios").child(uid).get()
+                        database.child("usuarios")
+                            .child(uid)
+                            .get()
                             .addOnSuccessListener { snap ->
+
                                 ConquistasManager.verificarConquistas(
                                     requireContext(),
                                     uid,
-                                    snap.child("alimentos").getValue(Int::class.java)            ?: 0,
-                                    snap.child("roupas").getValue(Int::class.java)               ?: 0,
-                                    snap.child("brinquedos").getValue(Int::class.java)           ?: 0,
-                                    snap.child("total_doacoes").getValue(Double::class.java)?.toInt() ?: 0
-                                ) { /* resultado ignorado — navegação já ocorreu */ }
+                                    snap.child("alimentos").getValue(Int::class.java) ?: 0,
+                                    snap.child("roupas").getValue(Int::class.java) ?: 0,
+                                    snap.child("brinquedos").getValue(Int::class.java) ?: 0,
+                                    snap.child("total_doacoes")
+                                        .getValue(Double::class.java)
+                                        ?.toInt() ?: 0
+                                )
                             }
                     }
                 }
@@ -360,13 +371,58 @@ class DoacaoFragment : Fragment() {
     ) {
         val ref = database.child("usuarios").child(uid)
         ref.child("total_doacoes").get().addOnSuccessListener { snap ->
-            ref.child("total_doacoes").setValue(
+
+            val novoTotal =
                 (snap.getValue(Double::class.java) ?: 0.0) + quantidade
-            )
-            atualizarTotalCategoria(ref, categoria, quantidade, onFinish)
+
+            ref.child("total_doacoes")
+                .setValue(novoTotal)
+                .addOnSuccessListener {
+
+                    atualizarTotalInterface(quantidade)
+
+                    atualizarTotalCategoria(
+                        ref,
+                        categoria,
+                        quantidade,
+                        onFinish
+                    )
+                }
         }
     }
 
+    private fun atualizarTotalInterface(
+        quantidade: Double
+    ) {
+
+        val ref = database
+            .child("estatisticas")
+            .child("interface")
+            .child("total_doacoes")
+
+        ref.runTransaction(object : Transaction.Handler {
+
+            override fun doTransaction(
+                currentData: MutableData
+            ): Transaction.Result {
+
+                val totalAtual =
+                    currentData.getValue(Double::class.java) ?: 0.0
+
+                currentData.value =
+                    totalAtual + quantidade
+
+                return Transaction.success(currentData)
+            }
+
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+            }
+        })
+    }
     private fun atualizarTotalCategoria(
         ref: DatabaseReference, categoria: String, quantidade: Double,
         onFinish: (Int?, Int) -> Unit

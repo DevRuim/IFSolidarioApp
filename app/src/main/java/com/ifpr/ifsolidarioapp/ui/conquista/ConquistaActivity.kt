@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.ifpr.ifsolidarioapp.MainActivity
 import com.ifpr.ifsolidarioapp.R
@@ -13,9 +14,11 @@ class ConquistaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConquistaBinding
     private val handler = Handler(Looper.getMainLooper())
+    private var terminou = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityConquistaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -51,14 +54,8 @@ class ConquistaActivity : AppCompatActivity() {
         }
 
         handler.postDelayed({
-            // Avisa o manager — se houver fila, ele abrirá a próxima conquista
-            ConquistasManager.conquistaFinalizada(this)
 
-            // Se não há mais conquistas na fila, volta para a MainActivity no Ranking
-            if (!ConquistasManager.temConquistasPendentes()) {
-                navegarParaRanking()
-            }
-            // Se há mais conquistas, o Manager abrirá a próxima via Intent (onNewIntent)
+            finish()
 
         }, tempoDuracao)
     }
@@ -77,6 +74,12 @@ class ConquistaActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+
         handler.removeCallbacksAndMessages(null)
+
+        if (!terminou) {
+            terminou = true
+            ConquistasManager.conquistaFinalizada(applicationContext)
+        }
     }
 }

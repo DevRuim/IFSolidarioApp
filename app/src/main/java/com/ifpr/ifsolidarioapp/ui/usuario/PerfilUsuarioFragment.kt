@@ -17,6 +17,7 @@ import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.databinding.FragmentPerfilUsuarioBinding
 import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
 import androidx.navigation.fragment.findNavController
+import com.ifpr.ifsolidarioapp.MainActivity
 
 class PerfilUsuarioFragment : Fragment() {
 
@@ -122,7 +123,7 @@ class PerfilUsuarioFragment : Fragment() {
             if (usuarioSnapshot.exists()) {
 
                 b.cardInfoUsuario.visibility = View.VISIBLE
-                b.cardConquistas.visibility = View.VISIBLE
+                b.cardConquista.visibility = View.VISIBLE
                 b.cardOpcoesUsuario.visibility = View.VISIBLE
 
                 b.cardInfoOng.visibility = View.GONE
@@ -140,7 +141,7 @@ class PerfilUsuarioFragment : Fragment() {
                         if (ongSnapshot.exists()) {
 
                             b2.cardInfoUsuario.visibility = View.GONE
-                            b2.cardConquistas.visibility = View.GONE
+                            b2.cardConquista.visibility = View.GONE
                             b2.cardOpcoesUsuario.visibility = View.GONE
 
                             b2.cardInfoOng.visibility = View.VISIBLE
@@ -339,6 +340,7 @@ class PerfilUsuarioFragment : Fragment() {
         binding.textViewEmailOng.text = email
         binding.textViewTelefoneOng.text = telefone
         binding.textViewCNPJ.text = cnpj
+
     }
 
     private fun carregarConquistas(
@@ -424,6 +426,19 @@ class PerfilUsuarioFragment : Fragment() {
             R.drawable.ic_roupa_40_enabled,
             R.drawable.ic_roupa_40_disabled
         )
+
+        if (MainActivity.focarCardConquista) {
+
+            binding.scrollView.post {
+
+                binding.scrollView.smoothScrollTo(
+                    0,
+                    binding.cardConquista.top
+                )
+
+                MainActivity.focarCardConquista = false
+            }
+        }
     }
 
     private fun habilitarPrimeiraConquista(total: Int) {
