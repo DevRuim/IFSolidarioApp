@@ -17,8 +17,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Usuario
+import android.widget.FrameLayout
 
 class RankingFragment : Fragment() {
+
+    //Loading
+    private lateinit var loadingRanking: FrameLayout
+    private lateinit var conteudoRanking: LinearLayout
 
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: RankingAdapter
@@ -61,6 +66,13 @@ class RankingFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.ranking_fragment, container, false)
 
+        //Loading
+        loadingRanking = view.findViewById(R.id.loadingRanking)
+        conteudoRanking = view.findViewById(R.id.conteudoRanking)
+
+        loadingRanking.visibility = View.VISIBLE
+        conteudoRanking.visibility = View.INVISIBLE
+
         // RecyclerView
         recycler = view.findViewById(R.id.recyclerRanking)
         recycler.layoutManager = LinearLayoutManager(requireContext())
@@ -95,6 +107,26 @@ class RankingFragment : Fragment() {
 
     // ─────────────────────────────────────────────────────────────────────────
 
+    private fun esconderLoading() {
+
+        loadingRanking.animate()
+            .alpha(0f)
+            .setDuration(300)
+            .withEndAction {
+
+                loadingRanking.visibility = View.GONE
+
+                conteudoRanking.alpha = 0f
+                conteudoRanking.visibility = View.VISIBLE
+
+                conteudoRanking.animate()
+                    .alpha(1f)
+                    .setDuration(300)
+                    .start()
+            }
+            .start()
+    }
+
     private fun carregarRanking() {
         FirebaseDatabase.getInstance()
             .getReference("usuarios")
@@ -120,9 +152,14 @@ class RankingFragment : Fragment() {
                     atualizarPodio(usuarioLogado)
                     montarLista(usuarioLogado)
                     mostrarCardSuaPosicao(usuarioLogado)
+
+                    esconderLoading()
                 }
 
-                override fun onCancelled(error: DatabaseError) {}
+                override fun onCancelled(error: DatabaseError) {
+                    loadingRanking.visibility = View.GONE
+                    conteudoRanking.visibility = View.VISIBLE
+                }
             })
     }
 
