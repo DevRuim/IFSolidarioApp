@@ -35,6 +35,12 @@ class
 HomeFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
 
+    private var totalCarregado = false
+    private var campanhasCarregadas = false
+
+    private lateinit var loadingHome: FrameLayout
+    private lateinit var scrollView: ScrollView
+
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,8 +52,14 @@ HomeFragment : Fragment() {
 
         val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
 
-        val scrollView =
-            view.findViewById<ScrollView>(R.id.scrollView)
+        scrollView =
+            view.findViewById(R.id.scrollView)
+
+        loadingHome =
+            view.findViewById<FrameLayout>(R.id.loadingHome)
+
+        loadingHome.visibility = View.VISIBLE
+        scrollView.visibility = View.INVISIBLE
 
         val totalContainer =
             view.findViewById<FrameLayout>(R.id.totalDoacoesContainer)
@@ -109,9 +121,15 @@ HomeFragment : Fragment() {
                         .scaleY(1f)
                         .setDuration(500)
                         .start()
+
+                    totalCarregado = true
+                    verificarFimLoading()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
+                    campanhasCarregadas = true
+                    totalCarregado = true
+                    esconderLoading()
                     Toast.makeText(
                         requireContext(),
                         "Erro ao carregar total",
@@ -124,6 +142,34 @@ HomeFragment : Fragment() {
         carregarCampanhas(containerLayout)
 
         return view
+    }
+
+
+    private fun verificarFimLoading() {
+
+        if (totalCarregado && campanhasCarregadas) {
+            esconderLoading()
+        }
+    }
+
+    private fun esconderLoading() {
+
+        loadingHome.animate()
+            .alpha(0f)
+            .setDuration(300)
+            .withEndAction {
+
+                loadingHome.visibility = View.GONE
+
+                scrollView.alpha = 0f
+                scrollView.visibility = View.VISIBLE
+
+                scrollView.animate()
+                    .alpha(1f)
+                    .setDuration(300)
+                    .start()
+            }
+            .start()
     }
 
     private fun recalcularTotalInterface() {
@@ -407,6 +453,9 @@ HomeFragment : Fragment() {
 
                         container.addView(itemView)
                     }
+
+                    campanhasCarregadas = true
+                    verificarFimLoading()
                 }
 
                 private fun obterUnidade(categoria: String): String {
@@ -470,6 +519,7 @@ HomeFragment : Fragment() {
 
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(container.context, "Erro ao carregar", Toast.LENGTH_SHORT).show()
+                    esconderLoading()
                 }
             })
     }
