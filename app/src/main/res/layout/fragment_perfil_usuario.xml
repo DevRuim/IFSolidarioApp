@@ -8,897 +8,907 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.usuario.PerfilUsuarioFragment">
 
-
-    <ScrollView
-        android:id="@+id/scrollView"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="190dp"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <FrameLayout
-                    android:layout_width="125dp"
-                    android:layout_height="125dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/imageViewFoto"
+                    <FrameLayout
                         android:layout_width="125dp"
-                        android:layout_height="125dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_profile_white"
-                        app:shapeAppearanceOverlay="@style/CircleImageView"/>
+                        android:layout_height="125dp">
 
 
-                </FrameLayout>
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/imageViewFoto"
+                            android:layout_width="125dp"
+                            android:layout_height="125dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_profile_white"
+                            app:shapeAppearanceOverlay="@style/CircleImageView"/>
 
-                <TextView
-                    android:id="@+id/textViewName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="Nome Usuario"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
 
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#EFEFEF"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <LinearLayout
-                    android:id="@+id/cardOpcoesUsuario"
-                    android:layout_width="match_parent"
-                    android:layout_height="194dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/bg_rounded_white"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/buttonEditarPerfilUsuario"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_edit_profile" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:textStyle="bold"
-                            android:gravity="center_vertical"
-                            android:text="Editar perfil"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/buttonHistoricoDoacao"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/ic_historical" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="2dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:textStyle="bold"
-                            android:gravity="center_vertical"
-                            android:text="Histórico de Doações"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/buttonSairUsuario"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_exit" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:textStyle="bold"
-                            android:gravity="center_vertical"
-                            android:text="Sair"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/cardOpcoesOng"
-                    android:layout_width="match_parent"
-                    android:layout_height="128dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/bg_rounded_white"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/buttonEditarPerfilOng"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_edit_profile" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Editar perfil"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/buttonSairOng"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="15dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_exit" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Sair"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@drawable/ic_arrow_right_black" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/cardInfoUsuario"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/bg_card_white_rounded"
-                    android:elevation="4dp"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <!-- ── Cabeçalho: Informações do Doador ── -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="4dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="10dp"
-                            android:background="@drawable/bg_accent_bar" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="Informações do Doador"
-                            android:textColor="#333333"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="14dp"
-                        android:background="#F0E6FF" />
-
-                    <!-- Email -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="10dp">
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="Email: "
-                            android:textColor="#333333"
-                            android:textSize="13sp"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:id="@+id/textViewEmail"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/poppins_regular"
-                            android:maxLines="1"
-                            android:textColor="#1A1A1A"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-
-                    <!-- Telefone -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="Telefone: "
-                            android:textColor="#333333"
-                            android:textSize="13sp"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:id="@+id/textViewTelefone"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:textColor="#1A1A1A"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-
-                    <!-- ── Divider + título Doações ── -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="14dp"
-                        android:background="#F0E6FF" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="14dp">
-
-                        <View
-                            android:layout_width="4dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="10dp"
-                            android:background="@drawable/bg_accent_bar" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="Minhas Doações"
-                            android:textColor="#333333"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <!-- Badge total -->
-                        <TextView
-                            android:id="@+id/textViewTotal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_badge_total"
-                            android:fontFamily="@font/poppins_bold"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"
-                            android:textColor="#FFFFFF"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- ── Alimentos ── -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="14dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="5dp">
-
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/poppins_bold"
-                                android:text="Alimentos"
-                                android:textColor="#333333"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                            <!-- "X / próxima meta" -->
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/textViewAlimentos"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_bold"
-                                    android:textColor="#7B2FBE"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/textViewAlimentosMeta"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_regular"
-                                    android:textColor="#9BA3B5"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <!-- Barra de progresso alimentos -->
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:background="@drawable/bg_progress_track">
-
-                            <View
-                                android:id="@+id/progressAlimentos"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/progress_bar_custom" />
-                        </FrameLayout>
-                    </LinearLayout>
-
-                    <!-- ── Brinquedos ── -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="14dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="5dp">
-
-
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/poppins_bold"
-                                android:text="Brinquedos"
-                                android:textColor="#333333"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/textViewBrinquedos"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_bold"
-                                    android:textColor="#7B2FBE"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/textViewBrinquedosMeta"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_regular"
-                                    android:textColor="#9BA3B5"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <!-- Barra de progresso brinquedos -->
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:background="@drawable/bg_progress_track">
-
-                            <View
-                                android:id="@+id/progressBrinquedos"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/progress_bar_custom" />
-                        </FrameLayout>
-                    </LinearLayout>
-
-                    <!-- ── Roupas ── -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="5dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/poppins_bold"
-                                android:text="Roupas"
-                                android:textColor="#333333"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/textViewRoupas"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_bold"
-                                    android:textColor="#7B2FBE"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/textViewRoupasMeta"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_regular"
-                                    android:textColor="#9BA3B5"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <!-- Barra de progresso roupas -->
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:background="@drawable/bg_progress_track">
-
-                            <View
-                                android:id="@+id/progressRoupas"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/progress_bar_custom" />
-                        </FrameLayout>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/cardInfoOng"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/bg_rounded_white"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    </FrameLayout>
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:gravity="center_horizontal"
-                        android:text="Informações da ONG"
-                        android:textColor="#2A2A2A"
-                        android:textSize="22sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Email:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewEmailOng"
-                            android:layout_width="match_parent"
-                            android:layout_height="41dp"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="Telefone:"
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewTelefoneOng"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text="CNPJ: "
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textViewCNPJ"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
-                            android:text=""
-                            android:textColor="#2A2A2A"
-                            android:textSize="18sp" />
-
-                    </LinearLayout>
+                        android:id="@+id/textViewName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="Nome Usuario"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
+
                 <LinearLayout
-                    android:id="@+id/cardConquista"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="50dp"
-                    android:background="@drawable/bg_rounded_white"
+                    android:layout_height="match_parent"
+                    android:background="#EFEFEF"
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/cardOpcoesUsuario"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textStyle="bold"
-                        android:gravity="center_horizontal"
-                        android:text="Primeira Doação"
-                        android:textColor="#333333"
-                        android:textSize="22sp" />
+                        android:layout_height="194dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_rounded_white"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/buttonEditarPerfilUsuario"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="15dp">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_edit_profile" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"
+                                android:text="Editar perfil"
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_arrow_right_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/buttonHistoricoDoacao"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="15dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:src="@drawable/ic_historical" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="2dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"
+                                android:text="Histórico de Doações"
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_arrow_right_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/buttonSairUsuario"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="15dp">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_exit" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"
+                                android:text="Sair"
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_arrow_right_black" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cardOpcoesOng"
+                        android:layout_width="match_parent"
+                        android:layout_height="128dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_rounded_white"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/buttonEditarPerfilOng"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="15dp">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_edit_profile" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_regular"
+                                android:gravity="center_vertical"
+                                android:text="Editar perfil"
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_arrow_right_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/buttonSairOng"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="15dp">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_exit" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_regular"
+                                android:gravity="center_vertical"
+                                android:text="Sair"
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_arrow_right_black" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cardInfoUsuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_card_white_rounded"
+                        android:elevation="4dp"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <!-- ── Cabeçalho: Informações do Doador ── -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="4dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="10dp"
+                                android:background="@drawable/bg_accent_bar" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:text="Informações do Doador"
+                                android:textColor="#333333"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <!-- Divider -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="14dp"
+                            android:background="#F0E6FF" />
+
+                        <!-- Email -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="10dp">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_bold"
+                                android:text="Email: "
+                                android:textColor="#333333"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/textViewEmail"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/poppins_regular"
+                                android:maxLines="1"
+                                android:textColor="#1A1A1A"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <!-- Telefone -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_bold"
+                                android:text="Telefone: "
+                                android:textColor="#333333"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/textViewTelefone"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textColor="#1A1A1A"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <!-- ── Divider + título Doações ── -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="14dp"
+                            android:background="#F0E6FF" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="14dp">
+
+                            <View
+                                android:layout_width="4dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="10dp"
+                                android:background="@drawable/bg_accent_bar" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins_regular"
+                                android:text="Minhas Doações"
+                                android:textColor="#333333"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <!-- Badge total -->
+                            <TextView
+                                android:id="@+id/textViewTotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_badge_total"
+                                android:fontFamily="@font/poppins_bold"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:textColor="#FFFFFF"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- ── Alimentos ── -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="5dp">
+
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:text="Alimentos"
+                                    android:textColor="#333333"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <!-- "X / próxima meta" -->
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/textViewAlimentos"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/poppins_bold"
+                                        android:textColor="#7B2FBE"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/textViewAlimentosMeta"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/poppins_regular"
+                                        android:textColor="#9BA3B5"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Barra de progresso alimentos -->
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="8dp"
+                                android:background="@drawable/bg_progress_track">
+
+                                <View
+                                    android:id="@+id/progressAlimentos"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/progress_bar_custom" />
+                            </FrameLayout>
+                        </LinearLayout>
+
+                        <!-- ── Brinquedos ── -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="5dp">
+
+
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:text="Brinquedos"
+                                    android:textColor="#333333"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/textViewBrinquedos"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/poppins_bold"
+                                        android:textColor="#7B2FBE"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/textViewBrinquedosMeta"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/poppins_regular"
+                                        android:textColor="#9BA3B5"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Barra de progresso brinquedos -->
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="8dp"
+                                android:background="@drawable/bg_progress_track">
+
+                                <View
+                                    android:id="@+id/progressBrinquedos"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/progress_bar_custom" />
+                            </FrameLayout>
+                        </LinearLayout>
+
+                        <!-- ── Roupas ── -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="5dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:text="Roupas"
+                                    android:textColor="#333333"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/textViewRoupas"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/poppins_bold"
+                                        android:textColor="#7B2FBE"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/textViewRoupasMeta"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/poppins_regular"
+                                        android:textColor="#9BA3B5"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Barra de progresso roupas -->
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="8dp"
+                                android:background="@drawable/bg_progress_track">
+
+                                <View
+                                    android:id="@+id/progressRoupas"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/progress_bar_custom" />
+                            </FrameLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cardInfoOng"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_rounded_white"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_horizontal"
+                            android:text="Informações da ONG"
+                            android:textColor="#2A2A2A"
+                            android:textSize="22sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="15dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/poppins_regular"
+                                android:gravity="center_vertical"
+                                android:text="Email:"
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textViewEmailOng"
+                                android:layout_width="match_parent"
+                                android:layout_height="41dp"
+                                android:layout_marginStart="10dp"
+                                android:fontFamily="@font/poppins_regular"
+                                android:gravity="center_vertical"
+                                android:text=""
+                                android:textColor="#2A2A2A"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="15dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/poppins_regular"
+                                android:gravity="center_vertical"
+                                android:text="Telefone:"
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textViewTelefoneOng"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:fontFamily="@font/poppins_regular"
+                                android:gravity="center_vertical"
+                                android:text=""
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="15dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/poppins_regular"
+                                android:gravity="center_vertical"
+                                android:text="CNPJ: "
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textViewCNPJ"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:fontFamily="@font/poppins_regular"
+                                android:gravity="center_vertical"
+                                android:text=""
+                                android:textColor="#2A2A2A"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cardConquista"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="50dp"
+                        android:background="@drawable/bg_rounded_white"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textStyle="bold"
+                            android:gravity="center_horizontal"
+                            android:text="Primeira Doação"
+                            android:textColor="#333333"
+                            android:textSize="22sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:orientation="vertical"
+                                android:layout_marginTop="5dp">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewIconPrimeiraConquista"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_primeira_doacao_disabled" />
+
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textStyle="bold"
+                            android:gravity="center_horizontal"
+                            android:text="Doação de Alimentos"
+                            android:textColor="#333333"
+                            android:textSize="22sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
                             android:layout_marginTop="5dp">
 
-                            <FrameLayout
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:orientation="horizontal"
                                 android:gravity="center">
 
                                 <ImageView
-                                    android:id="@+id/imageViewIconPrimeiraConquista"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_primeira_doacao_disabled" />
+                                    android:id="@+id/imageViewIconAlimento5"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_alimento_5_disabled" />
 
-                            </FrameLayout>
+                                <ImageView
+                                    android:id="@+id/imageViewIconAlimento10"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_alimento_10_disabled" />
 
-                        </LinearLayout>
+                                <ImageView
+                                    android:id="@+id/imageViewIconAlimento20"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_alimento_20_disabled" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textStyle="bold"
-                        android:gravity="center_horizontal"
-                        android:text="Doação de Alimentos"
-                        android:textColor="#333333"
-                        android:textSize="22sp" />
+                                <ImageView
+                                    android:id="@+id/imageViewIconAlimento40"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_alimento_40_disabled" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="5dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:id="@+id/imageViewIconAlimento5"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_alimento_5_disabled" />
-
-                            <ImageView
-                                android:id="@+id/imageViewIconAlimento10"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_alimento_10_disabled" />
-
-                            <ImageView
-                                android:id="@+id/imageViewIconAlimento20"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_alimento_20_disabled" />
-
-                            <ImageView
-                                android:id="@+id/imageViewIconAlimento40"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_alimento_40_disabled" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textStyle="bold"
-                        android:gravity="center_horizontal"
-                        android:text="Doação de Brinquedos"
-                        android:textColor="#333333"
-                        android:textSize="22sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textStyle="bold"
+                            android:gravity="center_horizontal"
+                            android:text="Doação de Brinquedos"
+                            android:textColor="#333333"
+                            android:textSize="22sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="80dp"
                             android:orientation="horizontal"
-                            android:gravity="center">
+                            android:layout_marginTop="5dp">
 
-                            <ImageView
-                                android:id="@+id/imageViewIconBrinquedo5"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_brinquedo_5_disabled" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center">
 
-                            <ImageView
-                                android:id="@+id/imageViewIconBrinquedo10"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_brinquedo_10_disabled" />
+                                <ImageView
+                                    android:id="@+id/imageViewIconBrinquedo5"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_brinquedo_5_disabled" />
 
-                            <ImageView
-                                android:id="@+id/imageViewIconBrinquedo20"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_brinquedo_20_disabled" />
+                                <ImageView
+                                    android:id="@+id/imageViewIconBrinquedo10"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_brinquedo_10_disabled" />
 
-                            <ImageView
-                                android:id="@+id/imageViewIconBrinquedo40"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_brinquedo_40_disabled" />
+                                <ImageView
+                                    android:id="@+id/imageViewIconBrinquedo20"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_brinquedo_20_disabled" />
+
+                                <ImageView
+                                    android:id="@+id/imageViewIconBrinquedo40"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_brinquedo_40_disabled" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textStyle="bold"
-                        android:gravity="center_horizontal"
-                        android:text="Doação de Roupas"
-                        android:textColor="#333333"
-                        android:textSize="22sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textStyle="bold"
+                            android:gravity="center_horizontal"
+                            android:text="Doação de Roupas"
+                            android:textColor="#333333"
+                            android:textSize="22sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="80dp"
                             android:orientation="horizontal"
-                            android:gravity="center">
+                            android:layout_marginTop="5dp">
 
-                            <ImageView
-                                android:id="@+id/imageViewIconRoupa5"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_roupa_5_disabled" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center">
 
-                            <ImageView
-                                android:id="@+id/imageViewIconRoupa10"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_roupa_10_disabled" />
+                                <ImageView
+                                    android:id="@+id/imageViewIconRoupa5"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_roupa_5_disabled" />
 
-                            <ImageView
-                                android:id="@+id/imageViewIconRoupa20"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_roupa_20_disabled" />
+                                <ImageView
+                                    android:id="@+id/imageViewIconRoupa10"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_roupa_10_disabled" />
 
-                            <ImageView
-                                android:id="@+id/imageViewIconRoupa40"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:src="@drawable/ic_roupa_40_disabled" />
+                                <ImageView
+                                    android:id="@+id/imageViewIconRoupa20"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_roupa_20_disabled" />
+
+                                <ImageView
+                                    android:id="@+id/imageViewIconRoupa40"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:src="@drawable/ic_roupa_40_disabled" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -908,9 +918,27 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
+        <FrameLayout
+            android:id="@+id/loadingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:clickable="true"
+            android:focusable="true">
 
-    </ScrollView>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loadingPerfil"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading"/>
+
+        </FrameLayout>
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

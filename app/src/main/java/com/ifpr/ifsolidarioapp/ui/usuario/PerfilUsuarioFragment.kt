@@ -44,6 +44,9 @@ class PerfilUsuarioFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
+        binding.loadingLayout.visibility = View.VISIBLE
+        binding.scrollView.visibility = View.GONE
+
         val uid = auth.currentUser?.uid
 
         if (uid == null) {
@@ -94,6 +97,16 @@ class PerfilUsuarioFragment : Fragment() {
         binding.buttonSairOng.setOnClickListener {
             signOut()
         }
+    }
+
+    private fun mostrarLoading() {
+        binding.loadingPerfil.visibility = View.VISIBLE
+        binding.scrollView.visibility = View.GONE
+    }
+
+    private fun esconderLoading() {
+        binding.loadingPerfil.visibility = View.GONE
+        binding.scrollView.visibility = View.VISIBLE
     }
 
     private fun abrirTelaEditarPerfil() {
@@ -156,6 +169,9 @@ class PerfilUsuarioFragment : Fragment() {
 
                 if (_binding == null) return@addOnFailureListener
 
+                binding.loadingLayout.visibility = View.GONE
+                binding.scrollView.visibility = View.VISIBLE
+
                 Toast.makeText(
                     context,
                     "Erro ao carregar usuário",
@@ -194,6 +210,9 @@ class PerfilUsuarioFragment : Fragment() {
             brinquedos,
             total
         )
+
+        binding.loadingLayout.visibility = View.GONE
+        binding.scrollView.visibility = View.VISIBLE
     }
 
     private fun proximaMeta(total: Int): Int? {
@@ -218,6 +237,9 @@ class PerfilUsuarioFragment : Fragment() {
             telefone,
             cnpj,
         )
+
+        binding.loadingLayout.visibility = View.GONE
+        binding.scrollView.visibility = View.VISIBLE
     }
 
     private fun carregarFoto(snapshot: DataSnapshot) {
