@@ -6,7 +6,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
+    android:layout_marginHorizontal="4dp"
     android:layout_marginBottom="12dp"
     card_view:cardCornerRadius="36dp"
     card_view:cardElevation="4dp"
@@ -24,22 +24,43 @@
             android:id="@+id/item_nome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="14dp"
             android:fontFamily="@font/poppins_bold"
             android:gravity="center"
             android:textColor="#111111"
             android:textSize="24sp" />
 
-        <!-- IMAGEM -->
+        <!-- IMAGEM + OVERLAY ENCERRADA -->
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/item_image"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:layout_marginBottom="16dp"
-            app:shapeAppearanceOverlay="@style/RoundedImage"/>
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/item_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:shapeAppearanceOverlay="@style/RoundedImage"/>
+
+            <!-- Overlay exibido apenas em campanhas encerradas -->
+            <TextView
+                android:id="@+id/overlayEncerrada"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="ENCERRADA"
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:fontFamily="@font/poppins_bold"
+                android:textStyle="bold"
+                android:letterSpacing="0.15"
+                android:background="#99000000"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
         <!-- DESCRIÇÃO -->
 
@@ -47,7 +68,7 @@
             android:id="@+id/item_descricao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             android:ellipsize="end"
             android:fontFamily="@font/poppins_regular"
             android:lineSpacingExtra="3dp"
@@ -63,7 +84,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -119,7 +140,7 @@
             android:id="@+id/item_progresso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="6dp"
             android:fontFamily="@font/poppins_bold"
             android:textColor="#1F1F1F"
             android:textSize="17sp" />
@@ -129,7 +150,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_progress_fundo">
 
             <ProgressBar
