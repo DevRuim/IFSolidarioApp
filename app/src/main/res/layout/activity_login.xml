@@ -127,7 +127,7 @@
             android:focusable="true"
             android:fontFamily="@font/poppins_regular"
             android:gravity="center"
-            android:text="Nao tem conta? Cadastre-se"
+            android:text="Não tem conta? Cadastre-se"
             android:textColor="@color/purple_700"
             android:textSize="14sp" />
 

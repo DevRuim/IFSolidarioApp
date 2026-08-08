@@ -51,18 +51,12 @@ class PerfilUsuarioFragment : Fragment() {
 
         if (uid == null) {
 
-            val intent = Intent(
-                context,
-                LoginActivity::class.java
-            )
+            findNavController().navigate(R.id.navigation_home)
 
-            intent.flags =
-                Intent.FLAG_ACTIVITY_NEW_TASK or
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+            val intent = Intent(context, LoginActivity::class.java)
 
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
-
-            requireActivity().finish()
 
             return binding.root
         }

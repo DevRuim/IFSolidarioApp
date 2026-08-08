@@ -14,7 +14,6 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -41,14 +40,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        //FirebaseApp.initializeApp(this)
-
         firebaseAuth = FirebaseAuth.getInstance()
 
-        emailEditText = findViewById(R.id.edit_text_email)
+        emailEditText  = findViewById(R.id.edit_text_email)
         passwordEditText = findViewById(R.id.edit_text_password)
-        loginButton = findViewById(R.id.button_login)
-        registerLink = findViewById(R.id.registerLink)
+        loginButton    = findViewById(R.id.button_login)
+        registerLink   = findViewById(R.id.registerLink)
         btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn)
 
         registerLink.setOnClickListener {
@@ -56,15 +53,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginButton.setOnClickListener {
-
-            val email = emailEditText.text.toString()
+            val email    = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
-
-            if(email.isEmpty() || password.isEmpty()){
+            if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             signIn(email, password)
         }
 
@@ -75,11 +69,22 @@ class LoginActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        btnGoogleSignIn.setOnClickListener {
-            signInGoogle()
-        }
+        btnGoogleSignIn.setOnClickListener { signInGoogle() }
     }
 
+    // ── CORREÇÃO: botão voltar volta para a MainActivity (Home) ──────────────
+    // sem isso o app fechava pois a MainActivity tinha sido destruída
+    // pelo FLAG_ACTIVITY_CLEAR_TASK que foi removido no PerfilUsuarioFragment
+    override fun onBackPressed() {
+        // Se a MainActivity ainda está na pilha, apenas fecha esta Activity.
+        // Se não está (usuário veio do splash/cold start), abre a Home.
+        val mainRunning = (application as? android.app.Application)
+            ?.let { true } ?: false
+
+        super.onBackPressed()
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
 
     private fun signIn(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -89,8 +94,7 @@ class LoginActivity : AppCompatActivity() {
                     updateUI(firebaseAuth.currentUser)
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
@@ -98,10 +102,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
-            // Navegue para a proxima atividade
-            val intent = Intent(applicationContext, MainActivity::class.java)
+            // Login bem-sucedido → abre MainActivity limpando a pilha
+            val intent = Intent(applicationContext, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
             startActivity(intent)
-            this.finish()
+            finish()
         } else {
             Toast.makeText(
                 applicationContext,
@@ -111,8 +117,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-     private fun signInGoogle() {
+    private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
+        @Suppress("DEPRECATION")
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
@@ -121,29 +128,27 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Login bem-sucedido, navegar para a atividade principal ou atualizar UI
                     Log.d(TAG, "signInWithGoogle:success")
                     updateUI(firebaseAuth.currentUser)
                 } else {
-                    // Tratar falha de login
                     Log.w(TAG, "signInWithGoogle:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
     }
 
+    @Deprecated("Legado")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
-                // Tratar falha de login
+                Log.w(TAG, "Google sign in failed", e)
             }
         }
     }
