@@ -2,6 +2,8 @@ package com.ifpr.ifsolidarioapp.ui.home
 
 import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
@@ -12,13 +14,10 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.database.*
 import com.ifpr.ifsolidarioapp.R
 import com.ifpr.ifsolidarioapp.baseclasses.Campanha
-import com.ifpr.ifsolidarioapp.baseclasses.DoacaoData
 import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.ifpr.ifsolidarioapp.ui.login.LoginActivity
-import com.ifpr.ifsolidarioapp.ui.usuario.CadastroUsuarioActivity
-import android.widget.Button
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
@@ -31,9 +30,14 @@ data class CampanhaItem(
     val campanhaId: String
 )
 
-class
-HomeFragment : Fragment() {
+class HomeFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
+
+    private var totalCarregado = false
+    private var campanhasCarregadas = false
+
+    private lateinit var loadingHome: FrameLayout
+    private lateinit var scrollView: ScrollView
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -46,36 +50,22 @@ HomeFragment : Fragment() {
 
         val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
 
-        val scrollView =
-            view.findViewById<ScrollView>(R.id.scrollView)
+        scrollView = view.findViewById(R.id.scrollView)
+        loadingHome = view.findViewById<FrameLayout>(R.id.loadingHome)
 
-        val totalContainer =
-            view.findViewById<FrameLayout>(R.id.totalDoacoesContainer)
+        loadingHome.visibility = View.VISIBLE
+        scrollView.visibility = View.INVISIBLE
 
-        val totalText =
-            view.findViewById<TextView>(R.id.textTotalDoacoes)
-
-        val loading =
-            view.findViewById<LottieAnimationView>(
-                R.id.loadingTotalDoacoes
-            )
-
-        val particles =
-            view.findViewById<LottieAnimationView>(
-                R.id.particlesAnimation
-            )
+        val totalContainer = view.findViewById<FrameLayout>(R.id.totalDoacoesContainer)
+        val totalText = view.findViewById<TextView>(R.id.textTotalDoacoes)
+        val loading = view.findViewById<LottieAnimationView>(R.id.loadingTotalDoacoes)
+        val particles = view.findViewById<LottieAnimationView>(R.id.particlesAnimation)
 
         scrollView.viewTreeObserver.addOnScrollChangedListener {
-
             val scrollY = scrollView.scrollY
-
-            // fade progressivo
             val alpha = 1f - (scrollY / 300f)
-
-            totalContainer.alpha =
-                alpha.coerceIn(0f, 1f)
+            totalContainer.alpha = alpha.coerceIn(0f, 1f)
         }
-
 
         auth = FirebaseAuth.getInstance()
 
@@ -86,79 +76,52 @@ HomeFragment : Fragment() {
             .addListenerForSingleValueEvent(object : ValueEventListener {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-
-                    val total =
-                        snapshot.getValue(Double::class.java) ?: 0.0
+                    val total = snapshot.getValue(Double::class.java) ?: 0.0
 
                     loading.visibility = View.GONE
-
                     particles.visibility = View.VISIBLE
                     particles.playAnimation()
-
                     totalText.visibility = View.VISIBLE
-
                     totalText.text = total.toInt().toString()
-
                     totalText.alpha = 0f
                     totalText.scaleX = 0.8f
                     totalText.scaleY = 0.8f
+                    totalText.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(500).start()
 
-                    totalText.animate()
-                        .alpha(1f)
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .setDuration(500)
-                        .start()
+                    totalCarregado = true
+                    verificarFimLoading()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Erro ao carregar total",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    campanhasCarregadas = true
+                    totalCarregado = true
+                    esconderLoading()
+                    Toast.makeText(requireContext(), "Erro ao carregar total", Toast.LENGTH_SHORT).show()
                 }
             })
 
-        //recalcularTotalInterface()
         carregarCampanhas(containerLayout)
 
         return view
     }
 
-    private fun recalcularTotalInterface() {
-
-        val usuariosRef = FirebaseDatabase.getInstance()
-            .getReference("usuarios")
-
-        val interfaceRef = FirebaseDatabase.getInstance()
-            .getReference("estatisticas")
-            .child("interface")
-            .child("total_doacoes")
-
-        usuariosRef.get()
-            .addOnSuccessListener { snapshot ->
-
-                var total = 0.0
-
-                for (usuario in snapshot.children) {
-
-                    val valor =
-                        usuario.child("total_doacoes")
-                            .getValue(Double::class.java) ?: 0.0
-
-                    total += valor
-                }
-
-                interfaceRef.setValue(total)
-
-                Toast.makeText(
-                    requireContext(),
-                    "Total recalculado: ${total.toInt()}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+    private fun verificarFimLoading() {
+        if (totalCarregado && campanhasCarregadas) esconderLoading()
     }
+
+    private fun esconderLoading() {
+        loadingHome.animate()
+            .alpha(0f)
+            .setDuration(300)
+            .withEndAction {
+                loadingHome.visibility = View.GONE
+                scrollView.alpha = 0f
+                scrollView.visibility = View.VISIBLE
+                scrollView.animate().alpha(1f).setDuration(300).start()
+            }
+            .start()
+    }
+
     private fun carregarCampanhas(container: LinearLayout) {
 
         val db = FirebaseDatabase.getInstance().reference
@@ -175,7 +138,6 @@ HomeFragment : Fragment() {
 
                     for (userSnapshot in snapshot.children) {
                         for (campanhaSnapshot in userSnapshot.children) {
-
                             val campanha = try {
                                 campanhaSnapshot.getValue(Campanha::class.java)
                             } catch (e: Exception) {
@@ -184,49 +146,36 @@ HomeFragment : Fragment() {
                             } ?: continue
 
                             val campanha_id = campanhaSnapshot.key
-
                             if (campanha_id.isNullOrEmpty()) {
                                 Toast.makeText(container.context, "Erro: ID nulo", Toast.LENGTH_SHORT).show()
                                 continue
                             }
 
                             listaCampanhas.add(Pair(campanha, campanha_id))
-
                         }
                     }
 
-                    val formato =
-                        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
+                    val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                     val hoje = Date()
 
-                    val campanhasOrdenadas =
-                        listaCampanhas
-                            .filter {
-
-                                try {
-
-                                    val dataFinal =
-                                        formato.parse(it.first.data_termino)
-
-                                    dataFinal.time >= hoje.time - 86400000
-
-                                } catch (e: Exception) {
-
-                                    false
-                                }
+                    // Ativas primeiro (data_termino >= hoje), encerradas depois.
+                    // Dentro de cada grupo, ordena pela data mais próxima.
+                    val campanhasOrdenadas = listaCampanhas.sortedWith(
+                        compareByDescending<Pair<Campanha, String>> { (campanha, _) ->
+                            try {
+                                val dataFinal = formato.parse(campanha.data_termino)
+                                dataFinal.time >= hoje.time
+                            } catch (e: Exception) {
+                                false
                             }
-                            .sortedBy {
-
-                                try {
-
-                                    formato.parse(it.first.data_termino)
-
-                                } catch (e: Exception) {
-
-                                    null
-                                }
+                        }.thenBy { (campanha, _) ->
+                            try {
+                                formato.parse(campanha.data_termino)
+                            } catch (e: Exception) {
+                                null
                             }
+                        }
+                    )
 
                     for ((campanha, campanha_id) in campanhasOrdenadas) {
 
@@ -234,170 +183,131 @@ HomeFragment : Fragment() {
                             .inflate(R.layout.item_template, container, false)
 
                         val img = itemView.findViewById<ImageView>(R.id.item_image)
-
                         val nome = itemView.findViewById<TextView>(R.id.item_nome)
-
                         val desc = itemView.findViewById<TextView>(R.id.item_descricao)
+                        val categoria = itemView.findViewById<TextView>(R.id.item_categoria)
+                        val data = itemView.findViewById<TextView>(R.id.item_data)
+                        val progresso = itemView.findViewById<TextView>(R.id.item_progresso)
+                        val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBarCampanha)
+                        val doarBotao = itemView.findViewById<Button>(R.id.doarButton)
+                        val instagramBotao = itemView.findViewById<ImageButton>(R.id.btnInstagram)
+                        val overlayEncerrada = itemView.findViewById<TextView>(R.id.overlayEncerrada)
+                        val txtConhecaInstituicao = itemView.findViewById<TextView>(R.id.txtConhecaInstituicao)
 
-                        val categoria =
-                            itemView.findViewById<TextView>(R.id.item_categoria)
-
-                        val data =
-                            itemView.findViewById<TextView>(R.id.item_data)
-
-                        val instagram = campanha.instagram
-
-                        val progresso =
-                            itemView.findViewById<TextView>(R.id.item_progresso)
-
-                        val progressBar =
-                            itemView.findViewById<ProgressBar>(R.id.progressBarCampanha)
-
-                        val porcentagem =
-                            ((campanha.quantidade_atual / campanha.meta) * 100).toInt()
-
+                        val porcentagem = ((campanha.quantidade_atual / campanha.meta) * 100).toInt()
                         progressBar.progress = porcentagem
 
-                        val doarBotao =
-                            itemView.findViewById<Button>(R.id.doarButton)
-
-                        val instagramBotao =
-                            itemView.findViewById<ImageButton>(R.id.btnInstagram)
-
                         nome.text = campanha.nome_campanha
-
                         desc.text = "     ${campanha.descricao}"
+                        categoria.text = "Categoria: ${campanha.categoria_campanha}"
 
-                        categoria.text =
-                            "Categoria: ${campanha.categoria_campanha}"
+                        val unidade = obterUnidade(campanha.categoria_campanha)
+                        progresso.text = "${campanha.quantidade_atual.toInt()} de ${campanha.meta.toInt()} $unidade"
 
-                        val unidade =
-                            obterUnidade(campanha.categoria_campanha)
+                        val textoData = obterTextoData(campanha.data_termino)
+                        val encerrada = textoData == "Campanha encerrada"
 
-                        progresso.text =
-                            "${campanha.quantidade_atual.toInt()} de ${campanha.meta.toInt()} $unidade"
+                        data.text = textoData
 
-                        data.text =
-                            obterTextoData(campanha.data_termino)
+                        if (encerrada) {
+                            // Badge cinza "Encerrada"
+                            data.visibility = View.INVISIBLE
 
-                        val textoData =
-                            obterTextoData(campanha.data_termino)
+                            // Botão desabilitado
+                            doarBotao.isEnabled = false
+                            doarBotao.alpha = 0.4f
+                            doarBotao.text = "Encerrada"
+                            doarBotao.setPadding(24, 10, 24, 10)
 
-                        if (
-                            textoData.contains("hoje") ||
-                            textoData.contains("amanhã") ||
-                            textoData.contains("2 dias") ||
-                            textoData.contains("3 dias")
-                        ) {
+                            // Imagem em escala de cinza
+                            val cm = ColorMatrix().also { it.setSaturation(0f) }
+                            img.colorFilter = ColorMatrixColorFilter(cm)
+                            img.alpha = 0.6f
 
-                            // ALERTA VERMELHO
+                            // Overlay "ENCERRADA" sobre a imagem
+                            overlayEncerrada.visibility = View.VISIBLE
 
-                            data.setTextColor(
-                                resources.getColor(android.R.color.white)
-                            )
-
-                            data.setBackgroundResource(
-                                R.drawable.bg_alerta_vermelho
-                            )
-
-                            data.setPadding(24, 10, 24, 10)
+                            // Categoria e instagram em cinza
+                            categoria.setTextColor(resources.getColor(android.R.color.darker_gray))
+                            categoria.alpha = 0.5f
+                            txtConhecaInstituicao.alpha = 0.4f
+                            instagramBotao.alpha = 0.4f
+                            instagramBotao.isEnabled = false
 
                         } else {
-
-                            // VOLTA AO NORMAL
-
-                            data.setTextColor(
-                                resources.getColor(R.color.black)
-                            )
-
-                            data.background = null
-
-                            data.setPadding(0, 0, 0, 0)
-                        }
-
-                        try {
-
-                            val bytes = Base64.decode(
-                                campanha.imagemBase64,
-                                Base64.DEFAULT
-                            )
-
-                            val bitmap = BitmapFactory.decodeByteArray(
-                                bytes,
-                                0,
-                                bytes.size
-                            )
-
-                            img.setImageBitmap(bitmap)
-
-                        } catch (e: Exception) {
-
-                            img.setImageResource(
-                                android.R.drawable.ic_menu_report_image
-                            )
-                        }
-
-                        doarBotao.setOnClickListener {
-
-                            val uid = auth.currentUser?.uid
-
-                            if (uid != null) {
-
-                                val bundle = Bundle().apply {
-
-                                    putString("campanha_id", campanha_id)
-
-                                    putString(
-                                        "campanha_nome",
-                                        campanha.nome_campanha
-                                    )
-
-                                    putString(
-                                        "categoria_campanha",
-                                        campanha.categoria_campanha
-                                    )
-
-                                    putString(
-                                        "criadorId",
-                                        campanha.criadorId
-                                    )
-
-                                    putString(
-                                        "quantidade_atual",
-                                        campanha.quantidade_atual.toString()
-                                    )
+                            // Visual normal para campanhas ativas
+                            when {
+                                textoData.contains("hoje") ||
+                                        textoData.contains("amanhã") ||
+                                        textoData.contains("2 dias") ||
+                                        textoData.contains("3 dias") -> {
+                                    // Alerta vermelho
+                                    data.setTextColor(resources.getColor(android.R.color.white))
+                                    data.setBackgroundResource(R.drawable.bg_alerta_vermelho)
+                                    data.setPadding(24, 10, 24, 10)
                                 }
+                                else -> {
+                                    data.setTextColor(resources.getColor(R.color.black))
+                                    data.background = null
+                                    data.setPadding(0, 0, 0, 0)
+                                }
+                            }
 
-                                findNavController().navigate(
-                                    R.id.navigation_dashboard,
-                                    bundle
-                                )
+                            // Botão DOAR ativo
+                            doarBotao.isEnabled = true
+                            doarBotao.alpha = 1f
+                            doarBotao.text = "DOAR"
+                            img.colorFilter = null
+                            img.alpha = 1f
+                            overlayEncerrada.visibility = View.GONE
+                            categoria.alpha = 1f
+                            txtConhecaInstituicao.alpha = 1f
+                            instagramBotao.alpha = 1f
+                            instagramBotao.isEnabled = true
 
-                            } else {
-
-                                startActivity(
-                                    Intent(context, LoginActivity::class.java)
-                                )
+                            doarBotao.setOnClickListener {
+                                val uid = auth.currentUser?.uid
+                                if (uid != null) {
+                                    val bundle = Bundle().apply {
+                                        putString("campanha_id", campanha_id)
+                                        putString("campanha_nome", campanha.nome_campanha)
+                                        putString("categoria_campanha", campanha.categoria_campanha)
+                                        putString("criadorId", campanha.criadorId)
+                                        putString("quantidade_atual", campanha.quantidade_atual.toString())
+                                    }
+                                    findNavController().navigate(R.id.navigation_dashboard, bundle)
+                                } else {
+                                    startActivity(Intent(context, LoginActivity::class.java))
+                                }
                             }
                         }
 
-                        instagramBotao.setOnClickListener {
+                        try {
+                            val bytes = Base64.decode(campanha.imagemBase64, Base64.DEFAULT)
+                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                            img.setImageBitmap(bitmap)
+                            // Reaplicar filtro cinza se encerrada (setImageBitmap reseta o colorFilter)
+                            if (encerrada) {
+                                val cm = ColorMatrix().also { it.setSaturation(0f) }
+                                img.colorFilter = ColorMatrixColorFilter(cm)
+                                img.alpha = 0.6f
+                                overlayEncerrada.visibility = View.VISIBLE
+                            }
+                        } catch (e: Exception) {
+                            img.setImageResource(android.R.drawable.ic_menu_report_image)
+                        }
 
+                        instagramBotao.setOnClickListener {
                             val intent = Intent(
                                 Intent.ACTION_VIEW,
-                                android.net.Uri.parse(
-                                    "https://instagram.com/$instagram"
-                                )
+                                android.net.Uri.parse("https://instagram.com/${campanha.instagram}")
                             )
-
                             startActivity(intent)
                         }
 
-                        // ANIMAÇÃO DOS CARDS
-
+                        // Animação de entrada dos cards
                         itemView.alpha = 0f
                         itemView.translationY = 50f
-
                         itemView.animate()
                             .alpha(1f)
                             .translationY(0f)
@@ -407,69 +317,45 @@ HomeFragment : Fragment() {
 
                         container.addView(itemView)
                     }
+
+                    campanhasCarregadas = true
+                    verificarFimLoading()
                 }
 
                 private fun obterUnidade(categoria: String): String {
-
                     return when (categoria.lowercase()) {
-
                         "alimento", "alimentos" -> "Kg"
-
                         "brinquedo", "brinquedos" -> "un."
-
                         "roupa", "roupas" -> "peças"
-
                         else -> "un."
                     }
                 }
+
                 @SuppressLint("SetTextI18n")
                 private fun obterTextoData(dataTermino: String): String {
-
                     return try {
-
-                        val formato =
-                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
-                        val dataFinal =
-                            formato.parse(dataTermino)
-
+                        val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                        val dataFinal = formato.parse(dataTermino)
                         val hoje = formato.parse(formato.format(Date()))
-
-                        val diferencaMillis =
-                            dataFinal.time - hoje.time
-
-                        val dias =
-                            TimeUnit.MILLISECONDS.toDays(diferencaMillis).toInt()
+                        val diferencaMillis = dataFinal.time - hoje.time
+                        val dias = TimeUnit.MILLISECONDS.toDays(diferencaMillis).toInt()
 
                         when {
-
-                            dias > 3 ->
-                                "Termina em: $dataTermino"
-
-                            dias == 3 ->
-                                "Termina em 3 dias"
-
-                            dias == 2 ->
-                                "Termina em 2 dias"
-
-                            dias == 1 ->
-                                "Termina amanhã"
-
-                            dias == 0 ->
-                                "Termina hoje"
-
-                            else ->
-                                "Campanha encerrada"
+                            dias > 3  -> "Termina em: $dataTermino"
+                            dias == 3 -> "Termina em 3 dias"
+                            dias == 2 -> "Termina em 2 dias"
+                            dias == 1 -> "Termina amanhã"
+                            dias == 0 -> "Termina hoje"
+                            else      -> "Campanha encerrada"
                         }
-
                     } catch (e: Exception) {
-
                         "Data inválida"
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(container.context, "Erro ao carregar", Toast.LENGTH_SHORT).show()
+                    esconderLoading()
                 }
             })
     }

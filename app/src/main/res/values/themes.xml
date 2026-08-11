@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style
         name="Theme.AndroidAppTemplate"
-        parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
@@ -16,23 +16,22 @@
         <item name="colorOnSecondary">@color/black</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">
-            ?attr/colorPrimaryVariant
-        </item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
     </style>
 
     <style name="RoundedImage">
 
         <item name="cornerFamily">rounded</item>
-
         <item name="cornerSize">24dp</item>
 
     </style>
 
     <style name="circleImage">
+
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">999dp</item>
+
     </style>
 
 </resources>

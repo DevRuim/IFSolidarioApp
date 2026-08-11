@@ -77,6 +77,14 @@ class DoacaoFragment : Fragment() {
     // Navegação
     // ─────────────────────────────────────────────────────────────────────────
 
+    private fun mostrarLoading() {
+        binding.layoutLoading.visibility = View.VISIBLE
+    }
+
+    private fun esconderLoading() {
+        binding.layoutLoading.visibility = View.GONE
+    }
+
     /**
      * Após qualquer doação (com ou sem conquista):
      * 1. Remove o DoacaoFragment da pilha, mantendo apenas a Home.
@@ -86,10 +94,17 @@ class DoacaoFragment : Fragment() {
      * → Home funciona, Perfil funciona, Doação não aparece mais ao voltar.
      */
     private fun irParaRankingAposDoacao() {
+
         if (_binding == null) return
-        // Remove Doação (e qualquer tela intermediária) da pilha, mantém Home
-        findNavController().popBackStack(R.id.navigation_home, false)
-        // Sincroniza o BottomNav via MainActivity
+
+        // Remove o Fragment de Doação da pilha
+        findNavController().popBackStack(
+            R.id.navigation_home,
+            false
+        )
+
+        // Agora a Home está visível.
+        // Mantém sua lógica existente para abrir o Ranking/Perfil.
         (requireActivity() as? MainActivity)?.selecionarRanking()
     }
 
@@ -302,8 +317,13 @@ class DoacaoFragment : Fragment() {
     // ─────────────────────────────────────────────────────────────────────────
 
     private fun finalizarDoacao() {
+        mostrarLoading()
+        binding.buttonFinalizar.isEnabled = false
         val qtdTexto = binding.editQuantidade.text.toString()
         if (qtdTexto.isEmpty()) {
+            esconderLoading()
+            binding.buttonFinalizar.isEnabled = true
+
             Toast.makeText(requireContext(), "Digite uma quantidade", Toast.LENGTH_SHORT).show()
             return
         }
@@ -359,6 +379,10 @@ class DoacaoFragment : Fragment() {
                                         .getValue(Double::class.java)
                                         ?.toInt() ?: 0
                                 )
+
+                                esconderLoading()
+
+                                irParaRankingAposDoacao()
                             }
                     }
                 }
