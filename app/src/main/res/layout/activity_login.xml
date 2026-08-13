@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/login_card"
         android:layout_width="0dp"
-        android:layout_height="520dp"
+        android:layout_height="420dp"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:background="@drawable/bg_login_card"
@@ -97,16 +97,13 @@
             android:textColorHint="#6F6F6F"
             android:textSize="14sp" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <Button
             android:id="@+id/button_login"
             android:layout_width="match_parent"
             android:layout_height="51dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/bg_login_button"
             android:backgroundTint="@null"
             android:fontFamily="@font/poppins_bold"
@@ -131,22 +128,6 @@
             android:textColor="@color/purple_700"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/text_login_or"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="2dp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="ou"
-            android:textColor="#6F6F6F"
-            android:textSize="13sp" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/btnGoogleSignIn"
-            android:layout_width="240dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -56,8 +56,8 @@
                         android:padding="6dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_add_custom"
-                        android:tint="#FFFFFF"
                         android:contentDescription="Adicionar foto"/>
+
                 </FrameLayout>
 
                 <!-- Títulos -->
@@ -164,9 +164,11 @@
                     android:layout_height="52dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="20dp"
+                    android:autofillHints="name"
                     android:background="@drawable/edittext_background"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Preencher"
+                    android:inputType="textPersonName"
                     android:paddingHorizontal="16dp"
                     android:textColor="#1A1A1A"
                     android:textColorHint="#AAAAAA"
@@ -184,6 +186,7 @@
 
                 <EditText
                     android:id="@+id/registerTelefoneEditText"
+                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="6dp"
@@ -210,6 +213,7 @@
 
                 <EditText
                     android:id="@+id/registerCNPJEditText"
+                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="6dp"
@@ -240,6 +244,7 @@
                     android:layout_height="52dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="20dp"
+                    android:autofillHints="emailAddress"
                     android:background="@drawable/edittext_background"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="seu@email.com"
@@ -261,6 +266,8 @@
 
                 <EditText
                     android:id="@+id/registerPasswordEditText"
+                    android:inputType="textPassword"
+                    android:autofillHints="password"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="6dp"
@@ -268,7 +275,6 @@
                     android:background="@drawable/edittext_background"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Mínimo 6 caracteres"
-                    android:inputType="textPassword"
                     android:paddingHorizontal="16dp"
                     android:textColor="#1A1A1A"
                     android:textColorHint="#AAAAAA"
@@ -286,6 +292,7 @@
 
                 <EditText
                     android:id="@+id/registerConfirmPasswordEditText"
+                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="6dp"
